@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>GUGU-GBF 辅助</title>
+  <style>
+    :root {
+      --bg: #12141c; --card: #1e2330; --text: #e6e9f0;
+      --accent: #4f7cff; --warn: #ffb454; --danger: #ff5c5c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 360px; background: var(--bg); color: var(--text);
+      font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      padding: 14px;
+    }
+    h1 { font-size: 15px; margin-bottom: 12px; color: var(--accent); }
+    .card { background: var(--card); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .card h3 { font-size: 13px; margin-bottom: 8px; }
+    .team-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+    .member { background: #2a3142; border-radius: 6px; padding: 6px 10px; font-size: 12px; }
+    .label { color: #9aa3b5; font-size: 11px; margin-right: 4px; }
+    .advice { font-size: 12px; border-left: 3px solid var(--accent); padding-left: 8px; margin-bottom: 6px; }
+    .advice.high { border-color: var(--danger); }
+    .advice.medium { border-color: var(--warn); }
+    .btn { width: 100%; padding: 8px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; font-size: 13px; }
+    .btn:hover { opacity: .9; }
+    .status { font-size: 11px; color: #9aa3b5; margin-top: 8px; text-align: center; }
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+    .field label { font-size: 11px; color: #9aa3b5; display: block; margin-bottom: 2px; }
+    .field input, .field select { width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #3a4258; background: #2a3142; color: var(--text); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>GUGU-GBF 辅助</h1>
+
+  <div class="card">
+    <h3>📋 当前配队建议</h3>
+    <div id="team-content">加载中…</div>
+  </div>
+
+  <div class="card">
+    <h3>⚔️ 战斗回合建议</h3>
+    <div id="battle-content">未录入战斗状态</div>
+    <button class="btn" id="quick-fill" style="margin-top:8px">填入示例战斗状态</button>
+  </div>
+
+  <div class="card">
+    <h3>📝 战斗状态录入（半自动）</h3>
+    <div class="input-grid">
+      <div class="field">
+        <label>敌方属性</label>
+        <select id="enemy-element">
+          <option>火</option><option>水</option><option>土</option>
+          <option>风</option><option>光</option><option>暗</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>敌方血量(%)</label>
+        <input id="enemy-hp" type="number" value="55" />
+      </div>
+      <div class="field">
+        <label>敌方OD</label>
+        <select id="enemy-od"><option>是</option><option>否</option></select>
+      </div>
+      <div class="field">
+        <label>即将特动</label>
+        <select id="enemy-trigger"><option>否</option><option>是</option></select>
+      </div>
+      <div class="field">
+        <label>己方血量(%)</label>
+        <input id="party-hp" type="number" value="100" />
+      </div>
+      <div class="field">
+        <label>回合</label>
+        <input id="turn" type="number" value="1" />
+      </div>
+    </div>
+    <button class="btn" id="submit-battle">获取回合建议</button>
+    <div class="status" id="analyzer-status">分析端：未连接（可离线演示）</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

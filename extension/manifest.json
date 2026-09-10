@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "GUGU-GBF 辅助",
+  "version": "0.1.0",
+  "description": "读取玩家配置与战斗状态，输出配队与回合建议（纯展示，不自动操作）",
+  "permissions": [
+    "storage",
+    "webRequest",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://game.granbluefantasy.jp/*",
+    "https://gbf.game.mbga.jp/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "GUGU-GBF"
+  }
+}
