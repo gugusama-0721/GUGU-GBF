@@ -1,0 +1,16 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 环境
+.env
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# 系统文件
+.DS_Store
+Thumbs.db
