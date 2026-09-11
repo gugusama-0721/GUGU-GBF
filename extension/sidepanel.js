@@ -138,6 +138,18 @@ function updateStatus(cache) {
         box.textContent = "暂无诊断数据。\ncontent script 未写入诊断。可能：尚未刷新游戏页，或注入失败。\n请刷新 GBF 页面后点「立即读取」。";
         return;
       }
+      // 叠加展示 CDP/debugger 状态
+      chrome.storage.local.get("gugu_gbf_dbg", (dbgObj) => {
+        const db = dbgObj && dbgObj.gugu_gbf_dbg;
+        const dbgLine = db
+          ? [
+              "\n===== CDP/debugger 状态 =====",
+              "attach: " + (db.state === "attached" ? "✅已附加" : db.state === "attach-fail" ? "❌附加失败" : db.state),
+              "attach详情: " + (db.detail || "-"),
+              "捕获响应数: " + (db.captured ?? 0),
+              "最近捕获: " + (db.lastKind || "-"),
+            ]
+          : ["\n===== CDP/debugger 状态 =====", "暂无状态。debugger 未记录（可能扩展未重载或未打开 GBF 页）"];
       const lines = [
         "注入时间: " + (d.time ? new Date(d.time).toLocaleTimeString() : "-"),
         "注入页面: " + (d.url || "-"),
@@ -147,13 +159,15 @@ function updateStatus(cache) {
         "主世界inject状态: " + ({ hooked: "✅已挂接", "no-jquery": "❌无jQuery(30秒超时)", loaded: "已加载" }[d.injectState] || d.injectState || "-"),
         "已接收数据条数: " + (d.received ?? 0),
         "最近类型: " + (d.lastKind || "-"),
+        ...dbgLine,
       ];
       box.textContent = lines.join("\n");
-      if (d.contentInjected && !d.injectLoaded) {
-        box.textContent += "\n\n⚠️ content script 已注入，但主世界 inject.js 未加载。\n原因：GBF 页面的 Content-Security-Policy 可能阻止了外部脚本注入。\n需改用 chrome.scripting 以 MAIN world 注入方式。";
-      } else if (d.injectLoaded && (d.received ?? 0) === 0) {
-        box.textContent += "\n\n⚠️ inject.js 已加载，但未捕获到数据。\n若状态为「已挂接」，请在游戏内切换页面触发请求后再「立即读取」。";
+      if (db && db.state === "attached" && (db.captured ?? 0) === 0) {
+        box.textContent += "\n\n⚠️ debugger 已附加但未捕获到目标接口。\nCDP 层级监控正常，但当前页面没触发 角色/武器/召唤/队伍 请求。请进入对应页面。";
+      } else if (!db || db.state !== "attached") {
+        box.textContent += "\n\n⚠️ debugger 未附加成功。\n可能是：①Tarou 或其他扩展占用；②标签页已自动 attach 但被 detach。\n请停用 Tarou 后重载扩展、重开 GBF 标签页。";
       }
+      });
     });
   } catch (e) {}
 }

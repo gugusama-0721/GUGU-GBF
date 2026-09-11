@@ -96,14 +96,24 @@ async function attachDebug(tabId) {
   try {
     await chrome.debugger.attach({ tabId }, "1.3");
     await chrome.debugger.sendCommand({ tabId }, "Network.enable", {
-      maxTotalBufferSize: 10000000, // 10MB，保证大 JSON 响应完整
+      maxTotalBufferSize: 10000000,
       maxResourceBufferSize: 10000000,
     });
     console.log("[GUGU-GBF] debugger 已附加", tabId);
+    writeDbgStatus("attached", tabId, "debugger 已附加到标签页");
   } catch (e) {
     console.warn("[GUGU-GBF] debugger attach 失败:", e.message);
+    writeDbgStatus("attach-fail", tabId, e.message);
   }
 }
+function writeDbgStatus(state, tabId, detail) {
+  try {
+    chrome.storage.local.set({
+      gugu_gbf_dbg: { state, tabId, detail, captured: dbgCount, time: Date.now() },
+    });
+  } catch (e) {}
+}
+let dbgCount = 0;
 
 chrome.debugger.onEvent.addListener((source, method, params) => {
   if (!params || source.tabId !== debugTabId) return;
@@ -139,6 +149,13 @@ async function getBody(kind, requestId) {
     }
     saveKind(kind, "cdp:" + kind, data);
     forwardToAnalyzer({ kind, url: "cdp:" + kind, data });
+    dbgCount++;
+    try {
+      chrome.storage.local.get("gugu_gbf_dbg", (o) => {
+        const d = (o && o.gugu_gbf_dbg) || {};
+        chrome.storage.local.set({ gugu_gbf_dbg: { ...d, captured: dbgCount, lastKind: kind, time: Date.now() } });
+      });
+    } catch (e) {}
   } catch (e) {
     // 可能 base64 加密响应，暂跳过
   }
