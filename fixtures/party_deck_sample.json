@@ -1,0 +1,2694 @@
+{
+    "is_equipment_shield": false,
+    "is_equipment_familiar": false,
+    "is_companionweapon_job_skin": false,
+    "bullet_info": [],
+    "hiddenweapon_count": null,
+    "deck": {
+        "group_name": "Party Slot 13",
+        "is_used": false,
+        "name": "Party 1",
+        "order_no": 1,
+        "priority": 131,
+        "combination_id": 17123149,
+        "combination_group_id": 2830784,
+        "npc": {
+            "1": {
+                "master": {
+                    "id": "3040467000",
+                    "character_id": "3227",
+                    "name": "Cosmos",
+                    "short_name": "Cosmos",
+                    "attribute": 5,
+                    "rarity": "4",
+                    "weapon": "6,1",
+                    "type": "1",
+                    "da_odds": "10",
+                    "ta_odds": "5",
+                    "image_id": null,
+                    "tribe": "6",
+                    "tribe_2": ""
+                },
+                "param": {
+                    "attack": 70547,
+                    "hp": 21588,
+                    "level": "80",
+                    "total": "21575",
+                    "quality": "0",
+                    "evolution": "4",
+                    "phase": "0",
+                    "style": "1",
+                    "rarity": "4",
+                    "id": 216480174,
+                    "image_id_3": "3040467000_01",
+                    "has_npcaugment_constant": false,
+                    "cjs_name": "npc_3040467000_02",
+                    "cjs_position": null,
+                    "image_id_3_tower": "3040467000_01",
+                    "npc_arousal_form": 3
+                },
+                "skill": {
+                    "count": 17,
+                    "description": [
+                        {
+                            "over": 1,
+                            "comment": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100135"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Small boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100453"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to light allies\u0027 DMG cap",
+                            "sort": "10700025"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                            "sort": "10701011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Amplify all allies\u0027 superior elemental DMG",
+                            "sort": "10702901"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to ATK based on how many harps are equipped",
+                            "sort": "10708009"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                            "sort": "10708651"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                            "sort": "10710451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                            "sort": "10710583"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Small boost to light allies\u0027 max HP and debuff resistance",
+                            "sort": "20100453"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                            "sort": "30300004"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to all allies\u0027 skill DMG cap",
+                            "sort": "30300006"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                            "sort": "30300011"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Supplement light allies\u0027 DMG",
+                            "sort": "40101975"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                            "sort": "40102751"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                            "sort": "999999999"
+                        }
+                    ]
+                },
+                "is_position_locked": false,
+                "is_doll": false,
+                "is_fix_evoker_npc": false,
+                "is_invalid_npc": false
+            },
+            "2": {
+                "master": {
+                    "id": "3040518000",
+                    "character_id": "3245",
+                    "name": "Horus",
+                    "short_name": "Horus",
+                    "attribute": 5,
+                    "rarity": "4",
+                    "weapon": "5",
+                    "type": "5",
+                    "da_odds": "7",
+                    "ta_odds": "3",
+                    "image_id": null,
+                    "tribe": "6",
+                    "tribe_2": ""
+                },
+                "param": {
+                    "attack": 66829,
+                    "hp": 21387,
+                    "level": "80",
+                    "total": "19464",
+                    "quality": "0",
+                    "evolution": "4",
+                    "phase": "0",
+                    "style": "1",
+                    "rarity": "4",
+                    "id": 223202911,
+                    "image_id_3": "3040518000_01",
+                    "has_npcaugment_constant": false,
+                    "cjs_name": "npc_3040518000_02",
+                    "cjs_position": null,
+                    "image_id_3_tower": "3040518000_01",
+                    "npc_arousal_form": 3
+                },
+                "skill": {
+                    "count": 17,
+                    "description": [
+                        {
+                            "over": 1,
+                            "comment": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100135"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Small boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100453"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to light allies\u0027 DMG cap",
+                            "sort": "10700025"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                            "sort": "10701011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Amplify all allies\u0027 superior elemental DMG",
+                            "sort": "10702901"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to ATK based on how many harps are equipped",
+                            "sort": "10708009"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                            "sort": "10708651"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                            "sort": "10710451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                            "sort": "10710583"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Small boost to light allies\u0027 max HP and debuff resistance",
+                            "sort": "20100453"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                            "sort": "30300004"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to all allies\u0027 skill DMG cap",
+                            "sort": "30300006"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                            "sort": "30300011"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Supplement light allies\u0027 DMG",
+                            "sort": "40101975"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                            "sort": "40102751"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                            "sort": "999999999"
+                        }
+                    ]
+                },
+                "is_position_locked": false,
+                "is_doll": false,
+                "is_fix_evoker_npc": false,
+                "is_invalid_npc": false
+            },
+            "3": {
+                "master": {
+                    "id": "3040034000",
+                    "character_id": "4005",
+                    "name": "Fif",
+                    "short_name": "Fif",
+                    "attribute": 5,
+                    "rarity": "4",
+                    "weapon": "5",
+                    "type": "4",
+                    "da_odds": "4",
+                    "ta_odds": "1",
+                    "image_id": null,
+                    "tribe": "4",
+                    "tribe_2": ""
+                },
+                "param": {
+                    "attack": 70104,
+                    "hp": 23608,
+                    "level": "150",
+                    "total": "24960",
+                    "quality": "0",
+                    "evolution": "6",
+                    "phase": "5",
+                    "style": "1",
+                    "rarity": "4",
+                    "id": 169668805,
+                    "image_id_3": "3040034000_04",
+                    "has_npcaugment_constant": false,
+                    "cjs_name": "npc_3040034000_04",
+                    "cjs_position": {
+                        "x": 4,
+                        "y": 0
+                    },
+                    "image_id_3_tower": "3040034000_04",
+                    "npc_arousal_form": 3
+                },
+                "skill": {
+                    "count": 17,
+                    "description": [
+                        {
+                            "over": 1,
+                            "comment": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100135"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Small boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100453"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to light allies\u0027 DMG cap",
+                            "sort": "10700025"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                            "sort": "10701011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Amplify all allies\u0027 superior elemental DMG",
+                            "sort": "10702901"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to ATK based on how many harps are equipped",
+                            "sort": "10708009"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                            "sort": "10708651"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                            "sort": "10710451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                            "sort": "10710583"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Small boost to light allies\u0027 max HP and debuff resistance",
+                            "sort": "20100453"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                            "sort": "30300004"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to all allies\u0027 skill DMG cap",
+                            "sort": "30300006"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                            "sort": "30300011"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Supplement light allies\u0027 DMG",
+                            "sort": "40101975"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                            "sort": "40102751"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                            "sort": "999999999"
+                        }
+                    ]
+                },
+                "is_position_locked": false,
+                "is_doll": false,
+                "is_fix_evoker_npc": false,
+                "is_invalid_npc": false
+            },
+            "4": {
+                "master": {
+                    "id": "3040515000",
+                    "character_id": "3096",
+                    "name": "Sandalphon",
+                    "short_name": "Sandalphon",
+                    "attribute": 5,
+                    "rarity": "4",
+                    "weapon": "1,10",
+                    "type": "2",
+                    "da_odds": "10",
+                    "ta_odds": "5",
+                    "image_id": null,
+                    "tribe": "6",
+                    "tribe_2": ""
+                },
+                "param": {
+                    "attack": 73781,
+                    "hp": 19043,
+                    "level": "80",
+                    "total": "20640",
+                    "quality": "0",
+                    "evolution": "4",
+                    "phase": "0",
+                    "style": "1",
+                    "rarity": "4",
+                    "id": 224578767,
+                    "image_id_3": "3040515000_01",
+                    "has_npcaugment_constant": false,
+                    "cjs_name": "npc_3040515000_02",
+                    "cjs_position": {
+                        "x": 0,
+                        "y": -5
+                    },
+                    "image_id_3_tower": "3040515000_01",
+                    "npc_arousal_form": 1
+                },
+                "skill": {
+                    "count": 18,
+                    "description": [
+                        {
+                            "over": 1,
+                            "comment": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100135"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Small boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100453"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to light allies\u0027 DMG cap",
+                            "sort": "10700025"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                            "sort": "10701011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Amplify all allies\u0027 superior elemental DMG",
+                            "sort": "10702901"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to ATK based on how many harps are equipped",
+                            "sort": "10708009"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                            "sort": "10708651"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                            "sort": "10710451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                            "sort": "10710583"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Small boost to light allies\u0027 max HP and debuff resistance",
+                            "sort": "20100453"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                            "sort": "30300004"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to all allies\u0027 skill DMG cap",
+                            "sort": "30300006"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                            "sort": "30300011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "\u003Cspan class=text-small\u003EBig boost to katana-specialty allies\u0027 ATK and max HP \/ Big boost to ATK based on how high HP is\u003C\/span\u003E",
+                            "sort": "40100960"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Supplement light allies\u0027 DMG",
+                            "sort": "40101975"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                            "sort": "40102751"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                            "sort": "999999999"
+                        }
+                    ]
+                },
+                "is_position_locked": false,
+                "is_doll": false,
+                "is_fix_evoker_npc": false,
+                "is_invalid_npc": false
+            },
+            "5": {
+                "master": {
+                    "id": "3040393000",
+                    "character_id": "2145",
+                    "name": "You",
+                    "short_name": "You",
+                    "attribute": 5,
+                    "rarity": "4",
+                    "weapon": "7,10",
+                    "type": "2",
+                    "da_odds": "10",
+                    "ta_odds": "5",
+                    "image_id": null,
+                    "tribe": "2",
+                    "tribe_2": ""
+                },
+                "param": {
+                    "attack": 73902,
+                    "hp": 15503,
+                    "level": "80",
+                    "total": "19700",
+                    "quality": "0",
+                    "evolution": "4",
+                    "phase": "0",
+                    "style": "1",
+                    "rarity": "4",
+                    "id": 220201683,
+                    "image_id_3": "3040393000_01",
+                    "has_npcaugment_constant": false,
+                    "cjs_name": "npc_3040393000_02",
+                    "cjs_position": null,
+                    "image_id_3_tower": "3040393000_01",
+                    "npc_arousal_form": 4
+                },
+                "skill": {
+                    "count": 18,
+                    "description": [
+                        {
+                            "over": 1,
+                            "comment": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100135"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Small boost to light allies\u0027 ATK and critical hit rate",
+                            "sort": "10100453"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to light allies\u0027 DMG cap",
+                            "sort": "10700025"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                            "sort": "10701011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Amplify all allies\u0027 superior elemental DMG",
+                            "sort": "10702901"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Boost to ATK based on how many harps are equipped",
+                            "sort": "10708009"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                            "sort": "10708651"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                            "sort": "10710451"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                            "sort": "10710583"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Small boost to light allies\u0027 max HP and debuff resistance",
+                            "sort": "20100453"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                            "sort": "30300004"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to all allies\u0027 skill DMG cap",
+                            "sort": "30300006"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                            "sort": "30300011"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "\u003Cspan class=text-small\u003EBig boost to katana-specialty allies\u0027 ATK and max HP \/ Big boost to ATK based on how high HP is\u003C\/span\u003E",
+                            "sort": "40100960"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "Supplement light allies\u0027 DMG",
+                            "sort": "40101975"
+                        },
+                        {
+                            "over": 2,
+                            "comment": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                            "sort": "40102751"
+                        },
+                        {
+                            "over": 1,
+                            "comment": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                            "sort": "999999999"
+                        }
+                    ]
+                },
+                "is_position_locked": false,
+                "is_doll": false,
+                "is_fix_evoker_npc": false,
+                "is_invalid_npc": false
+            }
+        },
+        "pc": {
+            "skin_weapon_id": null,
+            "skin_weapon_id_2": null,
+            "use_skin_weapon_effect": "0",
+            "use_skin_weapon_effect_2": "0",
+            "weapons": {
+                "1": {
+                    "param": {
+                        "id": 4574092655,
+                        "image_id": "1040909700",
+                        "level": "200",
+                        "attack": "3930",
+                        "hp": "340",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "1"
+                    },
+                    "master": {
+                        "id": "1040909700",
+                        "name": "Unsigned Kaneshige",
+                        "attribute": "5",
+                        "kind": "10",
+                        "rarity": "4",
+                        "is_group": "10",
+                        "series_id": "19",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "0",
+                        "skill2_display": "0",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "1048",
+                        "description": "When main weapon (MC only): Boost to charge bar gain",
+                        "image": "skill_job_weapon",
+                        "attribute": "",
+                        "name": "Kengo\u0027s Nature"
+                    },
+                    "skill2": {
+                        "id": "1050",
+                        "description": "When main weapon (MC only): Boost to all allies\u0027 charge bar gain upon using charge attack",
+                        "image": "skill_job_weapon",
+                        "attribute": "",
+                        "name": "Kengo\u0027s Devilry"
+                    },
+                    "skill3": null,
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "2": {
+                    "param": {
+                        "id": 4555320132,
+                        "image_id": "1040025900",
+                        "level": "150",
+                        "attack": "3852",
+                        "hp": "382",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "15"
+                    },
+                    "master": {
+                        "id": "1040025900",
+                        "name": "Efes",
+                        "attribute": "5",
+                        "kind": "1",
+                        "rarity": "4",
+                        "is_group": "6",
+                        "series_id": "2",
+                        "pre_weapon_skill_index": "1",
+                        "skill1_display": "0",
+                        "skill2_display": "",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "2029",
+                        "description": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                        "image": "skill_optimus_5",
+                        "attribute": "5",
+                        "name": "Optimus Exalto Luminis"
+                    },
+                    "skill2": {
+                        "id": "849",
+                        "description": "Small boost to light allies\u0027 ATK and critical hit rate",
+                        "image": "skill_moment_5_1",
+                        "attribute": "5",
+                        "name": "Light\u0027s Celere"
+                    },
+                    "skill3": {
+                        "id": "2286",
+                        "description": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                        "image": "skill_tec_rise_5_3",
+                        "attribute": "5",
+                        "name": "Zion\u0027s Stratagem"
+                    },
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "3": {
+                    "param": {
+                        "id": 4756962403,
+                        "image_id": "1040025900",
+                        "level": "150",
+                        "attack": "3852",
+                        "hp": "382",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "15"
+                    },
+                    "master": {
+                        "id": "1040025900",
+                        "name": "Efes",
+                        "attribute": "5",
+                        "kind": "1",
+                        "rarity": "4",
+                        "is_group": "6",
+                        "series_id": "2",
+                        "pre_weapon_skill_index": "1",
+                        "skill1_display": "0",
+                        "skill2_display": "",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "2029",
+                        "description": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                        "image": "skill_optimus_5",
+                        "attribute": "5",
+                        "name": "Optimus Exalto Luminis"
+                    },
+                    "skill2": {
+                        "id": "849",
+                        "description": "Small boost to light allies\u0027 ATK and critical hit rate",
+                        "image": "skill_moment_5_1",
+                        "attribute": "5",
+                        "name": "Light\u0027s Celere"
+                    },
+                    "skill3": {
+                        "id": "2286",
+                        "description": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                        "image": "skill_tec_rise_5_3",
+                        "attribute": "5",
+                        "name": "Zion\u0027s Stratagem"
+                    },
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "4": {
+                    "param": {
+                        "id": 3580528911,
+                        "image_id": "1040112500",
+                        "level": "150",
+                        "attack": "3675",
+                        "hp": "417",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "4",
+                        "arousal_form": "1",
+                        "arousal_exp": "2000",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": true,
+                            "level": 4,
+                            "form": 1,
+                            "form_name": "Attack",
+                            "remain_for_next_level": 0,
+                            "width": 100,
+                            "is_complete_condition": true,
+                            "release_conditions": [
+                                {
+                                    "condition_type": "1",
+                                    "condition_value": "150",
+                                    "is_cleared": true
+                                }
+                            ],
+                            "max_level": 4,
+                            "total_bonus": {
+                                "2": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 15
+                                    }
+                                ],
+                                "3": [
+                                    {
+                                        "name": "DMG Cap",
+                                        "image": "bonus_1",
+                                        "attribute_image": "",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 5
+                                    }
+                                ],
+                                "4": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 25
+                                    }
+                                ]
+                            },
+                            "total_acquired_bonus": [
+                                {
+                                    "status_id": "21",
+                                    "level": "2",
+                                    "name": "Might",
+                                    "effect_value": "40",
+                                    "disp_string": "+%s%",
+                                    "image": "bonus_1",
+                                    "attribute_image": "",
+                                    "weapon_kind_images": [],
+                                    "unit_type": "1"
+                                },
+                                {
+                                    "status_id": "22",
+                                    "level": "3",
+                                    "name": "DMG Cap",
+                                    "effect_value": "5",
+                                    "disp_string": "+%s%",
+                                    "image": "bonus_1",
+                                    "attribute_image": "",
+                                    "weapon_kind_images": [],
+                                    "unit_type": "1"
+                                }
+                            ],
+                            "skill": [
+                                {
+                                    "skill_id": 1883,
+                                    "name": "Might",
+                                    "comment": "Boost to all allies\u0027 ATK",
+                                    "image": "ex_skill_atk",
+                                    "disp_string": "+%s%",
+                                    "unit_type": 1,
+                                    "display_type": 0,
+                                    "effect_value": "40",
+                                    "acquired_awakening_level": null,
+                                    "acquired_skill": true
+                                },
+                                {
+                                    "skill_id": 1885,
+                                    "name": "DMG Cap",
+                                    "comment": "Boost to all allies\u0027 DMG cap",
+                                    "image": "ex_skill_atk_limit",
+                                    "disp_string": "+%s%",
+                                    "unit_type": 1,
+                                    "display_type": 0,
+                                    "effect_value": "5",
+                                    "acquired_awakening_level": null,
+                                    "acquired_skill": true
+                                }
+                            ],
+                            "is_caution": true
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "15"
+                    },
+                    "master": {
+                        "id": "1040112500",
+                        "name": "Ivory Ark",
+                        "attribute": "5",
+                        "kind": "2",
+                        "rarity": "4",
+                        "is_group": "6",
+                        "series_id": "2",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "",
+                        "skill2_display": "",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "1426",
+                        "description": "Big boost to light allies\u0027 ATK and critical hit rate",
+                        "image": "skill_moment_5_3_2",
+                        "attribute": "5",
+                        "name": "Zion\u0027s Celere II"
+                    },
+                    "skill2": {
+                        "id": "1432",
+                        "description": "Small boost to light allies\u0027 max HP and debuff resistance",
+                        "image": "skill_grace_5_1",
+                        "attribute": "5",
+                        "name": "Light\u0027s Grace"
+                    },
+                    "skill3": null,
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "5": {
+                    "param": {
+                        "id": 4269926254,
+                        "image_id": "1040814500",
+                        "level": "150",
+                        "attack": "3365",
+                        "hp": "480",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "15"
+                    },
+                    "master": {
+                        "id": "1040814500",
+                        "name": "Harmonia",
+                        "attribute": "5",
+                        "kind": "9",
+                        "rarity": "4",
+                        "is_group": "6",
+                        "series_id": "2",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "0",
+                        "skill2_display": "0",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "1792",
+                        "description": "Supplement light allies\u0027 DMG",
+                        "image": "skill_job_weapon",
+                        "attribute": "5",
+                        "name": "Glimmer\u0027s Pact"
+                    },
+                    "skill2": {
+                        "id": "1848",
+                        "description": "Boost to ATK based on how many harps are equipped",
+                        "image": "skill_job_weapon",
+                        "attribute": "",
+                        "name": "Harp Voltage II"
+                    },
+                    "skill3": {
+                        "id": "1784",
+                        "description": "Boost to light allies\u0027 DMG cap",
+                        "image": "skill_job_weapon",
+                        "attribute": "5",
+                        "name": "Glimmer\u0027s Quintessence"
+                    },
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "6": {
+                    "param": {
+                        "id": 4110969712,
+                        "image_id": "1040814500",
+                        "level": "150",
+                        "attack": "3365",
+                        "hp": "480",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "15"
+                    },
+                    "master": {
+                        "id": "1040814500",
+                        "name": "Harmonia",
+                        "attribute": "5",
+                        "kind": "9",
+                        "rarity": "4",
+                        "is_group": "6",
+                        "series_id": "2",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "0",
+                        "skill2_display": "0",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "1792",
+                        "description": "Supplement light allies\u0027 DMG",
+                        "image": "skill_job_weapon",
+                        "attribute": "5",
+                        "name": "Glimmer\u0027s Pact"
+                    },
+                    "skill2": {
+                        "id": "1848",
+                        "description": "Boost to ATK based on how many harps are equipped",
+                        "image": "skill_job_weapon",
+                        "attribute": "",
+                        "name": "Harp Voltage II"
+                    },
+                    "skill3": {
+                        "id": "1784",
+                        "description": "Boost to light allies\u0027 DMG cap",
+                        "image": "skill_job_weapon",
+                        "attribute": "5",
+                        "name": "Glimmer\u0027s Quintessence"
+                    },
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "7": {
+                    "param": {
+                        "id": 3823747718,
+                        "image_id": "1040418600",
+                        "level": "150",
+                        "attack": "3358",
+                        "hp": "481",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "15"
+                    },
+                    "master": {
+                        "id": "1040418600",
+                        "name": "Ouroboros Prime",
+                        "attribute": "5",
+                        "kind": "5",
+                        "rarity": "4",
+                        "is_group": "6",
+                        "series_id": "2",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "",
+                        "skill2_display": "",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "1668",
+                        "description": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                        "image": "skill_secret_5_3",
+                        "attribute": "5",
+                        "name": "Zion\u0027s Crux"
+                    },
+                    "skill2": {
+                        "id": "326",
+                        "description": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                        "image": "skill_moment_5",
+                        "attribute": "5",
+                        "name": "Thunder\u0027s Celere"
+                    },
+                    "skill3": null,
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "8": {
+                    "param": {
+                        "id": 3362678120,
+                        "image_id": "1040907700",
+                        "level": "200",
+                        "attack": "4191",
+                        "hp": "240",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "0",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "20"
+                    },
+                    "master": {
+                        "id": "1040907700",
+                        "name": "Ultima Blade",
+                        "attribute": "3",
+                        "kind": "10",
+                        "rarity": "4",
+                        "is_group": "7",
+                        "series_id": "13",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "",
+                        "skill2_display": "0",
+                        "skill3_display": "0",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "736",
+                        "description": "\u003Cspan class=text-small\u003EBig boost to katana-specialty allies\u0027 ATK and max HP \/ Big boost to ATK based on how high HP is\u003C\/span\u003E",
+                        "image": "skill_weapon_whole_10",
+                        "attribute": "",
+                        "name": "Makhaira Plenum"
+                    },
+                    "skill2": {
+                        "id": "759",
+                        "description": "Boost to all allies\u0027 skill DMG cap",
+                        "image": "skill_ability_limit",
+                        "attribute": "",
+                        "name": "Scandere Facultas"
+                    },
+                    "skill3": {
+                        "id": "1809",
+                        "description": "Amplify all allies\u0027 superior elemental DMG",
+                        "image": "skill_job_weapon",
+                        "attribute": "",
+                        "name": "Fulgor Impetus"
+                    },
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "9": {
+                    "param": {
+                        "id": 4568255237,
+                        "image_id": "1040117600",
+                        "level": "150",
+                        "attack": "3719",
+                        "hp": "329",
+                        "bonus_attack": 500,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "0",
+                        "is_user_level": true,
+                        "arousal_level": "15",
+                        "arousal_form": "1",
+                        "arousal_exp": "2000",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": true,
+                            "level": 15,
+                            "form": 1,
+                            "form_name": "Attack",
+                            "remain_for_next_level": 500,
+                            "width": 50,
+                            "is_complete_condition": true,
+                            "release_conditions": [
+                                {
+                                    "condition_type": "1",
+                                    "condition_value": "100",
+                                    "is_cleared": true
+                                }
+                            ],
+                            "max_level": 20,
+                            "total_bonus": {
+                                "2": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 2
+                                    }
+                                ],
+                                "3": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 2
+                                    }
+                                ],
+                                "4": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 2
+                                    }
+                                ],
+                                "5": [
+                                    {
+                                        "name": "ATK",
+                                        "image": "bonus_1",
+                                        "attribute_image": "",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s",
+                                        "effect_value": 100
+                                    }
+                                ],
+                                "6": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 3
+                                    }
+                                ],
+                                "7": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 3
+                                    }
+                                ],
+                                "8": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 3
+                                    }
+                                ],
+                                "9": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 3
+                                    }
+                                ],
+                                "10": [
+                                    {
+                                        "name": "ATK",
+                                        "image": "bonus_1",
+                                        "attribute_image": "",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s",
+                                        "effect_value": 100
+                                    }
+                                ],
+                                "11": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 4
+                                    }
+                                ],
+                                "12": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 4
+                                    }
+                                ],
+                                "13": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 4
+                                    }
+                                ],
+                                "14": [
+                                    {
+                                        "name": "Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 5
+                                    }
+                                ],
+                                "15": [
+                                    {
+                                        "name": "ATK",
+                                        "image": "bonus_1",
+                                        "attribute_image": "",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s",
+                                        "effect_value": 300
+                                    }
+                                ],
+                                "16": [
+                                    {
+                                        "name": "Light ATK",
+                                        "image": "bonus_11",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 2
+                                    }
+                                ],
+                                "17": [
+                                    {
+                                        "name": "EX Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 5
+                                    }
+                                ],
+                                "18": [
+                                    {
+                                        "name": "Light ATK",
+                                        "image": "bonus_11",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 3
+                                    }
+                                ],
+                                "19": [
+                                    {
+                                        "name": "EX Might",
+                                        "image": "bonus_1",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 5
+                                    }
+                                ],
+                                "20": [
+                                    {
+                                        "name": "Light ATK",
+                                        "image": "bonus_11",
+                                        "attribute_image": "icon_type_5",
+                                        "weapon_kind_images": [],
+                                        "disp_string": "+%s%",
+                                        "effect_value": 10
+                                    }
+                                ]
+                            },
+                            "total_acquired_bonus": [
+                                {
+                                    "status_id": "185",
+                                    "level": "2",
+                                    "name": "Might",
+                                    "effect_value": "35",
+                                    "disp_string": "+%s%",
+                                    "image": "bonus_1",
+                                    "attribute_image": "icon_type_5",
+                                    "weapon_kind_images": [],
+                                    "unit_type": "1"
+                                },
+                                {
+                                    "status_id": "2",
+                                    "level": "5",
+                                    "name": "ATK",
+                                    "effect_value": "500",
+                                    "disp_string": "+%s",
+                                    "image": "bonus_1",
+                                    "attribute_image": "",
+                                    "weapon_kind_images": [],
+                                    "unit_type": "2"
+                                }
+                            ],
+                            "skill": [
+                                {
+                                    "skill_id": 2131,
+                                    "name": "Might",
+                                    "comment": "Boost to light allies\u0027 ATK",
+                                    "image": "ex_skill_atk",
+                                    "disp_string": "+%s%",
+                                    "unit_type": 1,
+                                    "display_type": 0,
+                                    "effect_value": "35",
+                                    "acquired_awakening_level": null,
+                                    "acquired_skill": true
+                                }
+                            ],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "1"
+                    },
+                    "master": {
+                        "id": "1040117600",
+                        "name": "Concordia Mk II",
+                        "attribute": "5",
+                        "kind": "2",
+                        "rarity": "4",
+                        "is_group": "",
+                        "series_id": "37",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "0",
+                        "skill2_display": "0",
+                        "skill3_display": "",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "2107",
+                        "description": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                        "image": "skill_job_weapon",
+                        "attribute": "5",
+                        "name": "Golden Enforcement"
+                    },
+                    "skill2": {
+                        "id": "2161",
+                        "description": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                        "image": "skill_job_weapon",
+                        "attribute": "5",
+                        "name": "Zenith Strike: Light"
+                    },
+                    "skill3": null,
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                },
+                "10": {
+                    "param": {
+                        "id": 3997630373,
+                        "image_id": "1040017000_03",
+                        "level": "250",
+                        "attack": "4695",
+                        "hp": "462",
+                        "bonus_attack": 0,
+                        "bonus_hp": 0,
+                        "adequate_flag": true,
+                        "quality": "99",
+                        "is_user_level": true,
+                        "arousal_level": "1",
+                        "arousal_form": "1",
+                        "arousal_exp": "0",
+                        "augment_image": [],
+                        "augment_skill_icon_image": [],
+                        "augment_skill_info": [],
+                        "arousal": {
+                            "is_arousal_weapon": false,
+                            "level": null,
+                            "form": null,
+                            "form_name": null,
+                            "remain_for_next_level": null,
+                            "width": null,
+                            "is_complete_condition": false,
+                            "release_conditions": [],
+                            "max_level": null,
+                            "total_bonus": null,
+                            "total_acquired_bonus": null,
+                            "skill": [],
+                            "is_caution": false
+                        },
+                        "odiant": {
+                            "is_odiant_weapon": false,
+                            "exorcision_level": 0,
+                            "max_exorcision_level": 0,
+                            "reduction_effect_value": 0
+                        },
+                        "skill_level": "25"
+                    },
+                    "master": {
+                        "id": "1040017000",
+                        "name": "Sword of Repudiation",
+                        "attribute": "5",
+                        "kind": "1",
+                        "rarity": "4",
+                        "is_group": "17",
+                        "series_id": "3",
+                        "pre_weapon_skill_index": "",
+                        "skill1_display": "",
+                        "skill2_display": "0",
+                        "skill3_display": "0",
+                        "skill4_display": ""
+                    },
+                    "skill1": {
+                        "id": "2196",
+                        "description": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                        "image": "skill_atk_hp_rise_5_3",
+                        "attribute": "5",
+                        "name": "Zion\u0027s Apotheosis"
+                    },
+                    "skill2": {
+                        "id": "2210",
+                        "description": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                        "image": "skill_special_limit_3",
+                        "attribute": "",
+                        "name": "\u03b3 Revelation Ater II"
+                    },
+                    "skill3": {
+                        "id": "1726",
+                        "description": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                        "image": "skill_job_weapon",
+                        "attribute": "",
+                        "name": "Deceitful Fallacy"
+                    },
+                    "skill4": null,
+                    "hidden_skill1": null,
+                    "hidden_skill2": null,
+                    "is_position_locked": false
+                }
+            },
+            "weapons_attack": 38002,
+            "weapons_hp": 3993,
+            "weapon_kind_replace": {
+                "weapon": 10
+            },
+            "weapon_replace": {
+                "weapon": "1040909700"
+            },
+            "is_open_additional_weapon": true,
+            "is_effective_companionweapon": false,
+            "is_use_additional_weapon": false,
+            "skin_summon_id": null,
+            "skin_summon_is_mypage": false,
+            "skin_summon_pose": null,
+            "summons": {
+                "1": {
+                    "param": {
+                        "id": "1043431742",
+                        "image_id": "2040056000_04",
+                        "level": "250",
+                        "attack": "4181",
+                        "hp": "1759",
+                        "quality": "99",
+                        "evolution_flag": "0",
+                        "evolution": "6",
+                        "is_mypage": true
+                    },
+                    "master": {
+                        "id": "2040056000",
+                        "name": "Lucifer",
+                        "attribute": "5",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "120130",
+                        "comment": "150% boost to all elemental ATK \/ 50% boost to max HP \/ When a foe uses a special attack: Remove 1 debuff \/ Wings of Pure White effect",
+                        "name": "Lucifer\u0027s Aura"
+                    },
+                    "sub_skill": {
+                        "id": "120471",
+                        "comment": "30% boost to healing specs",
+                        "name": "Lucifer\u0027s Aura"
+                    },
+                    "is_position_locked": false
+                },
+                "2": {
+                    "param": {
+                        "id": "1488621044",
+                        "image_id": "2040448000",
+                        "level": "150",
+                        "attack": "3450",
+                        "hp": "1237",
+                        "quality": "99",
+                        "evolution_flag": "0",
+                        "evolution": "4",
+                        "is_mypage": true
+                    },
+                    "master": {
+                        "id": "2040448000",
+                        "name": "Versusia",
+                        "attribute": "1",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "20541",
+                        "comment": "200% boost to all elemental ATK \/ At the end of a turn after 5 combined charge attacks or triple attacks by all allies that turn: Celestial Dominion effect to MC",
+                        "name": "Will of Destruction"
+                    },
+                    "sub_skill": {
+                        "id": "20542",
+                        "comment": "At the end of a turn after 8 combined charge attacks or triple attacks by all allies that turn: Celestial Dominion effect to MC",
+                        "name": "Will of Destruction"
+                    },
+                    "is_position_locked": false
+                },
+                "3": {
+                    "param": {
+                        "id": "1365038585",
+                        "image_id": "2040425000",
+                        "level": "150",
+                        "attack": "3442",
+                        "hp": "1239",
+                        "quality": "99",
+                        "evolution_flag": "0",
+                        "evolution": "4",
+                        "is_mypage": true
+                    },
+                    "master": {
+                        "id": "2040425000",
+                        "name": "Triple Zero",
+                        "attribute": "5",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "20484",
+                        "comment": "120% boost to all elemental ATK \/ 12 Wings of Promise to MC at battle start (Boost to MC\u0027s ATK and DEF based on number of Wings of Promise \/ Amplify all allies\u0027 DMG dealt when at 12)",
+                        "name": "Vying of Twelve Wings"
+                    },
+                    "sub_skill": {
+                        "id": "20485",
+                        "comment": "2 Wings of Promise to MC upon MC using a skill or charge attack (Max: 12 \/ Boost to MC\u0027s ATK and DEF based on number of Wings of Promise \/ Amplify all allies\u0027 DMG dealt when at 12)",
+                        "name": "Vying of Twelve Wings"
+                    },
+                    "is_position_locked": false
+                },
+                "4": {
+                    "param": {
+                        "id": "1257969915",
+                        "image_id": "2040409000",
+                        "level": "150",
+                        "attack": "2573",
+                        "hp": "1243",
+                        "quality": "0",
+                        "evolution_flag": "0",
+                        "evolution": "4",
+                        "is_mypage": false
+                    },
+                    "master": {
+                        "id": "2040409000",
+                        "name": "Lu Woh",
+                        "attribute": "5",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "20453",
+                        "comment": "140% boost to light ATK",
+                        "name": "Lu Woh\u0027s Aura"
+                    },
+                    "sub_skill": {
+                        "id": "20454",
+                        "comment": "40% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                        "name": "Lu Woh\u0027s Aura"
+                    },
+                    "is_position_locked": false
+                },
+                "5": {
+                    "param": {
+                        "id": "1101208583",
+                        "image_id": "2040319000",
+                        "level": "200",
+                        "attack": "2830",
+                        "hp": "1132",
+                        "quality": "0",
+                        "evolution_flag": "0",
+                        "evolution": "5",
+                        "is_mypage": false
+                    },
+                    "master": {
+                        "id": "2040319000",
+                        "name": "The Star",
+                        "attribute": "5",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "30275",
+                        "comment": "Boost to light allies\u0027 multiattack rate (Boost rises based on turns passed)",
+                        "name": "The Star\u0027s Aura"
+                    },
+                    "sub_skill": {
+                        "id": "20276",
+                        "comment": "Amplify light allies\u0027 DMG against dark foes by 10%",
+                        "name": "The Star\u0027s Aura"
+                    },
+                    "is_position_locked": false
+                }
+            },
+            "summons_attack": 16476,
+            "summons_hp": 6610,
+            "sub_summons": {
+                "1": {
+                    "param": {
+                        "id": "1122001291",
+                        "image_id": "2040330000",
+                        "level": "150",
+                        "attack": "2870",
+                        "hp": "1155",
+                        "quality": "0",
+                        "evolution_flag": "0",
+                        "evolution": "4",
+                        "is_mypage": false
+                    },
+                    "master": {
+                        "id": "2040330000",
+                        "name": "Metatron",
+                        "attribute": "5",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "20355",
+                        "comment": "140% boost to light ATK",
+                        "name": "Metatron\u0027s Aura"
+                    },
+                    "sub_skill": {
+                        "id": "20356",
+                        "comment": "15% boost to light allies\u0027 DMG cap",
+                        "name": "Metatron\u0027s Aura"
+                    },
+                    "is_position_locked": false
+                },
+                "2": {
+                    "param": {
+                        "id": "964898351",
+                        "image_id": "2040347000",
+                        "level": "150",
+                        "attack": "3760",
+                        "hp": "1239",
+                        "quality": "99",
+                        "evolution_flag": "0",
+                        "evolution": "4",
+                        "is_mypage": true
+                    },
+                    "master": {
+                        "id": "2040347000",
+                        "name": "Belial",
+                        "attribute": "6",
+                        "rarity": "4"
+                    },
+                    "skill": {
+                        "id": "20377",
+                        "comment": "130% boost to dark ATK \/ Cap dark allies\u0027 max HP at 20,000 \/ Cap DMG taken at 5,000 per hit",
+                        "name": "Not So Bad Once You Try It, Right?"
+                    },
+                    "sub_skill": {
+                        "id": "20378",
+                        "comment": "Supplement DMG by up to 30,000 per hit \/ 30% hit to max HP",
+                        "name": "Not So Bad Once You Try It, Right?"
+                    },
+                    "is_position_locked": false
+                }
+            },
+            "quick_user_summon_id": 1043431742,
+            "cjs_name": "uf3_sw_1_01",
+            "cjs_position": null,
+            "param": {
+                "id": 26122367,
+                "attack": 89383,
+                "hp": 26552,
+                "attribute": 5,
+                "kind": 10,
+                "image": "311303_sw_1_01"
+            },
+            "job": {
+                "master": {
+                    "id": "220301",
+                    "name": "Kengo",
+                    "comment": "Become the dancing blade that cuts through all opposition in battle.",
+                    "class": "6",
+                    "ex_class": true,
+                    "type": "2",
+                    "title_get_hint": "Get by clearing the free quest You Have My Katana in Inhabited Area, Amalthea Island.\u003Cbr\u003E\u003Cbr\u003ERequirements to start the quest:\u003Cbr\u003E\u2022 Clear main quest chapter 63\u003Cbr\u003E\u2022 Master the Samurai class\u003Cbr\u003E\u2022 Change the class champion weapon Murakumo\u0027s element",
+                    "class_change_point": "0",
+                    "domain": "22",
+                    "requirement_popup_type": "1",
+                    "weapon1": "10",
+                    "weapon2": "8",
+                    "da_odds": "4",
+                    "ta_odds": "1",
+                    "weapon_1": "10",
+                    "weapon_2": "8",
+                    "is_super_job_class": false,
+                    "super_job_class_id": null,
+                    "max_evolution": 0,
+                    "max_job_level": 20,
+                    "companion_weapon_flag": ""
+                },
+                "param": {
+                    "id": 21894231,
+                    "is_master": true,
+                    "level": 20,
+                    "max_job_level_by_evolution": 20,
+                    "evolution": 0,
+                    "max_evolution": 0,
+                    "is_complete_master_level": true,
+                    "master_level": 30,
+                    "remain_next_master_exp": 0,
+                    "is_complete_perfection_proof": true,
+                    "perfection_proof_level": 6,
+                    "remain_next_perfection_proof_exp": 0,
+                    "can_display_super_job_class": false,
+                    "is_opened_job_zenith_exp": true,
+                    "job_exp_width": 100,
+                    "is_open_master_level": true,
+                    "can_open_super_job_class": false,
+                    "remain_next_exp": 0
+                },
+                "bonue": {
+                    "level_up_bonus": [
+                        {
+                            "kind": "bonus_1",
+                            "kind_jp": "ATK",
+                            "is_percent": "0",
+                            "type": "attack_up",
+                            "value": 3000,
+                            "sort_id": "1010"
+                        },
+                        {
+                            "kind": "bonus_14",
+                            "kind_jp": "HP",
+                            "is_percent": "0",
+                            "type": "hp_up",
+                            "value": 1000,
+                            "sort_id": "1030"
+                        },
+                        {
+                            "kind": "bonus_15",
+                            "kind_jp": "Boost to charge bar gain on normal attacks",
+                            "is_percent": "0",
+                            "type": "special_skill_gauge_bonuse_attack",
+                            "value": 1,
+                            "sort_id": "5010"
+                        }
+                    ],
+                    "master_bonus": [
+                        {
+                            "type": "attack_up",
+                            "name": "ATK",
+                            "comment": "",
+                            "description": "",
+                            "param": 22,
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "1010"
+                        },
+                        {
+                            "type": "defense_up",
+                            "name": "DEF",
+                            "comment": "",
+                            "description": "",
+                            "param": 13,
+                            "kind": "bonus_2",
+                            "is_percent_master": "1",
+                            "sort_id": "1020"
+                        },
+                        {
+                            "type": "hp_up",
+                            "name": "HP",
+                            "comment": "",
+                            "description": "",
+                            "param": 20,
+                            "kind": "bonus_14",
+                            "is_percent_master": "1",
+                            "sort_id": "1030"
+                        },
+                        {
+                            "type": "double_attack_rate_up",
+                            "name": "Double attack rate",
+                            "comment": "",
+                            "description": "",
+                            "param": 7,
+                            "kind": "bonus_20",
+                            "is_percent_master": "1",
+                            "sort_id": "1040"
+                        },
+                        {
+                            "type": "triple_attack_rate_up",
+                            "name": "Triple attack rate",
+                            "comment": "",
+                            "description": "",
+                            "param": 5,
+                            "kind": "bonus_21",
+                            "is_percent_master": "1",
+                            "sort_id": "1050"
+                        },
+                        {
+                            "type": "passive_damage_limit_up_plus",
+                            "name": "DMG Cap",
+                            "comment": "",
+                            "description": "",
+                            "param": "1",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "1060"
+                        },
+                        {
+                            "type": "ability_attack_up",
+                            "name": "Skill DMG",
+                            "comment": "",
+                            "description": "",
+                            "param": 23,
+                            "kind": "bonus_18",
+                            "is_percent_master": "1",
+                            "sort_id": "1070"
+                        },
+                        {
+                            "type": "ability_damage_limit_up_value",
+                            "name": "Skill DMG cap",
+                            "comment": "",
+                            "description": "",
+                            "param": 5,
+                            "kind": "bonus_18",
+                            "is_percent_master": "1",
+                            "sort_id": "1075"
+                        },
+                        {
+                            "type": "guard_ailment",
+                            "name": "Debuff resistance",
+                            "comment": "",
+                            "description": "",
+                            "param": 20,
+                            "kind": "bonus_3",
+                            "is_percent_master": "1",
+                            "sort_id": "1090"
+                        },
+                        {
+                            "type": "ailment_enhance",
+                            "name": "Debuff success rate",
+                            "comment": "",
+                            "description": "",
+                            "param": 7,
+                            "kind": "bonus_4",
+                            "is_percent_master": "1",
+                            "sort_id": "1100"
+                        },
+                        {
+                            "type": "dodge",
+                            "name": "Dodge",
+                            "comment": "",
+                            "description": "",
+                            "param": 3,
+                            "kind": "bonus_2",
+                            "is_percent_master": "1",
+                            "sort_id": "1110"
+                        },
+                        {
+                            "type": "heal_up",
+                            "name": "Healing",
+                            "comment": "",
+                            "description": "",
+                            "param": 14,
+                            "kind": "bonus_13",
+                            "is_percent_master": "1",
+                            "sort_id": "1120"
+                        },
+                        {
+                            "type": "gauge_effect_up",
+                            "name": "Inhibit overdrive",
+                            "comment": "",
+                            "description": "",
+                            "param": 8,
+                            "kind": "bonus_5",
+                            "is_percent_master": "1",
+                            "sort_id": "2010"
+                        },
+                        {
+                            "type": "runaway_damage_cut",
+                            "name": "Cut to DMG from a foe in overdrive",
+                            "comment": "",
+                            "description": "",
+                            "param": "1",
+                            "kind": "bonus_2",
+                            "is_percent_master": "1",
+                            "sort_id": "2030"
+                        },
+                        {
+                            "type": "main_weapon_sword_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a sabre",
+                            "comment": "",
+                            "description": "",
+                            "param": 6,
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4010"
+                        },
+                        {
+                            "type": "main_weapon_dagger_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a dagger",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4020"
+                        },
+                        {
+                            "type": "main_weapon_spear_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a spear",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4030"
+                        },
+                        {
+                            "type": "main_weapon_axe_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is an axe",
+                            "comment": "",
+                            "description": "",
+                            "param": 6,
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4040"
+                        },
+                        {
+                            "type": "main_weapon_wand_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a staff",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4050"
+                        },
+                        {
+                            "type": "main_weapon_gun_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a gun",
+                            "comment": "",
+                            "description": "",
+                            "param": 6,
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4060"
+                        },
+                        {
+                            "type": "main_weapon_melee_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a melee",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4070"
+                        },
+                        {
+                            "type": "main_weapon_bow_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a bow",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4080"
+                        },
+                        {
+                            "type": "main_weapon_harp_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a harp",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4090"
+                        },
+                        {
+                            "type": "main_weapon_katana_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a katana",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4100"
+                        },
+                        {
+                            "type": "special_skill_gauge_bonuse_attack",
+                            "name": "Boost to charge bar gain upon normal\u00a0attacks",
+                            "comment": "",
+                            "description": "",
+                            "param": "1",
+                            "kind": "bonus_15",
+                            "is_percent_master": "0",
+                            "sort_id": "5010"
+                        },
+                        {
+                            "type": "defense_up_my_max_hp",
+                            "name": "Boost to DEF when HP is full",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_2",
+                            "is_percent_master": "1",
+                            "sort_id": "5020"
+                        },
+                        {
+                            "type": "my_job_class_if:passive_damage_limit_up_plus",
+                            "name": "Boost to DMG cap for classes not row V",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "5030"
+                        },
+                        {
+                            "type": "my_job_class_if:defense_up",
+                            "name": "Boost to DEF for classes not row V",
+                            "comment": "",
+                            "description": "",
+                            "param": "5",
+                            "kind": "bonus_2",
+                            "is_percent_master": "1",
+                            "sort_id": "5040"
+                        },
+                        {
+                            "type": "my_job_class_if:passive_heal_limit_up",
+                            "name": "Boost to healing cap for classes not row V",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_13",
+                            "is_percent_master": "1",
+                            "sort_id": "5050"
+                        },
+                        {
+                            "type": "my_job_class_if:ability_attack_up",
+                            "name": "Boost to skill DMG for classes not row V",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_18",
+                            "is_percent_master": "1",
+                            "sort_id": "5060"
+                        },
+                        {
+                            "type": "my_job_class_if:final_attack_rise_plus",
+                            "name": "Amplify normal attack DMG for classes not row V",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "5070"
+                        },
+                        {
+                            "type": "my_job_class_if:ailment_enhance",
+                            "name": "Boost to debuff success rate for classes not row V",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_4",
+                            "is_percent_master": "1",
+                            "sort_id": "5080"
+                        }
+                    ],
+                    "master_bonus_of_job": [
+                        {
+                            "type": "main_weapon_katana_attack_up",
+                            "name": "Boost to main weapon\u0027s ATK when main weapon is a katana",
+                            "comment": "",
+                            "description": "",
+                            "param": "3",
+                            "kind": "bonus_1",
+                            "is_percent_master": "1",
+                            "sort_id": "4100"
+                        }
+                    ]
+                }
+            },
+            "set_action": [
+                {
+                    "character_id": "0",
+                    "action_set_pos": "0",
+                    "set_action_id": "200211",
+                    "name": "No More Doubt"
+                },
+                {
+                    "character_id": "0",
+                    "action_set_pos": "1",
+                    "set_action_id": "15",
+                    "name": "Rage III"
+                },
+                {
+                    "character_id": "0",
+                    "action_set_pos": "2",
+                    "set_action_id": "3040",
+                    "name": "Dispel"
+                }
+            ],
+            "shield_id": null,
+            "skin_shield_id": null,
+            "familiar_id": null,
+            "skin_familiar_id": null,
+            "skill": {
+                "count": 20,
+                "description": [
+                    {
+                        "over": 1,
+                        "comment": "Medium boost to light allies\u0027 ATK and critical hit rate",
+                        "sort": "10100135"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Big boost to light allies\u0027 ATK and critical hit rate",
+                        "sort": "10100451"
+                    },
+                    {
+                        "over": 2,
+                        "comment": "Small boost to light allies\u0027 ATK and critical hit rate",
+                        "sort": "10100453"
+                    },
+                    {
+                        "over": 2,
+                        "comment": "Boost to light allies\u0027 DMG cap",
+                        "sort": "10700025"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Big boost to light allies\u0027 ATK and max HP \/ Big amplifying boost to DMG",
+                        "sort": "10701011"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Amplify all allies\u0027 superior elemental DMG",
+                        "sort": "10702901"
+                    },
+                    {
+                        "over": 2,
+                        "comment": "Boost to ATK based on how many harps are equipped",
+                        "sort": "10708009"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Big supplemental boost to light allies\u0027 C.A. DMG",
+                        "sort": "10708651"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Boost to light allies\u0027 C.A. DMG cap and normal attack DMG cap",
+                        "sort": "10710451"
+                    },
+                    {
+                        "over": 2,
+                        "comment": "Big amplifying boost to light allies\u0027 critical hit DMG",
+                        "sort": "10710583"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Small boost to light allies\u0027 max HP and debuff resistance",
+                        "sort": "20100453"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Boost to charge bar gain",
+                        "sort": "30100023"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Boost to all allies\u0027 charge bar gain upon using charge attack",
+                        "sort": "30100089"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Bonus Elemental DMG effect \/ Sharp hit to charge bar gain",
+                        "sort": "30300004"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Boost to all allies\u0027 skill DMG cap",
+                        "sort": "30300006"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Boost to C.A. DMG cap and special C.A. DMG cap",
+                        "sort": "30300011"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "\u003Cspan class=text-small\u003EBig boost to katana-specialty allies\u0027 ATK and max HP \/ Big boost to ATK based on how high HP is\u003C\/span\u003E",
+                        "sort": "40100960"
+                    },
+                    {
+                        "over": 2,
+                        "comment": "Supplement light allies\u0027 DMG",
+                        "sort": "40101975"
+                    },
+                    {
+                        "over": 2,
+                        "comment": "30% boost to Light\u0027s, Thunder\u0027s, and Zion\u0027s weapon skills",
+                        "sort": "40102751"
+                    },
+                    {
+                        "over": 1,
+                        "comment": "Boost to light allies\u0027 ATK and DEF \u003Cspan class=text-blue\u003E(Activates when any of light Omega, light Taboo, or light Optimus weapon skills have a boost of 280% or above)\u003C\/span\u003E",
+                        "sort": "999999999"
+                    }
+                ]
+            },
+            "damage_info": {
+                "assumed_advantage_damage_attribute": 6,
+                "assumed_normal_damage_attribute": 5,
+                "assumed_advantage_damage": 672416,
+                "assumed_normal_damage": 465838,
+                "hp": 76523,
+                "effect_value_info": [
+                    {
+                        "icon_img": "01_icon_might_01.png",
+                        "value": "396%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "01_icon_might_03.png",
+                        "value": "45%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "01_icon_might_04.png",
+                        "value": "32%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "01_icon_stamina_01.png",
+                        "value": "20.4%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "01_icon_critical.png",
+                        "value": "95.55%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "01_icon_lightoptimus.png",
+                        "value": "60%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "03_icon_hp.png",
+                        "value": "168%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "02_icon_def.png",
+                        "value": "15%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "02_icon_debuff_res.png",
+                        "value": "15.6%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_dmg_cap.png",
+                        "value": "19%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_amplify.png",
+                        "value": "7.8%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_elem_amplify.png",
+                        "value": "25%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_na_dmg_cap.png",
+                        "value": "5%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_skill_dmg_cap.png",
+                        "value": "50%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_ca_dmg_cap.png",
+                        "value": "60%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_ca_dmg_cap_ded.png",
+                        "value": "5%",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_dmg_supp.png",
+                        "value": "+100000",
+                        "is_max": true
+                    },
+                    {
+                        "icon_img": "04_icon_ca_supp.png",
+                        "value": "+409500",
+                        "is_max": false
+                    },
+                    {
+                        "icon_img": "04_icon_ca_gage.png",
+                        "value": "-50%",
+                        "is_max": false
+                    }
+                ],
+                "weapon_skill_enhance_param": {
+                    "weapon_skill_enhance": 290,
+                    "weapon_skill_enhance_magna": 20,
+                    "weapon_skill_enhance_evil": 0
+                },
+                "summon_name": "Zeus"
+            },
+            "after_damage_info": [],
+            "is_open_sub_summon": true
+        },
+        "blessing": [],
+        "blessing_cost_info": [],
+        "dungeon_name": ""
+    },
+    "is_main_weapon_fixed": false,
+    "is_weapon_skin": false,
+    "recommend_attr": 4,
+    "is_effective_companionweapon": false,
+    "companionparts_button_flash": true,
+    "is_enable_recommend_party": true,
+    "is_change_deck_restriction": false,
+    "is_invalid_main_weapon": false,
+    "fix_evoker_attribute": null,
+    "quest_info": null,
+    "replicard_dungeon_id": null
+}

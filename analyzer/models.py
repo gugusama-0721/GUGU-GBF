@@ -74,6 +74,8 @@ class Summon:
     name: str
     element: str
     call_effect: str = ""
+    attack: int = 0
+    hp: int = 0
     tags: list = field(default_factory=list)
 
 
@@ -89,7 +91,9 @@ class Party:
     support_summons: list = field(default_factory=list)
 
     def total_attack(self) -> int:
-        atk = self.main.attack + self.sub.attack + self.third.attack
+        atk = self.main.attack if self.main else 0
+        atk += self.sub.attack if self.sub else 0
+        atk += self.third.attack if self.third else 0
         atk += sum(w.attack for w in self.weapons)
         if self.main_summon:
             atk += self.main_summon.attack if hasattr(self.main_summon, 'attack') else 0

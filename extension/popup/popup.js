@@ -3,6 +3,21 @@
 
 const ANALYZER_URL = "http://127.0.0.1:8765";
 
+// ---------- 截获数据统计 ----------
+async function refreshCollected() {
+  try {
+    const res = await chrome.runtime.sendMessage({ type: "gbf_get_collected" });
+    if (res && res.cache) {
+      document.getElementById("c-char").textContent =
+        res.cache.character ? (res.cache.character.data.list || []).length : 0;
+      document.getElementById("c-weapon").textContent =
+        res.cache.weapon ? (res.cache.weapon.data.list || []).length : 0;
+      document.getElementById("c-summon").textContent =
+        res.cache.summon ? (res.cache.summon.data.list || []).length : 0;
+    }
+  } catch (e) {}
+}
+
 // ---------- 配队展示 ----------
 const demoTeam = {
   raid: "火之龙HL",
@@ -14,17 +29,45 @@ const demoTeam = {
 
 function renderTeam() {
   const el = document.getElementById("team-content");
-  el.innerHTML = `
-    <div class="team-row">
-      ${demoTeam.members.map((m) => `<span class="member">${m}</span>`).join("")}
-    </div>
-    <div style="font-size:12px">
-      <span class="label">副本</span>${demoTeam.raid}<br/>
-      <span class="label">武器</span>${demoTeam.weapons.join("、")}<br/>
-      <span class="label">召唤</span>${demoTeam.summon}<br/>
-      <span class="label">总攻</span>${demoTeam.total_atk}
-    </div>
-  `;
+  // 尝试调用本机分析端获取真实配队
+  (async () => {
+    try {
+      const res = await fetch(`${ANALYZER_URL}/team`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ raid_id: "raid_fire_dragon" }),
+      });
+      const data = await res.json();
+      if (data && data.members) {
+        el.innerHTML = `
+          <div class="team-row">
+            ${data.members.map((m) => `<span class="member">${m}</span>`).join("")}
+          </div>
+          <div style="font-size:12px">
+            <span class="label">副本</span>${data.raid}<br/>
+            <span class="label">武器</span>${(data.weapons || []).join("、")}<br/>
+            <span class="label">召唤</span>${data.summon || "无"}<br/>
+            <span class="label">总攻</span>${data.total_attack}
+          </div>`;
+        document.getElementById("analyzer-status").textContent =
+          `分析端运行中 · 数据:${Object.values(data.collected || {}).join("/")}条`;
+        return;
+      }
+      throw new Error("无数据");
+    } catch (e) {
+      // 离线回退到演示数据
+      el.innerHTML = `
+        <div class="team-row">
+          ${demoTeam.members.map((m) => `<span class="member">${m}</span>`).join("")}
+        </div>
+        <div style="font-size:12px">
+          <span class="label">副本</span>${demoTeam.raid}<br/>
+          <span class="label">武器</span>${demoTeam.weapons.join("、")}<br/>
+          <span class="label">召唤</span>${demoTeam.summon}<br/>
+          <span class="label">总攻</span>${demoTeam.total_atk}
+        </div>`;
+    }
+  })();
 }
 
 // ---------- 战斗建议（示例） ----------
@@ -79,3 +122,4 @@ document.getElementById("submit-battle").addEventListener("click", async () => {
 });
 
 renderTeam();
+refreshCollected();

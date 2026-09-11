@@ -24,7 +24,13 @@ ELEMENT_ADVANTAGE = {
 
 def element_multiplier(my_element: str, enemy_element: str) -> float:
     """我方属性对敌方属性的伤害倍率，用于评分。"""
-    enemy = Element(enemy_element)
+    try:
+        enemy = Element(enemy_element)
+    except ValueError:
+        return 1.0
+    if my_element not in {e.value for e in Element}:
+        # 元素未知（真实列表接口暂缺元素字段）时给中性倍率
+        return 1.0
     if my_element == Element.LIGHT.value or my_element == Element.DARK.value:
         # 光克暗事件可后续扩展；此示范中光暗按1.0处理
         return 1.0
@@ -41,6 +47,18 @@ class TeamBuilder:
         self.weapons = kb["weapons"]
         self.summons = kb["summons"]
         self.raids = kb["raids"]
+
+    def load_from_store(self, characters: list, weapons: list, summons: list):
+        """用扩展截获的真实数据覆盖内置示例库。
+
+        characters/weapons/summons: api_parser.GbfApiParser.to_models() 产出的 model 对象。
+        """
+        if characters:
+            self.characters = {c.id: c for c in characters}
+        if weapons:
+            self.weapons = list(weapons) if isinstance(weapons, list) else list(self.weapons)
+        if summons:
+            self.summons = list(summons) if isinstance(summons, list) else list(self.summons)
 
     # ---------- 角色选人评分 ----------
     def _score_character(self, ch: Character, raid, party_char_ids) -> float:
@@ -71,8 +89,11 @@ class TeamBuilder:
         return score
 
     def _select_characters(self, raid, count=3):
-        """从玩家角色里选出评分最高的 count 个。"""
+        """从玩家角色里选出评分最高的 count 个（不足则尽可能多选）。"""
         candidates = list(self.characters.values())
+        if not candidates:
+            return []
+        n = min(count, len(candidates))
         ranked = sorted(
             candidates,
             key=lambda c: self._score_character(c, raid, []),
@@ -81,15 +102,15 @@ class TeamBuilder:
         # 简单贪心 + 少量协同提升
         best_score = -1
         best_combo = None
-        for combo in combinations(candidates, count):
+        for combo in combinations(candidates, n):
             s = sum(self._score_character(c, raid, [x.id for x in combo]) for c in combo)
             # 加一点同属性一致性溢价
             elems = {c.element for c in combo}
-            s += len(elems) * 0 + (25 if len(elems) == 1 else 0)
+            s += 25 if len(elems) == 1 else 0
             if s > best_score:
                 best_score = s
                 best_combo = combo
-        return list(best_combo)
+        return list(best_combo or [])
 
     # ---------- 武器盘构建 ----------
     def _build_weapons(self, main_character, count=6):
@@ -122,11 +143,17 @@ class TeamBuilder:
             pass
 
         chosen = self._select_characters(raid, 3)
+        if not chosen:
+            raise ValueError("玩家尚未解析到有效的角色数据")
+
+        def _at(i, default=None):
+            return chosen[i] if i < len(chosen) else default
+
         main = chosen[0]
         weapons = self._build_weapons(main)
         main_summon = self._select_summon(main)
         party = Party(
-            main=chosen[0], sub=chosen[1], third=chosen[2],
+            main=main, sub=_at(1), third=_at(2),
             weapons=weapons, main_summon=main_summon,
         )
 

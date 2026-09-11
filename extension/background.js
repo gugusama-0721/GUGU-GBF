@@ -1,52 +1,50 @@
 // GUGU-GBF 后台服务（MV3 Service Worker）
-// 只能读、不自动操作。捕获 GBF 网络请求，转发到本机 Python 分析端。
+// 聚合 content script 拦截到的三类配置数据，供 popup 展示并同步本机 Python 分析端。
+// 只读，不自动操作。
 
-// 本机 Python 分析端地址（后续可配置）
 const ANALYZER_URL = "http://127.0.0.1:8765";
+const STORE_KEY = "gugu_gbf_data";
 
-// 相关兴趣的请求路径片断（真实抓包后需补充）
-const INTERESTING_FRAGMENTS = [
-  "user", "party", "team", "party_list",
-  "battle", "battle_start", "battle_skill", "battle_action",
-  "relics", "character_list", "weapon_list", "summon_list",
-  "raid", "quest",
-];
+// 存储内容：
+// { character: {url, data, time} | null, weapon: {...}, summon: {...} }
+let cache = {
+  character: null,
+  weapon: null,
+  summon: null,
+  deck: null,
+};
 
-// 监听网络请求（只捕获，不拦截、不改写）
-chrome.webRequest.onCompleted.addListener(
-  (details) => {
-    const url = details.url;
-    if (!INTERESTING_FRAGMENTS.some((f) => url.includes(f))) return;
+// 恢复缓存
+chrome.storage.local.get(STORE_KEY, (obj) => {
+  if (obj && obj[STORE_KEY]) cache = obj[STORE_KEY];
+});
 
-    console.log("[GUGU-GBF] 捕获请求:", url, "method:", details.method);
-    // TODO: 拿到响应体需 content script 配合，这里先记录 URL/方法/状态
-    const payload = {
-      type: "web_request",
-      url,
-      method: details.method,
-      statusCode: details.statusCode,
-      tabId: details.tabId,
-      time: Date.now(),
-    };
-    forwardToAnalyzer(payload);
-  },
-  // 只监听 https 的 gbf 域
-  { urls: ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"] }
-);
+function persist() {
+  chrome.storage.local.set({ [STORE_KEY]: cache });
+}
 
-// 接收 content script 发来的页面数据
+// 接收 content script 拦截到的真实接口数据
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message && message.type === "gbf_page_data") {
-    forwardToAnalyzer(message.payload);
+  // 三类配置接口数据
+  if (message && message.type === "gbf_api_data" && message.kind) {
+    saveKind(message.kind, message.url, message.data);
+    forwardToAnalyzer({ kind: message.kind, url: message.url, data: message.data });
     sendResponse({ ok: true });
+    return;
   }
-  // 战斗状态半自动录入
-  if (message && message.type === "gbf_battle_state") {
-    forwardToAnalyzer(message.payload);
-    sendResponse({ ok: true });
+  // 为扩展界面提供汇总数据
+  if (message && message.type === "gbf_get_collected") {
+    sendResponse({ cache });
+    return;
   }
 });
 
+function saveKind(kind, url, data) {
+  cache[kind] = { url, data, time: Date.now() };
+  persist();
+}
+
+// 转发到本机 Python 分析端（不存在则忽略，不拖慢游戏）
 async function forwardToAnalyzer(payload) {
   try {
     await fetch(ANALYZER_URL + "/ingest", {
@@ -55,7 +53,14 @@ async function forwardToAnalyzer(payload) {
       body: JSON.stringify(payload),
     });
   } catch (e) {
-    // 分析端未启动时忽略，不打断游戏
     console.warn("[GUGU-GBF] 分析端未连接:", e.message);
   }
 }
+
+// 保留 webRequest 监听作为 URL 日志（可选，用于观察有哪些接口在活跃请求）
+chrome.webRequest.onCompleted.addListener(
+  (details) => {
+    // 仅记录，不做响应体解析（响应体由 content script 处理）
+  },
+  { urls: ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"] }
+);
