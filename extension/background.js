@@ -114,14 +114,18 @@ function writeDbgStatus(state, tabId, detail) {
   } catch (e) {}
 }
 let dbgCount = 0;
+let recentRequestUrls = [];
 
 chrome.debugger.onEvent.addListener((source, method, params) => {
   if (!params || source.tabId !== debugTabId) return;
   if (method === "Network.responseReceived") {
     const { requestId, response, type } = params;
+    // 记录最近若干请求 URL，供诊断查看（不匹配 kind 也记录，便于确认该匹配哪条接口）
+    recentRequestUrls.push({ url: response && response.url, type, t: Date.now() });
+    if (recentRequestUrls.length > 12) recentRequestUrls.shift();
+    try { chrome.storage.local.set({ gugu_gbf_recent: recentRequestUrls.slice() }); } catch (e) {}
     const kind = kindForUrl(response && response.url);
     if (kind && (type === "XHR" || type === "Fetch")) {
-      // 稍后 loadingFinished 后再取 body，避免读取过早
       pendingFetch[kind] = requestId;
     }
   } else if (method === "Network.loadingFinished") {

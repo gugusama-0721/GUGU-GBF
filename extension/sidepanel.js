@@ -162,6 +162,16 @@ function updateStatus(cache) {
         ...dbgLine,
       ];
       box.textContent = lines.join("\n");
+      // 追加最近请求 URL
+      chrome.storage.local.get("gugu_gbf_recent", (rc) => {
+        const list = (rc && rc.gugu_gbf_recent) || [];
+        if (list.length) {
+          const shown = list.map((r) => `  ${r.type||"-"} ${(r.url||"").replace("https://game.granbluefantasy.jp","")}`).join("\n");
+          box.textContent += "\n\n===== 最近 CDP 请求 =====" + (shown.length > 900 ? shown.slice(-900) : shown);
+        } else {
+          box.textContent += "\n\n(暂无 CDP 请求记录)";
+        }
+      });
       if (db && db.state === "attached" && (db.captured ?? 0) === 0) {
         box.textContent += "\n\n⚠️ debugger 已附加但未捕获到目标接口。\nCDP 层级监控正常，但当前页面没触发 角色/武器/召唤/队伍 请求。请进入对应页面。";
       } else if (!db || db.state !== "attached") {
