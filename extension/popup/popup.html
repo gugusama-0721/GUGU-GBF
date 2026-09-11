@@ -29,64 +29,53 @@
     .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
     .field label { font-size: 11px; color: #9aa3b5; display: block; margin-bottom: 2px; }
     .field input, .field select { width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #3a4258; background: #2a3142; color: var(--text); font-size: 12px; }
+    .raw-list { font-size: 11px; color: #bdc5d6; }
+    .raw-item { background: #232a3c; border-radius: 6px; padding: 8px; margin-bottom: 6px; border-left: 3px solid var(--accent); }
+    .raw-item b { color: #fff; }
+    .raw-field { color: #8f98ab; }
+    .kv { white-space: nowrap; }
   </style>
 </head>
 <body>
   <h1>GUGU-GBF 辅助</h1>
 
   <div class="card">
-    <h3>📦 已截获数据</h3>
-    <div style="font-size:12px">
-      <span class="label">角色</span><span id="c-char">0</span>&nbsp;
-      <span class="label">武器</span><span id="c-weapon">0</span>&nbsp;
-      <span class="label">召唤</span><span id="c-summon">0</span>
+    <h3>📡 数据读取状态（与网页核对用）</h3>
+    <div style="font-size:12px; margin-bottom:6px">
+      <span class="label">角色</span><span id="c-char">-</span>&nbsp;
+      <span class="label">武器</span><span id="c-weapon">-</span>&nbsp;
+      <span class="label">召唤</span><span id="c-summon">-</span>&nbsp;
+      <span class="label">队伍</span><span id="c-deck">-</span>
     </div>
+    <div style="font-size:11px;color:#9aa3b5;margin-bottom:8px" id="last-update">尚未读取 · 打开游戏编成页后自动采集</div>
+    <button class="btn" id="btn-refresh" style="margin-bottom:6px">🔄 立即读取已截获数据</button>
+    <details>
+      <summary style="font-size:12px;cursor:pointer">ℹ️ 数据采集说明</summary>
+      <div class="status" style="text-align:left">
+        打开 GBF 的队伍编成页、角色一览页、武器/召唤页时，扩展会自动截获接口返回并在此显示。
+        若数量为 0，请先打开对应页面后再点「立即读取」。
+      </div>
+    </details>
   </div>
 
   <div class="card">
-    <h3>📋 当前配队建议</h3>
-    <div id="team-content">加载中…</div>
+    <h3>📦 角色明细（读取原始字段）</h3>
+    <div id="raw-characters" class="raw-list"><i>暂无角色数据</i></div>
   </div>
 
   <div class="card">
-    <h3>⚔️ 战斗回合建议</h3>
-    <div id="battle-content">未录入战斗状态</div>
-    <button class="btn" id="quick-fill" style="margin-top:8px">填入示例战斗状态</button>
+    <h3>🔫 武器明细</h3>
+    <div id="raw-weapons" class="raw-list"><i>暂无武器数据</i></div>
   </div>
 
   <div class="card">
-    <h3>📝 战斗状态录入（半自动）</h3>
-    <div class="input-grid">
-      <div class="field">
-        <label>敌方属性</label>
-        <select id="enemy-element">
-          <option>火</option><option>水</option><option>土</option>
-          <option>风</option><option>光</option><option>暗</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>敌方血量(%)</label>
-        <input id="enemy-hp" type="number" value="55" />
-      </div>
-      <div class="field">
-        <label>敌方OD</label>
-        <select id="enemy-od"><option>是</option><option>否</option></select>
-      </div>
-      <div class="field">
-        <label>即将特动</label>
-        <select id="enemy-trigger"><option>否</option><option>是</option></select>
-      </div>
-      <div class="field">
-        <label>己方血量(%)</label>
-        <input id="party-hp" type="number" value="100" />
-      </div>
-      <div class="field">
-        <label>回合</label>
-        <input id="turn" type="number" value="1" />
-      </div>
-    </div>
-    <button class="btn" id="submit-battle">获取回合建议</button>
-    <div class="status" id="analyzer-status">分析端：未连接（可离线演示）</div>
+    <h3>✨ 召唤明细</h3>
+    <div id="raw-summons" class="raw-list"><i>暂无召唤数据</i></div>
+  </div>
+
+  <div class="card">
+    <h3>📦 队伍编成明细</h3>
+    <div id="raw-deck"><i>暂无队伍数据</i></div>
   </div>
 
   <script src="popup.js"></script>
