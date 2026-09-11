@@ -13,6 +13,16 @@
   if (!extId) return;
 
   const EVENT_NAME = extId + ":gbf:ajax";
+  const STATE_EVENT = extId + ":gbf:state";
+
+  // 加载成功即回报（供 content.js 确认主世界 inject 已执行）
+  let report = () => {};
+  try {
+    document.dispatchEvent(
+      new CustomEvent(STATE_EVENT, { detail: { state: "loaded", t: Date.now(), jq: typeof window.jQuery === "function" } })
+    );
+    report = () => {};
+  } catch (e) {}
 
   function tryHook() {
     if (typeof jQuery === "undefined" && typeof $ === "undefined") return false;
@@ -41,11 +51,25 @@
     tries++;
     if (tryHook()) {
       clearInterval(timer);
+      try {
+        document.dispatchEvent(
+          new CustomEvent(STATE_EVENT, { detail: { state: "hooked", t: Date.now() } })
+        );
+      } catch (e) {}
     } else if (tries > 300) {
       clearInterval(timer);
+      try {
+        document.dispatchEvent(
+          new CustomEvent(STATE_EVENT, { detail: { state: "no-jquery", t: Date.now() } })
+        );
+      } catch (e) {}
     }
   }, 100);
 
   // 万一 jQuery 已经就绪，立即试一次
-  tryHook();
+  if (tryHook()) {
+    try {
+      document.dispatchEvent(new CustomEvent(STATE_EVENT, { detail: { state: "hooked", t: Date.now() } }));
+    } catch (e) {}
+  }
 })();

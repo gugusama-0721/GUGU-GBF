@@ -16,7 +16,8 @@
     url: "",
     isIframe: false,
     jquery: false,
-    injectLoaded: null,
+    injectState: null,
+    injectLoaded: false,
     received: 0,
     lastKind: null,
     time: Date.now(),
@@ -57,6 +58,16 @@
       const kind = classify(payload.url, data);
       if (kind) send(kind, payload.url, data);
     } catch (e) {}
+  });
+
+  // 监听 inject.js 的状态回报（确认主世界脚本是否执行/挂接成功）
+  window.addEventListener(EXT_ID + ":gbf:state", (event) => {
+    const st = event && event.detail;
+    if (!st) return;
+    diagnostics.injectLoaded = true;
+    diagnostics.injectState = st.state;
+    if (st.jq !== undefined) diagnostics.jquery = !!st.jq;
+    writeDiag();
   });
 
   // ---------- 注入主世界脚本 inject.js ----------

@@ -143,13 +143,16 @@ function updateStatus(cache) {
         "注入页面: " + (d.url || "-"),
         "是否 iframe: " + (d.isIframe === true ? "是（子框架）" : d.isIframe === false ? "否（顶层）" : "未知"),
         "jQuery 就绪: " + (d.jquery ? "是" : "否"),
+        "主世界inject加载: " + (d.injectLoaded ? "已加载" : "❌未加载"),
+        "主世界inject状态: " + ({ hooked: "✅已挂接", "no-jquery": "❌无jQuery(30秒超时)", loaded: "已加载" }[d.injectState] || d.injectState || "-"),
         "已接收数据条数: " + (d.received ?? 0),
         "最近类型: " + (d.lastKind || "-"),
-        "注入标志: " + (d.contentInjected ? "已注入" : "未注入"),
       ];
       box.textContent = lines.join("\n");
-      if (d.contentInjected && (d.received ?? 0) === 0) {
-        box.textContent += "\n\n⚠️ content script 已注入，但未收到任何数据。\njQuery ajaxSuccess 可能未命中：请先在游戏内进入编成页/角色页触发请求。";
+      if (d.contentInjected && !d.injectLoaded) {
+        box.textContent += "\n\n⚠️ content script 已注入，但主世界 inject.js 未加载。\n原因：GBF 页面的 Content-Security-Policy 可能阻止了外部脚本注入。\n需改用 chrome.scripting 以 MAIN world 注入方式。";
+      } else if (d.injectLoaded && (d.received ?? 0) === 0) {
+        box.textContent += "\n\n⚠️ inject.js 已加载，但未捕获到数据。\n若状态为「已挂接」，请在游戏内切换页面触发请求后再「立即读取」。";
       }
     });
   } catch (e) {}
