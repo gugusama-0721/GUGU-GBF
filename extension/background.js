@@ -143,16 +143,41 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 });
 
 const pendingFetch = {};
+
+// 健壮地提取 JSON：去前后空白/前缀，尝试完整 parse；失败则从首个 { 截到末尾 } 再 parse
+function tryParseJson(raw) {
+  let s = String(raw || "").trim();
+  try { return JSON.parse(s); } catch (e) {}
+  // 去掉可能的前缀（如 "cb="、window.__、数字等）再试
+  const first = s.indexOf("{");
+  const firstb = s.indexOf("[");
+  let start = first;
+  if (firstb >= 0 && (firstb < first || first < 0)) start = firstb;
+  if (start < 0) throw new Error("no json start");
+  // 从 start 之后找最后一个 } 或 ]
+  let end = Math.max(s.lastIndexOf("}"), s.lastIndexOf("]"));
+  if (end < start) throw new Error("no json end");
+  const inner = s.slice(start, end + 1);
+  try { return JSON.parse(inner); } catch (e2) { throw e2; }
+}
+
 async function getBody(kind, requestId) {
   try {
     const res = await chrome.debugger.sendCommand({ tabId: debugTabId }, "Network.getResponseBody", { requestId });
     let data;
     try {
-      data = JSON.parse(res.body);
+      data = tryParseJson(res.body);
     } catch (e) {
-      try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody 非JSON body(" + kind + ")", captured: dbgCount, time: Date.now() } }); } catch (x) {}
+      try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody 非JSON body(" + kind + "): " + String(res.body).slice(0, 60), captured: dbgCount, time: Date.now() } }); } catch (x) {}
       return;
     }
+    // 若能解析但结构异常（无 result/list），也记录原始 preview
+    try {
+      const hasData = data && (data.result || data.list || data.deck || data.npclist);
+      if (!hasData) {
+        chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody parsed但结构未知(" + kind + ") keys=" + Object.keys(data).slice(0, 8).join(","), captured: dbgCount, time: Date.now() } });
+      }
+    } catch (x) {}
     saveKind(kind, "cdp:" + kind, data);
     forwardToAnalyzer({ kind, url: "cdp:" + kind, data });
     dbgCount++;
