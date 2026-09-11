@@ -68,9 +68,7 @@ function extractAndRender(cache) {
       charList = Object.values(deckData.deck.npc).map((it) => ({ ...(it.master || {}), ...(it.param || {}) }));
     }
   }
-  const charEl = document.getElementById("raw-characters");
-  if (charList.length) { renderCharacters(charEl, charList); document.getElementById("c-char").textContent = charList.length; }
-  else { charEl.innerHTML = "<i class=muted>暂无角色数据</i>"; document.getElementById("c-char").textContent = "0"; }
+  document.getElementById("c-char").textContent = charList.length;
 
   let wepList = [];
   const lw = cache.weapon && cache.weapon.data;
@@ -82,9 +80,7 @@ function extractAndRender(cache) {
       wepList = Object.values(deckData.deck.pc.weapons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
     }
   }
-  const wepEl = document.getElementById("raw-weapons");
-  if (wepList.length) { renderWeapons(wepEl, wepList); document.getElementById("c-weapon").textContent = wepList.length; }
-  else { wepEl.innerHTML = "<i class=muted>暂无武器数据</i>"; document.getElementById("c-weapon").textContent = "0"; }
+  document.getElementById("c-weapon").textContent = wepList.length;
 
   let sumList = [];
   const ls = cache.summon && cache.summon.data;
@@ -96,30 +92,17 @@ function extractAndRender(cache) {
       sumList = Object.values(deckData.deck.pc.summons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
     }
   }
-  const sumEl = document.getElementById("raw-summons");
-  if (sumList.length) { renderSummons(sumEl, sumList); document.getElementById("c-summon").textContent = sumList.length; }
-  else { sumEl.innerHTML = "<i class=muted>暂无召唤数据</i>"; document.getElementById("c-summon").textContent = "0"; }
+  document.getElementById("c-summon").textContent = sumList.length;
 
-  renderDeck(cache);
-  updateStatus(cache);
-}
-
-function renderDeck(cache) {
-  const el = document.getElementById("raw-deck");
+  // 队伍数量由可视化函数 renderDeckVisual 处理，这里仅汇总计数
   const deckData = cache.deck && cache.deck.data;
-  if (deckData && deckData.deck) {
-    const d = deckData.deck;
-    const npcNames = d.npc ? Object.values(d.npc).map((it) => (it.master && it.master.name) || "?").join("、") : "空";
-    document.getElementById("c-deck").textContent = npcNames.split("、").length;
-    el.innerHTML = `<div class="raw-item">
-      <b>${d.name || "未命名"}</b> <span class="raw-field">${d.group_name || ""}</span><br/>
-      <span class="raw-field">角色:</span> ${npcNames}<br/>
-      <span class="raw-field">队伍地址:</span> ${(cache.deck.url || "").split("?")[0] || "-"}
-    </div>`;
+  if (deckData && deckData.deck && deckData.deck.npc) {
+    document.getElementById("c-deck").textContent = Object.values(deckData.deck.npc).length;
   } else {
     document.getElementById("c-deck").textContent = "0";
-    el.innerHTML = "<i class=muted>暂无队伍编成数据（打开编成页后自动采集）</i>";
   }
+
+  updateStatus(cache);
 }
 
 function updateStatus(cache) {
@@ -185,9 +168,161 @@ function updateStatus(cache) {
 async function refresh() {
   const cache = await fetchCollected();
   extractAndRender(cache);
+  renderDeckVisual(cache);
+  renderDeckCharacters(cache);
+  renderWeaponGrid(cache);
+  renderSummonGrid(cache);
+  renderStatEstimate(cache);
 }
 
-document.getElementById("btn-refresh").addEventListener("click", () => { refresh(); });
-const btnHome = document.getElementById("btn-home");
-if (btnHome) btnHome.addEventListener("click", () => { window.open("https://github.com/gugusama-0721/GUGU-GBF", "_blank"); });
-refresh();
+const ATTR_COLOR = { "1":"#ff5b2e", "2":"#3fb0ff", "3":"#c8a24a", "4":"#7fd14a", "5":"#ffd23f", "6":"#a56bff" };
+const ATTR_CHAR = { "1":"🔥", "2":"💧", "3":"⛰️", "4":"🌪️", "5":"🌕", "6":"🌑" };
+const ATTR_NAME = { "1":"火","2":"水","3":"土","4":"风","5":"光","6":"暗" };
+
+function charTag(v){ return ATTR_CHAR[String(v)] || ""; }
+function charColor(v){ return ATTR_COLOR[String(v)] || "#555"; }
+
+// 队伍总览：成员缩略条
+function renderDeckVisual(cache){
+  const nameEl = document.getElementById("deck-name");
+  const slotEl = document.getElementById("deck-slot");
+  const memEl = document.getElementById("deck-members");
+  const deckData = cache.deck && cache.deck.data;
+  if(!deckData || !deckData.deck){ 
+    nameEl.textContent = "未读取"; slotEl.textContent = "";
+    memEl.innerHTML = '<i class="muted">打开编成页后自动采集</i>'; return;
+  }
+  const d = deckData.deck;
+  nameEl.textContent = d.name || "未命名";
+  slotEl.textContent = (d.group_name || "") + " · Slot " + (d.group_id || d.slot || "");
+  const npcs = d.npc ? Object.values(d.npc) : [];
+  if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员</i>'; return; }
+  memEl.innerHTML = npcs.map((it,i)=>{
+    const m = it.master||{}, p = it.param||{};
+    const attr = String(m.element !== undefined ? m.element : p.element);
+    return `<div class="m-cell">
+      <div class="attr" style="background:${charColor(attr)}"></div>
+      <div class="mn">${m.name || "?"}</div>
+      <div class="mnum">${p.level ? "Lv"+p.level : ""}</div>
+      <div class="ms">${ATTR_NAME[attr]||""} ${m.rare_name||""}</div>
+    </div>`;
+  }).join("");
+}
+
+// 角色头卡
+function renderDeckCharacters(cache){
+  const el = document.getElementById("ch-grid");
+  const deckData = cache.deck && cache.deck.data;
+  let list = [];
+  if(deckData && deckData.deck && deckData.deck.npc){
+    list = Object.values(deckData.deck.npc);
+  } else {
+    const raw = cache.character && cache.character.data;
+    if(raw && raw.list) list = raw.list;
+  }
+  if(!list.length){ el.innerHTML='<i class="muted">暂无角色数据</i>'; return; }
+  // 优先从 deck 取 master.name 作真实名称
+  el.innerHTML = list.map((it)=>{
+    const m = it.master||{}, p = it.param||{};
+    const attr = m.element !== undefined ? m.element : p.element;
+    const name = (m && m.name) || "";
+    return `<div class="ch-card">
+      <div class="ch-head">
+        <span class="ch-rarity">SSR</span>
+        <div class="ch-avatar"></div>
+        <div class="ch-attr" style="background:${charColor(attr)}"></div>
+      </div>
+      <div class="ch-body">
+        <div class="ch-name">${name||it.id}</div>
+        <div class="ch-stats">
+          <span>攻<b>${p.attack||m.attack||"-"}</b></span>
+          <span>血<b>${p.hp||m.hp||"-"}</b></span>
+        </div>
+        <div class="ch-type">${ATTR_NAME[attr]||""}属性 · ${m.specialty ? (Array.isArray(m.specialty)?m.specialty.map(s=>"得意"+s).join(" "):"得意"+m.specialty) : ""}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// 武器盘网格（主手 + 副手）
+function renderWeaponGrid(cache){
+  const el = document.getElementById("wp-grid");
+  const deckData = cache.deck && cache.deck.data;
+  let weps = [];
+  if(deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.weapons){
+    weps = Object.values(deckData.deck.pc.weapons);
+  } else {
+    const raw = cache.weapon && cache.weapon.data;
+    if(raw && raw.list) weps = raw.list.slice(0,13);
+  }
+  if(!weps.length){ el.innerHTML='<i class="muted">暂无武器数据</i>'; return; }
+  el.innerHTML = weps.map((it,idx)=>{
+    const m = it.master||{}, p = it.param||{};
+    const name = (m && m.name) || "";
+    const attr = m.element !== undefined ? m.element : p.element;
+    const atk = p.attack !== undefined ? p.attack : m.attack;
+    let skillName = "";
+    for(let i=1;i<=4;i++){ if(it["skill"+i] && it["skill"+i].name){ skillName = it["skill"+i].name; break; } }
+    return `<div class="wp-cell${idx===0?' main':''}">
+      <span class="wp-tag">${idx===0?'主手':(charTag(attr))}</span>
+      <div class="wp-icon" style="border:2px solid ${charColor(attr)}">🗡️</div>
+      <div class="wp-name">${name||it.id}</div>
+      <div class="wp-atk">攻 ${atk||"-"}</div>
+      ${skillName?`<div class="wp-skill">${skillName}</div>`:""}
+    </div>`;
+  }).join("");
+}
+
+// 召唤栏（主召唤 + 副召唤）
+function renderSummonGrid(cache){
+  const el = document.getElementById("sm-grid");
+  const deckData = cache.deck && cache.deck.data;
+  let sums = [];
+  if(deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.summons){
+    sums = Object.values(deckData.deck.pc.summons);
+  } else {
+    const raw = cache.summon && cache.summon.data;
+    if(raw && raw.list) sums = raw.list.slice(0,6);
+  }
+  if(!sums.length){ el.innerHTML='<i class="muted">暂无召唤数据</i>'; return; }
+  el.innerHTML = sums.map((it,idx)=>{
+    const m = it.master||{}, p = it.param||{};
+    const name = (m && m.name) || "";
+    const attr = m.element !== undefined ? m.element : p.element;
+    const atk = p.attack||m.attack||"-";
+    return `<div class="sm-cell${idx===0?' main':''}">
+      <div class="sm-icon" style="border:2px solid ${charColor(attr)}">${charTag(attr)||"✨"}</div>
+      <div class="sm-name">${name||it.id}</div>
+      <div class="sm-meta">${ATTR_NAME[attr]||""} · 攻 ${atk}</div>
+    </div>`;
+  }).join("");
+}
+
+// 数值统计：先展示可用基础统计（完整攻刃引擎后续）
+function renderStatEstimate(cache){
+  const el = document.getElementById("stats");
+  const deckData = cache.deck && cache.deck.data;
+  const weps = (deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.weapons)
+    ? Object.values(deckData.deck.pc.weapons) : [];
+  if(!weps.length){ el.innerHTML='<i class="muted">数值引擎待接入（参考 Tarou 攻刃/EX/浑身计算）</i>'; return; }
+  // 简化的攻刃估算：按武器数量 + 技能类型粗分（占位，真实公式后续实现）
+  const totalAtk = weps.reduce((s,w)=> s + Number((w.param&&w.param.attack)||(w.master&&w.master.attack)||0), 0);
+  const attrs = weps.reduce((s,w)=>{ const a=String((w.master&&w.master.element)||(w.param&&w.param.element)); s[a]=(s[a]||0)+1; return s;},{});
+  const rows = [
+    ["武器数", weps.length + " 把", Math.min(100, weps.length*8)],
+    ["总攻击", totalAtk.toLocaleString(), Math.min(100, totalAtk/2000)],
+    ["主属性", (Object.entries(attrs).sort((a,b)=>b[1]-a[1])[0]||["?",""])[0]+"属 x"+(Object.values(attrs)[0]||0), 60],
+  ];
+  el.innerHTML = rows.map(([label,val,bar])=>`
+    <div class="stat-row">
+      <span class="label">${label}</span>
+      <span class="val">${val}</span>
+    </div>
+    <div class="bar"><i style="width:${bar}%"></i></div>`).join("")
+    + '<div class="muted" style="margin-top:8px">⚠️ 当前为基础统计，完整「攻刃/EX/浑身」精细计算引擎为下一步 TODO</div>';
+}
+
+// 保留原渲染调用
+function refreshAll(){ refresh(); }
+document.getElementById("btn-refresh").addEventListener("click", refreshAll);
+refreshAll();
