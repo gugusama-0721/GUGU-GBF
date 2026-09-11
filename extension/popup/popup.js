@@ -188,7 +188,31 @@ function updateStatus(cache) {
     if (cache[k] && cache[k].time) last.push(`${k}:${new Date(cache[k].time).toLocaleTimeString()}`);
   }
   document.getElementById("last-update").textContent =
-    last.length ? "最近截获: " + last.join(" · ") : "尚未读取 · 打开游戏页面后自动采集";
+    last.length ? "最近截获: " + last.join(" · ") : "尚未读取 · 打开游戏页后自动采集";
+
+  // 读取诊断信息
+  try {
+    chrome.storage.local.get("gugu_gbf_diag", (obj) => {
+      const box = document.getElementById("diag-box");
+      const d = obj && obj.gugu_gbf_diag;
+      if (!d) {
+        box.textContent = "暂无诊断数据。\n提示：content script 可能未注入到游戏页面。\n请刷新游戏页面后重试。";
+        return;
+      }
+      const lines = [
+        "注入时间: " + (d.time ? new Date(d.time).toLocaleTimeString() : "-"),
+        "注入页面: " + (d.url || "-"),
+        "是否 iframe: " + (d.isIframe === true ? "是（在子框架内）" : d.isIframe === false ? "否（顶层）" : "未知"),
+        "fetch 命中: " + (d.hooks ? d.hooks.fetch : "-"),
+        "XHR 命中: " + (d.hooks ? d.hooks.xhr : "-"),
+        "最近类型: " + (d.hooks && d.hooks.lastKind ? d.hooks.lastKind : "-"),
+      ];
+      box.textContent = lines.join("\n");
+      if (d.isIframe === false && (d.hooks ? d.hooks.fetch + d.hooks.xhr : 0) === 0) {
+        box.textContent += "\n\n⚠️ 已注入顶层页面，但未捕获到任何接口。\n可能原因：数据接口走 fetch/XHR 之外的通道（如 WebSocket），或页面尚未请求这些接口。";
+      }
+    });
+  } catch (e) {}
 }
 
 async function refresh() {

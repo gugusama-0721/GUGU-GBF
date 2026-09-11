@@ -47,8 +47,12 @@
       <span class="label">召唤</span><span id="c-summon">-</span>&nbsp;
       <span class="label">队伍</span><span id="c-deck">-</span>
     </div>
-    <div style="font-size:11px;color:#9aa3b5;margin-bottom:8px" id="last-update">尚未读取 · 打开游戏编成页后自动采集</div>
+    <div style="font-size:11px;color:#9aa3b5;margin-bottom:8px" id="last-update">尚未读取 · 打开游戏页后自动采集</div>
     <button class="btn" id="btn-refresh" style="margin-bottom:6px">🔄 立即读取已截获数据</button>
+    <details>
+      <summary style="font-size:12px;cursor:pointer">🔧 诊断信息（排查用）</summary>
+      <div class="status" id="diag-box" style="text-align:left;white-space:pre-wrap;font-family:monospace;font-size:11px">读取中…</div>
+    </details>
     <details>
       <summary style="font-size:12px;cursor:pointer">ℹ️ 数据采集说明</summary>
       <div class="status" style="text-align:left">

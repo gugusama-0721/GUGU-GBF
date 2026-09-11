@@ -31,8 +31,37 @@
   // 缓存已收集的数据（同 kind 覆盖，保留最新一页；分页由分析端聚合）
   const collected = { character: null, weapon: null, summon: null, deck: null };
 
+  // 诊断信息：记录注入环境，便于排查为何未拦截到数据
+  let diagnostics = {
+    injected: true,
+    time: Date.now(),
+    url: "",
+    isIframe: false,
+    fetchHooked: true,
+    xhrOverridden: true,
+    frameCount: 0,
+    hooks: { fetch: 0, xhr: 0 },
+  };
+  try {
+    diagnostics.url = window.location.href;
+    diagnostics.isIframe = window.top !== window.self;
+  } catch (e) {}
+
+  function bump() {
+    // 每收到一条数据写一次诊断，记录最近一次拦截
+    try {
+      diagnostics.url = window.location.href;
+      chrome.runtime.sendMessage({ type: "gbf_got_data", url: diagnostics.url });
+    } catch (e) {}
+  }
+
   function send(kind, url, data) {
     collected[kind] = data;
+    diagnostics.time = Date.now();
+    diagnostics.hooks.lastKind = kind;
+    try {
+      chrome.storage.local.set({ gugu_gbf_diag: { ...diagnostics, hooks: { ...diagnostics.hooks } } });
+    } catch (e) {}
     try {
       chrome.runtime.sendMessage(
         { type: "gbf_api_data", kind, url, data },
@@ -49,6 +78,7 @@
         const url = String(args[0] || "");
         const urlKind = detectKind(url);
         if (urlKind) {
+          diagnostics.hooks.fetch++;
           const clone = resp.clone();
           clone
             .json()
@@ -75,15 +105,18 @@
       try {
         const url = this.__guguUrl || "";
         const urlKind = detectKind(url);
-        if (urlKind && this.status === 200) {
-          let data;
-          try {
-            data = JSON.parse(this.responseText);
-          } catch (e) {
-            return;
+        if (urlKind) {
+          diagnostics.hooks.xhr++;
+          if (this.status === 200) {
+            let data;
+            try {
+              data = JSON.parse(this.responseText);
+            } catch (e) {
+              return;
+            }
+            const kind = classify(url, data);
+            if (kind) send(kind, url, data);
           }
-          const kind = classify(url, data);
-          if (kind) send(kind, url, data);
         }
       } catch (e) {}
     });
