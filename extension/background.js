@@ -64,3 +64,15 @@ chrome.webRequest.onCompleted.addListener(
   },
   { urls: ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"] }
 );
+
+// 点击工具栏图标直接打开侧边栏（复刻 Tarou 行为）
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+});
+chrome.action.onClicked.addListener((tab) => {
+  chrome.sidePanel
+    .open({ tabId: tab.id })
+    .catch(() => chrome.sidePanel.open({ windowId: tab.windowId }).catch(() => {}));
+});
+// 启动时也设置一次
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});

@@ -7,7 +7,8 @@
     "storage",
     "webRequest",
     "activeTab",
-    "scripting"
+    "scripting",
+    "sidePanel"
   ],
   "host_permissions": [
     "https://game.granbluefantasy.jp/*",
@@ -15,6 +16,9 @@
   ],
   "background": {
     "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
   },
   "content_scripts": [
     {
@@ -32,7 +36,6 @@
     }
   ],
   "action": {
-    "default_popup": "popup/popup.html",
     "default_title": "GUGU-GBF"
   }
 }

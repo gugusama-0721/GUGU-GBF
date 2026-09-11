@@ -15,6 +15,8 @@
     contentInjected: true,
     url: "",
     isIframe: false,
+    jquery: false,
+    injectLoaded: null,
     received: 0,
     lastKind: null,
     time: Date.now(),
@@ -22,6 +24,7 @@
   try {
     diagnostics.url = window.location.href;
     diagnostics.isIframe = window.top !== window.self;
+    diagnostics.jquery = typeof window.jQuery === "function";
   } catch (e) {}
 
   function writeDiag() {
@@ -71,6 +74,8 @@
   } else {
     bootstrapInject();
   }
+  // 注入后立即写一次初始化诊断，供侧边栏排查未注入/未截获
+  writeDiag();
 
   // ---------- 响应 popup 查询 ----------
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
