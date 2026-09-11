@@ -83,15 +83,30 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => 
 let debugTabId = null;
 
 // 目标接口 -> kind 映射（基于抓包实证的接口路径）
-// 注意：/party/deck 只返回 group 编成组元信息(槽位配置)，不含角色/武器详情，
-// 会被 deck_combination_list(完整队伍)覆盖，故不归为 deck。
 function kindForUrl(u) {
   if (!u) return null;
-  if (/deckcombination|deck_combination_list/.test(u)) return "deck";
+  if (/deckcombination|deck_combination_list|\/party\/(deck|content|index)/.test(u)) return "deck";
   if (/\/npc\/list\//.test(u)) return "character";
   if (/\/listall\/content\//.test(u)) return "weapon";
   if (/\/summon\/list\//.test(u)) return "summon";
   return null;
+}
+
+// 判断 deck 数据是否含真实队伍内容（角色/武器/召唤），区分"完整队伍"与"group 元信息"
+function hasDeep(any) {
+  if (any === null || any === undefined) return false;
+  if (typeof any === "object" && !Array.isArray(any)) {
+    if (any.deck || any.party || any.npc || any.pc || any.weapons || any.summons) return true;
+    return Object.values(any).some((v) => v !== null && typeof v === "object" && hasDeep(v));
+  }
+  return false;
+}
+function isRichDeck(data) {
+  if (!data) return false;
+  if (data.deck_list && Array.isArray(data.deck_list)) {
+    return data.deck_list.some((d) => d && hasDeep(d));
+  }
+  return hasDeep(data);
 }
 
 async function attachDebug(tabId) {
@@ -181,6 +196,18 @@ async function getBody(kind, requestId) {
         chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody parsed但结构未知(" + kind + ") keys=" + Object.keys(data).slice(0, 8).join(",") + " SAMPLE=" + sample, captured: dbgCount, time: Date.now() } });
       }
     } catch (x) {}
+    // 队伍接口保护：/party/deck 等只返回 group 元信息(无角色/武器/召唤)，不覆盖已有完整队伍
+    if (kind === "deck") {
+      const hasFriends = isRichDeck(data);
+      if (!hasFriends) {
+        const existing = cache.deck && cache.deck.data;
+        if (existing && isRichDeck(existing)) {
+          // 保留旧完整数据，仅更新诊断
+          try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody(deck) group元信息,已保保留完整队伍。 keys=" + Object.keys(data).slice(0,8).join(","), captured: dbgCount, time: Date.now() } }); } catch (x) {}
+          return;
+        }
+      }
+    }
     saveKind(kind, "cdp:" + kind, data);
     forwardToAnalyzer({ kind, url: "cdp:" + kind, data });
     dbgCount++;
