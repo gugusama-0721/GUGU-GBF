@@ -83,9 +83,11 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => 
 let debugTabId = null;
 
 // 目标接口 -> kind 映射（基于抓包实证的接口路径）
+// 注意：/party/deck 只返回 group 编成组元信息(槽位配置)，不含角色/武器详情，
+// 会被 deck_combination_list(完整队伍)覆盖，故不归为 deck。
 function kindForUrl(u) {
   if (!u) return null;
-  if (/deckcombination|deck_combination_list|\/party\//.test(u)) return "deck";
+  if (/deckcombination|deck_combination_list/.test(u)) return "deck";
   if (/\/npc\/list\//.test(u)) return "character";
   if (/\/listall\/content\//.test(u)) return "weapon";
   if (/\/summon\/list\//.test(u)) return "summon";
