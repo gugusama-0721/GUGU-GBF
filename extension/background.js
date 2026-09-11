@@ -173,9 +173,10 @@ async function getBody(kind, requestId) {
     }
     // 若能解析但结构异常（无 result/list），也记录原始 preview
     try {
-      const hasData = data && (data.result || data.list || data.deck || data.npclist);
+      const hasData = data && (data.result || data.list || data.deck || data.npclist || data.deck_list);
       if (!hasData) {
-        chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody parsed但结构未知(" + kind + ") keys=" + Object.keys(data).slice(0, 8).join(","), captured: dbgCount, time: Date.now() } });
+        const sample = JSON.stringify(data).slice(0, 400);
+        chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody parsed但结构未知(" + kind + ") keys=" + Object.keys(data).slice(0, 8).join(",") + " SAMPLE=" + sample, captured: dbgCount, time: Date.now() } });
       }
     } catch (x) {}
     saveKind(kind, "cdp:" + kind, data);

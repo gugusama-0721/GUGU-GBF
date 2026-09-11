@@ -167,12 +167,28 @@ function updateStatus(cache) {
 
 async function refresh() {
   const cache = await fetchCollected();
+  renderRawBox(cache);
   extractAndRender(cache);
   renderDeckVisual(cache);
   renderDeckCharacters(cache);
   renderWeaponGrid(cache);
   renderSummonGrid(cache);
   renderStatEstimate(cache);
+}
+
+function renderRawBox(cache) {
+  const box = document.getElementById("raw-box");
+  if (!box) return;
+  const parts = [];
+  for (const k of ["deck", "character", "weapon", "summon"]) {
+    const item = cache[k];
+    if (item && item.data !== undefined) {
+      parts.push("===== " + k + " (" + item.time + ") =====\n" + JSON.stringify(item.data).slice(0, 3000));
+    } else {
+      parts.push("===== " + k + " =====\n(无)");
+    }
+  }
+  box.textContent = parts.join("\n\n");
 }
 
 const ATTR_COLOR = { "1":"#ff5b2e", "2":"#3fb0ff", "3":"#c8a24a", "4":"#7fd14a", "5":"#ffd23f", "6":"#a56bff" };
@@ -183,26 +199,48 @@ function charTag(v){ return ATTR_CHAR[String(v)] || ""; }
 function charColor(v){ return ATTR_COLOR[String(v)] || "#555"; }
 
 // 队伍总览：成员缩略条
+function normalizeDeck(deckData) {
+  // 兼容多种真实结构：deck.npc、deck.deck_list[]、平铺 deck
+  if (!deckData) return null;
+  // 顶层直接是 deck_list
+  if (Array.isArray(deckData.deck_list)) {
+    return deckData.deck_list[0] || deckData.deck_list;
+  }
+  return deckData;
+}
+function deckNPCs(d) {
+  if (!d) return [];
+  if (d.npc) return Object.values(d.npc);
+  if (d.party && d.party.npc) return Object.values(d.party.npc);
+  if (d.deck && d.deck.npc) return Object.values(d.deck.npc);
+  return [];
+}
+function deckPC(d) {
+  if (!d) return {};
+  if (d.pc) return d.pc;
+  if (d.party && d.party.pc) return d.party.pc;
+  return {};
+}
 function renderDeckVisual(cache){
   const nameEl = document.getElementById("deck-name");
   const slotEl = document.getElementById("deck-slot");
   const memEl = document.getElementById("deck-members");
   const deckData = cache.deck && cache.deck.data;
-  if(!deckData || !deckData.deck){ 
+  if(!deckData){
     nameEl.textContent = "未读取"; slotEl.textContent = "";
     memEl.innerHTML = '<i class="muted">打开编成页后自动采集</i>'; return;
   }
-  const d = deckData.deck;
-  nameEl.textContent = d.name || "未命名";
-  slotEl.textContent = (d.group_name || "") + " · Slot " + (d.group_id || d.slot || "");
-  const npcs = d.npc ? Object.values(d.npc) : [];
-  if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员</i>'; return; }
+  const d = normalizeDeck(cache.deck.data);
+  nameEl.textContent = (d && (d.name || d.deck_name)) || "Deck";
+  slotEl.textContent = (d && (d.group_name || (cache.deck.url||"").split("?")[0])) || "";
+  const npcs = deckNPCs(d);
+  if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员（原始结构见🔬原始数据）</i>'; return; }
   memEl.innerHTML = npcs.map((it,i)=>{
     const m = it.master||{}, p = it.param||{};
     const attr = String(m.element !== undefined ? m.element : p.element);
     return `<div class="m-cell">
       <div class="attr" style="background:${charColor(attr)}"></div>
-      <div class="mn">${m.name || "?"}</div>
+      <div class="mn">${m.name || (m.unit_name || "?")}</div>
       <div class="mnum">${p.level ? "Lv"+p.level : ""}</div>
       <div class="ms">${ATTR_NAME[attr]||""} ${m.rare_name||""}</div>
     </div>`;
@@ -213,10 +251,8 @@ function renderDeckVisual(cache){
 function renderDeckCharacters(cache){
   const el = document.getElementById("ch-grid");
   const deckData = cache.deck && cache.deck.data;
-  let list = [];
-  if(deckData && deckData.deck && deckData.deck.npc){
-    list = Object.values(deckData.deck.npc);
-  } else {
+  let list = deckNPCs(normalizeDeck(deckData));
+  if(!list.length){
     const raw = cache.character && cache.character.data;
     if(raw && raw.list) list = raw.list;
   }
@@ -248,10 +284,9 @@ function renderDeckCharacters(cache){
 function renderWeaponGrid(cache){
   const el = document.getElementById("wp-grid");
   const deckData = cache.deck && cache.deck.data;
-  let weps = [];
-  if(deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.weapons){
-    weps = Object.values(deckData.deck.pc.weapons);
-  } else {
+  const pc = deckPC(normalizeDeck(deckData));
+  let weps = (pc && pc.weapons) ? Object.values(pc.weapons) : [];
+  if(!weps.length){
     const raw = cache.weapon && cache.weapon.data;
     if(raw && raw.list) weps = raw.list.slice(0,13);
   }
@@ -277,10 +312,9 @@ function renderWeaponGrid(cache){
 function renderSummonGrid(cache){
   const el = document.getElementById("sm-grid");
   const deckData = cache.deck && cache.deck.data;
-  let sums = [];
-  if(deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.summons){
-    sums = Object.values(deckData.deck.pc.summons);
-  } else {
+  const pc = deckPC(normalizeDeck(deckData));
+  let sums = (pc && pc.summons) ? Object.values(pc.summons) : [];
+  if(!sums.length){
     const raw = cache.summon && cache.summon.data;
     if(raw && raw.list) sums = raw.list.slice(0,6);
   }
