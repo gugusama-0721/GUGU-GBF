@@ -82,12 +82,13 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => 
 // 完全绕开 CSP / 页面注入时序问题。角色/武器/召唤配置数据走 HTTP，可在此捕获。
 let debugTabId = null;
 
-// 目标接口 -> kind 映射
+// 目标接口 -> kind 映射（基于抓包实证的接口路径）
 function kindForUrl(u) {
+  if (!u) return null;
+  if (/deckcombination|deck_combination_list|\/party\//.test(u)) return "deck";
   if (/\/npc\/list\//.test(u)) return "character";
   if (/\/listall\/content\//.test(u)) return "weapon";
   if (/\/summon\/list\//.test(u)) return "summon";
-  if (/\/party\/.*(?:create|edit|combination|detail)/.test(u)) return "deck";
   return null;
 }
 
@@ -149,6 +150,7 @@ async function getBody(kind, requestId) {
     try {
       data = JSON.parse(res.body);
     } catch (e) {
+      try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody 非JSON body(" + kind + ")", captured: dbgCount, time: Date.now() } }); } catch (x) {}
       return;
     }
     saveKind(kind, "cdp:" + kind, data);
@@ -161,7 +163,8 @@ async function getBody(kind, requestId) {
       });
     } catch (e) {}
   } catch (e) {
-    // 可能 base64 加密响应，暂跳过
+    // 响应体已释放或不可读，记录状态供诊断
+    try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody 失败(" + kind + "):" + e.message, captured: dbgCount, time: Date.now() } }); } catch (x) {}
   }
 }
 
