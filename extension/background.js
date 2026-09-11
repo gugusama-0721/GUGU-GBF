@@ -76,3 +76,92 @@ chrome.action.onClicked.addListener((tab) => {
 });
 // 启动时也设置一次
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
+
+// ================= debugger/CDP 捕获 HTTP 响应体 =================
+// 复刻 Tarou 的核心机制：用 chrome.debugger + CDP 直接从协议层读响应体，
+// 完全绕开 CSP / 页面注入时序问题。角色/武器/召唤配置数据走 HTTP，可在此捕获。
+let debugTabId = null;
+
+// 目标接口 -> kind 映射
+function kindForUrl(u) {
+  if (/\/npc\/list\//.test(u)) return "character";
+  if (/\/listall\/content\//.test(u)) return "weapon";
+  if (/\/summon\/list\//.test(u)) return "summon";
+  if (/\/party\/.*(?:create|edit|combination|detail)/.test(u)) return "deck";
+  return null;
+}
+
+async function attachDebug(tabId) {
+  debugTabId = tabId;
+  try {
+    await chrome.debugger.attach({ tabId }, "1.3");
+    await chrome.debugger.sendCommand({ tabId }, "Network.enable", {
+      maxTotalBufferSize: 10000000, // 10MB，保证大 JSON 响应完整
+      maxResourceBufferSize: 10000000,
+    });
+    console.log("[GUGU-GBF] debugger 已附加", tabId);
+  } catch (e) {
+    console.warn("[GUGU-GBF] debugger attach 失败:", e.message);
+  }
+}
+
+chrome.debugger.onEvent.addListener((source, method, params) => {
+  if (!params || source.tabId !== debugTabId) return;
+  if (method === "Network.responseReceived") {
+    const { requestId, response, type } = params;
+    const kind = kindForUrl(response && response.url);
+    if (kind && (type === "XHR" || type === "Fetch")) {
+      // 稍后 loadingFinished 后再取 body，避免读取过早
+      pendingFetch[kind] = requestId;
+    }
+  } else if (method === "Network.loadingFinished") {
+    const { requestId, encodedDataLength } = params;
+    // 从 pendingFetch 找到 kind
+    for (const kind of Object.keys(pendingFetch)) {
+      if (pendingFetch[kind] === requestId) {
+        getBody(kind, requestId);
+        delete pendingFetch[kind];
+        break;
+      }
+    }
+  }
+});
+
+const pendingFetch = {};
+async function getBody(kind, requestId) {
+  try {
+    const res = await chrome.debugger.sendCommand({ tabId: debugTabId }, "Network.getResponseBody", { requestId });
+    let data;
+    try {
+      data = JSON.parse(res.body);
+    } catch (e) {
+      return;
+    }
+    saveKind(kind, "cdp:" + kind, data);
+    forwardToAnalyzer({ kind, url: "cdp:" + kind, data });
+  } catch (e) {
+    // 可能 base64 加密响应，暂跳过
+  }
+}
+
+// 当用户打开 GBF 标签页时自动附加 debugger；关闭时分离
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === "complete" && tab.url && /game\.granbluefantasy\.jp|gbf\.game\.mbga\.jp/.test(tab.url)) {
+    // 只附加已存在的 debugger，避免重复
+    chrome.debugger.getTargets().then((targets) => {
+      const already = targets.some((t) => t.tabId === tabId && t.attached);
+      if (!already) attachDebug(tabId);
+    });
+  }
+});
+chrome.tabs.onRemoved.addListener((tabId) => {
+  if (tabId === debugTabId) {
+    debugTabId = null;
+    try { chrome.debugger.detach({ tabId }, () => {}); } catch (e) {}
+  }
+});
+
+// 扩展启动时附加到已打开的 GBF 标签页
+chrome.tabs.query({ url: ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"] }, (tabs) => {
+  if (tabs && tabs.length && !debugTabId) attachDebug(tabs[0].id);
+});

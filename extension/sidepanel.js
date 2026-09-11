@@ -164,4 +164,6 @@ async function refresh() {
 }
 
 document.getElementById("btn-refresh").addEventListener("click", () => { refresh(); });
+const btnHome = document.getElementById("btn-home");
+if (btnHome) btnHome.addEventListener("click", () => { window.open("https://github.com/gugusama-0721/GUGU-GBF", "_blank"); });
 refresh();
