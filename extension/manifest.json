@@ -7,8 +7,7 @@
     "storage",
     "webRequest",
     "activeTab",
-    "scripting",
-    "webNavigation"
+    "scripting"
   ],
   "host_permissions": [
     "https://game.granbluefantasy.jp/*",
@@ -21,9 +20,15 @@
     {
       "matches": ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"],
       "js": ["content.js"],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "all_frames": true,
       "match_about_blank": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"]
     }
   ],
   "action": {

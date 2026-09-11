@@ -64,35 +64,3 @@ chrome.webRequest.onCompleted.addListener(
   },
   { urls: ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"] }
 );
-
-// ---------- 以 MAIN world 注入 hook.js ----------
-// content script 默认在 ISOLATED world，hook 不到游戏主世界的 fetch/XHR。
-// 用 chrome.scripting 以 world:"MAIN" 注入，才能真正拦截游戏请求。
-async function injectMainWorld(tabId) {
-  try {
-    const results = await chrome.scripting.executeScript({
-      target: { tabId, allFrames: true },
-      world: "MAIN",
-      files: ["hook.js"],
-    });
-    return results;
-  } catch (e) {
-    console.warn("[GUGU-GBF] MAIN注入失败:", e.message);
-    return null;
-  }
-}
-
-// 监听新标签页/已完成导航，自动注入（并在页面刷新/跳转后再次注入）
-chrome.webNavigation?.onCommitted.addListener((details) => {
-  if (
-    details.frameType === "outermost_frame" &&
-    /game\.granbluefantasy\.jp|gbf\.game\.mbga\.jp/.test(details.url)
-  ) {
-    injectMainWorld(details.tabId);
-  }
-});
-
-// 扩展启动时，给已打开的 GBF 标签页注入
-chrome.tabs.query({ url: ["https://game.granbluefantasy.jp/*", "https://gbf.game.mbga.jp/*"] }, (tabs) => {
-  (tabs || []).forEach((t) => injectMainWorld(t.id));
-});
