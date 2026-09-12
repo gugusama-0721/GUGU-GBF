@@ -359,4 +359,16 @@ function renderStatEstimate(cache){
 // 保留原渲染调用
 function refreshAll(){ refresh(); }
 document.getElementById("btn-refresh").addEventListener("click", refreshAll);
-refreshAll();
+
+// ===== 实时监听：数据到位自动重渲染，无需手动点击 =====
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== "local") return;
+  // 数据缓存或诊断/最近请求任一变化都触发刷新展示
+  if (changes["gugu_gbf_data"] || changes["gugu_gbf_dbg"] || changes["gugu_gbf_recent"]) {
+    refresh();
+  }
+});
+liveRefresh(true);
+function liveRefresh(first) {
+  if (first) refresh();
+}
