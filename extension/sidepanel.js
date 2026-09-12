@@ -168,12 +168,32 @@ function updateStatus(cache) {
 async function refresh() {
   const cache = await fetchCollected();
   renderRawBox(cache);
+  renderBattle(cache);
   extractAndRender(cache);
   renderDeckVisual(cache);
   renderDeckCharacters(cache);
   renderWeaponGrid(cache);
   renderSummonGrid(cache);
   renderStatEstimate(cache);
+}
+
+// 战斗实时事件（WebSocket，复刻 Tarou）
+async function renderBattle() {
+  const box = document.getElementById("battle-box");
+  if (!box) return;
+  let list = null;
+  try { list = (await chrome.storage.local.get("gugu_gbf_battle")).gugu_gbf_battle || []; } catch (e) { list = []; }
+  if (!list.length) { box.innerHTML = '<i class="muted">进入副本战斗后，WebSocket 服务器实时推送事件会显示于此</i>'; return; }
+  box.innerHTML = list.map((b) => {
+    const t = new Date(b.t || Date.now());
+    const hm = t.toTimeString().slice(0, 8);
+    return `<div style="font-size:11px;padding:3px 0;border-bottom:1px dashed var(--line)">
+      <span style="color:var(--muted)">${hm}</span>
+      <span style="color:${b.dir==='发'?'var(--accent)':'var(--ok)'}">[${b.dir}]</span>
+      <b style="color:var(--gold)">${b.evt}</b>
+      <span style="color:var(--muted)"> ${b.summary||''}</span>
+    </div>`;
+  }).join("");
 }
 
 function renderRawBox(cache) {
@@ -363,8 +383,8 @@ document.getElementById("btn-refresh").addEventListener("click", refreshAll);
 // ===== 实时监听：数据到位自动重渲染，无需手动点击 =====
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== "local") return;
-  // 数据缓存或诊断/最近请求任一变化都触发刷新展示
-  if (changes["gugu_gbf_data"] || changes["gugu_gbf_dbg"] || changes["gugu_gbf_recent"]) {
+  // 数据缓存、诊断、最近请求 或 战斗事件 任一变化都触发刷新展示
+  if (changes["gugu_gbf_data"] || changes["gugu_gbf_dbg"] || changes["gugu_gbf_recent"] || changes["gugu_gbf_battle"]) {
     refresh();
   }
 });

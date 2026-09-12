@@ -133,6 +133,9 @@ function writeDbgStatus(state, tabId, detail) {
 }
 let dbgCount = 0;
 let recentRequestUrls = [];
+let recentBattleEvents = []; // 最近战斗事件（WebSocket），用于侧边栏实时展示
+
+chrome.runtime.onInstalled.addListener(() => { try { chrome.storage.local.set({ gugu_gbf_battle: recentBattleEvents.slice() }); } catch (e) {} });
 
 chrome.debugger.onEvent.addListener((source, method, params) => {
   if (!params || source.tabId !== debugTabId) return;
@@ -156,8 +159,52 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         break;
       }
     }
+  } else if (method === "Network.webSocketFrameReceived" || method === "Network.webSocketFrameSent") {
+    // ===== WebSocket 战斗事件实时捕获（复刻 Tarou：服务器实时推）=====
+    try {
+      const payload = params.response && params.response.payloadData;
+      handleWsFrame(source, method, payload);
+    } catch (e) {}
   }
 });
+
+// 解析 Socket.IO 帧并提取战斗事件；Tarou 只处理 "42" 前缀的数据帧
+function handleWsFrame(source, method, payload) {
+  if (typeof payload !== "string") return;
+  const trimmed = payload.trim();
+  if (!trimmed.startsWith("42")) return; // Socket.IO 事件帧（42+eventName）才会继续
+  let parsed = null;
+  try { parsed = JSON.parse(trimmed.substring(2)); } catch (e) { return; }
+  if (!Array.isArray(parsed) || parsed.length === 0) return;
+  const [evtName, data] = parsed;
+  if (!evtName) return;
+  const BATTLE_EVENTS = ["bossUpdate", "memberJoin", "battleFinish", "mvpUpdate", "chatAdd2", "chatAdd", "raidPost"];
+  if (BATTLE_EVENTS.indexOf(evtName) === -1) return;
+
+  // 提取 boss 血量等关键状态
+  let summary = evtName;
+  try {
+    if (data && typeof data === "object") {
+      if (data.bossInfo) summary += " " + (data.bossInfo.hp || data.bossInfo.hpmax ? `HP ${data.bossInfo.hp}/${data.bossInfo.hpmax}` : "");
+      if (data.bossName) summary += " " + data.bossName;
+      if (data.condition) summary += " cond:" + JSON.stringify(data.condition).slice(0, 60);
+    }
+  } catch (e) {}
+
+  const evt = { evt: evtName, summary, t: Date.now(), dir: method === "Network.webSocketFrameSent" ? "发" : "收" };
+  recentBattleEvents.unshift(evt);
+  if (recentBattleEvents.length > 30) recentBattleEvents.pop();
+  try { chrome.storage.local.set({ gugu_gbf_battle: recentBattleEvents.slice() }); } catch (e) {}
+  // 转发到分析端（战斗阶段解析用）
+  forwardToAnalyzer({ kind: "battle", wsEvent: evtName, data });
+  // 更新诊断计数
+  try {
+    chrome.storage.local.get("gugu_gbf_dbg", (o) => {
+      const d = (o && o.gugu_gbf_dbg) || {};
+      chrome.storage.local.set({ gugu_gbf_dbg: { ...d, wsEvents: (d.wsEvents || 0) + 1, lastWs: evtName + " " + summary, time: Date.now() } });
+    });
+  } catch (e) {}
+}
 
 const pendingFetch = {};
 
