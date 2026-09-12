@@ -79,6 +79,9 @@
   .btn{width:100%;padding:9px;border:0;border-radius:7px;background:var(--accent);color:#fff;cursor:pointer;font-size:13px;margin-top:6px}
   details{margin-top:6px}summary{font-size:12px;cursor:pointer;color:var(--muted);margin-bottom:4px}
   pre.diag{white-space:pre-wrap;font-family:Consolas,monospace;font-size:11px;color:var(--muted);background:var(--card2);padding:8px;border-radius:6px}
+  .tabs{display:flex;gap:6px;margin-bottom:12px}
+  .tab{flex:1;padding:8px 0;border:0;border-radius:8px;background:var(--card2);color:var(--muted);cursor:pointer;font-size:13px;font-weight:600}
+  .tab.active{background:var(--accent);color:#fff}
 </style>
 </head>
 <body>
@@ -87,6 +90,14 @@
     <span class="home" id="btn-home">🏠</span>
   </div>
 
+  <!-- Tab 导航：配队读取 | 战斗事件 -->
+  <div class="tabs">
+    <button class="tab active" id="tab-btn-deck" data-tab="deck">📓 配队读取</button>
+    <button class="tab" id="tab-btn-battle" data-tab="battle">⚡ 战斗事件</button>
+  </div>
+
+  <!-- Tab 1: 配队读取 -->
+  <div id="panel-deck" class="panel">
   <!-- 队伍总览卡 -->
   <div class="card">
     <h3><span class="icon">⚔️</span> 当前队伍</h3>
@@ -95,12 +106,6 @@
       <span class="slot" id="deck-slot"></span>
     </div>
     <div class="members" id="deck-members"><i class="muted">打开编成页后自动采集</i></div>
-  </div>
-
-  <!-- 战斗实时事件卡（WebSocket，复刻 Tarou） -->
-  <div class="card">
-    <h3><span class="icon">⚡</span> 实时战斗事件</h3>
-    <div id="battle-box" style="max-height:180px;overflow:auto"><i class="muted">进入副本战斗后，WebSocket 服务器实时推送事件会显示于此</i></div>
   </div>
 
   <!-- 数据状态卡（可折叠诊断保留） -->
@@ -147,6 +152,15 @@
     <h3><span class="icon">✨</span> 召唤 · 主+副</h3>
     <div id="sm-grid" class="sm-grid"><i class="muted">暂无召唤数据</i></div>
   </div>
+  </div><!-- /panel-deck -->
+
+  <!-- Tab 2: 战斗事件 -->
+  <div id="panel-battle" class="panel" style="display:none">
+  <div class="card">
+    <h3><span class="icon">⚡</span> 实时战斗事件</h3>
+    <div id="battle-box" style="max-height:260px;overflow:auto"><i class="muted">进入副本战斗后，WebSocket 服务器实时推送事件会显示于此</i></div>
+  </div>
+  </div><!-- /panel-battle -->
 
   <script src="sidepanel.js"></script>
 </body>

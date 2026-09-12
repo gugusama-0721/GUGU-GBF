@@ -378,7 +378,28 @@ function renderStatEstimate(cache){
 
 // 保留原渲染调用
 function refreshAll(){ refresh(); }
-document.getElementById("btn-refresh").addEventListener("click", refreshAll);
+const refreshBtn = document.getElementById("btn-refresh");
+if (refreshBtn) refreshBtn.addEventListener("click", refreshAll);
+
+// ===== Tab 切换：配队读取 | 战斗事件 =====
+function bindTabs() {
+  const deckBtn = document.getElementById("tab-btn-deck");
+  const battleBtn = document.getElementById("tab-btn-battle");
+  const deckPanel = document.getElementById("panel-deck");
+  const battlePanel = document.getElementById("panel-battle");
+  if (!deckBtn || !battleBtn || !deckPanel || !battlePanel) return;
+  function select(which) {
+    const isDeck = which === "deck";
+    deckBtn.classList.toggle("active", isDeck);
+    battleBtn.classList.toggle("active", !isDeck);
+    deckPanel.style.display = isDeck ? "" : "none";
+    battlePanel.style.display = isDeck ? "none" : "";
+  }
+  deckBtn.addEventListener("click", () => select("deck"));
+  battleBtn.addEventListener("click", () => select("battle"));
+  return select;
+}
+const selectTab = bindTabs();
 
 // ===== 实时监听：数据到位自动重渲染，无需手动点击 =====
 chrome.storage.onChanged.addListener((changes, area) => {
