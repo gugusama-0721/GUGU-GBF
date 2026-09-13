@@ -16,7 +16,14 @@ let cache = {
 
 // 恢复缓存
 chrome.storage.local.get(STORE_KEY, (obj) => {
-  if (obj && obj[STORE_KEY]) cache = obj[STORE_KEY];
+  if (obj && obj[STORE_KEY]) {
+    cache = obj[STORE_KEY];
+    // 旧版本可能已经把 deck_combination 的 group 列表写进缓存，启动时主动清掉。
+    if (cache.deck && !isRichDeck(cache.deck.data)) {
+      cache.deck = null;
+      persist();
+    }
+  }
 });
 
 function persist() {
@@ -27,9 +34,12 @@ function persist() {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // 三类配置接口数据
   if (message && message.type === "gbf_api_data" && message.kind) {
-    saveKind(message.kind, message.url, message.data);
-    forwardToAnalyzer({ kind: message.kind, url: message.url, data: message.data });
-    sendResponse({ ok: true });
+    const saved = saveKind(message.kind, message.url, message.data);
+    // 被判定为队伍组列表的数据既不写缓存，也不送入分析端，避免污染后端状态。
+    if (saved) {
+      forwardToAnalyzer({ kind: message.kind, url: message.url, data: message.data });
+    }
+    sendResponse({ ok: true, saved });
     return;
   }
   // 为扩展界面提供汇总数据
@@ -40,8 +50,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function saveKind(kind, url, data) {
+  // deck_combination/deck_combination_list 只包含队伍组元信息，不能覆盖完整编成。
+  // 该入口同时接收 content script 和 CDP 的数据，必须在这里统一保护。
+  if (kind === "deck" && (isDeckCombinationUrl(url) || !isRichDeck(data))) {
+    try {
+      chrome.storage.local.set({
+        gugu_gbf_dbg: {
+          state: "attached",
+          detail: "忽略非完整队伍响应: " + (url || "unknown"),
+          captured: dbgCount,
+          time: Date.now(),
+        },
+      });
+    } catch (e) {}
+    return false;
+  }
   cache[kind] = { url, data, time: Date.now() };
   persist();
+  return true;
 }
 
 // 转发到本机 Python 分析端（不存在则忽略，不拖慢游戏）
@@ -92,11 +118,15 @@ function kindForUrl(u) {
   return null;
 }
 
+function isDeckCombinationUrl(u) {
+  return /\/deckcombination\/deck_combination_list(?:\/|\?|$)/.test(String(u || ""));
+}
+
 // 判断 deck 数据是否含真实队伍内容（角色/武器/召唤），区分"完整队伍"与"group 元信息"
 function hasDeep(any) {
   if (any === null || any === undefined) return false;
-  if (typeof any === "object" && !Array.isArray(any)) {
-    if (any.deck || any.party || any.npc || any.pc || any.weapons || any.summons) return true;
+  if (typeof any === "object") {
+    if (any.npc || any.pc || any.weapons || any.summons) return true;
     return Object.values(any).some((v) => v !== null && typeof v === "object" && hasDeep(v));
   }
   return false;
@@ -147,17 +177,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     try { chrome.storage.local.set({ gugu_gbf_recent: recentRequestUrls.slice() }); } catch (e) {}
     const kind = kindForUrl(response && response.url);
     if (kind && (type === "XHR" || type === "Fetch")) {
-      pendingFetch[kind] = requestId;
+      // 按 requestId 保存 URL，连续请求 party/deck 和 deck_combination 时互不覆盖。
+      pendingFetch[requestId] = { kind, url: response.url };
     }
   } else if (method === "Network.loadingFinished") {
     const { requestId, encodedDataLength } = params;
-    // 从 pendingFetch 找到 kind
-    for (const kind of Object.keys(pendingFetch)) {
-      if (pendingFetch[kind] === requestId) {
-        getBody(kind, requestId);
-        delete pendingFetch[kind];
-        break;
-      }
+    const pending = pendingFetch[requestId];
+    if (pending) {
+      delete pendingFetch[requestId];
+      getBody(pending.kind, requestId, pending.url);
     }
   } else if (method === "Network.webSocketFrameReceived" || method === "Network.webSocketFrameSent") {
     // ===== WebSocket 战斗事件实时捕获（复刻 Tarou：服务器实时推）=====
@@ -225,7 +253,7 @@ function tryParseJson(raw) {
   try { return JSON.parse(inner); } catch (e2) { throw e2; }
 }
 
-async function getBody(kind, requestId) {
+async function getBody(kind, requestId, url) {
   try {
     const res = await chrome.debugger.sendCommand({ tabId: debugTabId }, "Network.getResponseBody", { requestId });
     let data;
@@ -247,16 +275,13 @@ async function getBody(kind, requestId) {
     if (kind === "deck") {
       const hasFriends = isRichDeck(data);
       if (!hasFriends) {
-        const existing = cache.deck && cache.deck.data;
-        if (existing && isRichDeck(existing)) {
-          // 保留旧完整数据，仅更新诊断
-          try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody(deck) group元信息,已保保留完整队伍。 keys=" + Object.keys(data).slice(0,8).join(","), captured: dbgCount, time: Date.now() } }); } catch (x) {}
-          return;
-        }
+        // 保留旧完整数据。saveKind 也有同样保护，覆盖 content script 直达路径。
+        try { chrome.storage.local.set({ gugu_gbf_dbg: { state: "attached", detail: "getBody(deck) group元信息,已保留完整队伍。 keys=" + Object.keys(data).slice(0,8).join(","), captured: dbgCount, time: Date.now() } }); } catch (x) {}
+        return;
       }
     }
-    saveKind(kind, "cdp:" + kind, data);
-    forwardToAnalyzer({ kind, url: "cdp:" + kind, data });
+    saveKind(kind, url || "cdp:" + kind, data);
+    forwardToAnalyzer({ kind, url: url || "cdp:" + kind, data });
     dbgCount++;
     try {
       chrome.storage.local.get("gugu_gbf_dbg", (o) => {
