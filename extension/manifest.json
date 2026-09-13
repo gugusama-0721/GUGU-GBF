@@ -15,9 +15,6 @@
     "https://game.granbluefantasy.jp/*",
     "https://gbf.game.mbga.jp/*"
   ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: https://prd-game-a-granbluefantasy.akamaized.net"
-  },
   "background": {
     "service_worker": "background.js"
   },

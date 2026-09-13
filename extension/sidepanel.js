@@ -63,7 +63,10 @@ function extractAndRender(cache) {
   if (npcRaw && npcRaw.list) {
     charList = npcRaw.list.map((it) => ({ ...(it.master || {}), ...(it.param || {}) }));
   } else {
-    charList = deckNPCs(normalizeDeck(cache.deck && cache.deck.data));
+    const deckData = cache.deck && cache.deck.data;
+    if (deckData && deckData.deck && deckData.deck.npc) {
+      charList = Object.values(deckData.deck.npc).map((it) => ({ ...(it.master || {}), ...(it.param || {}) }));
+    }
   }
   document.getElementById("c-char").textContent = charList.length;
 
@@ -72,8 +75,10 @@ function extractAndRender(cache) {
   if (lw && lw.list) {
     wepList = lw.list.map((it) => ({ ...(it.master || {}), ...(it.param || {}) }));
   } else {
-    const pc = deckPC(normalizeDeck(cache.deck && cache.deck.data));
-    if (pc.weapons) wepList = Object.values(pc.weapons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
+    const deckData = cache.deck && cache.deck.data;
+    if (deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.weapons) {
+      wepList = Object.values(deckData.deck.pc.weapons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
+    }
   }
   document.getElementById("c-weapon").textContent = wepList.length;
 
@@ -82,13 +87,20 @@ function extractAndRender(cache) {
   if (ls && ls.list) {
     sumList = ls.list.map((it) => ({ ...(it.master || {}), ...(it.param || {}) }));
   } else {
-    const pc = deckPC(normalizeDeck(cache.deck && cache.deck.data));
-    if (pc.summons) sumList = Object.values(pc.summons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
+    const deckData = cache.deck && cache.deck.data;
+    if (deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.summons) {
+      sumList = Object.values(deckData.deck.pc.summons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
+    }
   }
   document.getElementById("c-summon").textContent = sumList.length;
 
   // 队伍数量由可视化函数 renderDeckVisual 处理，这里仅汇总计数
-  document.getElementById("c-deck").textContent = deckNPCs(normalizeDeck(cache.deck && cache.deck.data)).length;
+  const deckData = cache.deck && cache.deck.data;
+  if (deckData && deckData.deck && deckData.deck.npc) {
+    document.getElementById("c-deck").textContent = Object.values(deckData.deck.npc).length;
+  } else {
+    document.getElementById("c-deck").textContent = "0";
+  }
 
   updateStatus(cache);
 }
@@ -175,7 +187,7 @@ async function renderBattle() {
   box.innerHTML = list.map((b) => {
     const t = new Date(b.t || Date.now());
     const hm = t.toTimeString().slice(0, 8);
-    return `<div style="font-size:calc(11px*var(--ui-scale));padding:3px 0;border-bottom:1px dashed var(--line)">
+    return `<div style="font-size:11px;padding:3px 0;border-bottom:1px dashed var(--line)">
       <span style="color:var(--muted)">${hm}</span>
       <span style="color:${b.dir==='发'?'var(--accent)':'var(--ok)'}">[${b.dir}]</span>
       <b style="color:var(--gold)">${b.evt}</b>
@@ -202,186 +214,19 @@ function renderRawBox(cache) {
 const ATTR_COLOR = { "1":"#ff5b2e", "2":"#3fb0ff", "3":"#c8a24a", "4":"#7fd14a", "5":"#ffd23f", "6":"#a56bff" };
 const ATTR_CHAR = { "1":"🔥", "2":"💧", "3":"⛰️", "4":"🌪️", "5":"🌕", "6":"🌑" };
 const ATTR_NAME = { "1":"火","2":"水","3":"土","4":"风","5":"光","6":"暗" };
-const GBF_ASSET_CDN = "https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/assets";
 
 function charTag(v){ return ATTR_CHAR[String(v)] || ""; }
 function charColor(v){ return ATTR_COLOR[String(v)] || "#555"; }
 
-// GBF 的实际角色图 ID 不是单一命名规则：有时在 param.image_id_3，有时在 cjs_name / master.id，
-// 同时 jpg/png 也可能互换，且某些对象会带前缀 npc_。这里按真实数据的多种变体生成候选地址。
-function directImageUrl(item) {
-  if (!item || typeof item !== "object") return "";
-  const candidates = [
-    item.image_url,
-    item.img_url,
-    item.src,
-    item.url,
-    item.imageUrl,
-    item.imgUrl,
-    item.master && (item.master.image_url || item.master.img_url || item.master.src || item.master.url),
-    item.param && (item.param.image_url || item.param.img_url || item.param.src || item.param.url),
-  ];
-  for (const v of candidates) {
-    const s = String(v || "").trim();
-    if (s && /^https?:\/\//i.test(s)) return s;
-  }
-  return "";
-}
-
-function characterImageId(item) {
-  if (directImageUrl(item)) return "";
-  const master = item.master || {};
-  const param = item.param || {};
-  const candidates = [
-    param.image_id_3,
-    param.image_id_3_tower,
-    master.image_id,
-    param.image_id,
-    param.cjs_name,
-    master.id,
-    master.character_id,
-    master.unit_id,
-    param.unit_id,
-  ];
-  for (const v of candidates) {
-    const s = String(v || "").trim();
-    if (!s) continue;
-    return s;
-  }
-  return "";
-}
-
-function characterImageVariants(item) {
-  if (directImageUrl(item)) return [];
-  const raw = characterImageId(item);
-  if (!raw) return [];
-  const ids = new Set();
-  const add = (value) => {
-    const s = String(value || "").trim();
-    if (!s) return;
-    ids.add(s);
-    const noPrefix = s.replace(/^npc_/, "");
-    if (noPrefix !== s) ids.add(noPrefix);
-  };
-  add(raw);
-  const m = String(raw).match(/^(.*?)(?:_(?:\d{2}|\d{1}))$/);
-  if (m && m[1]) add(m[1]);
-  return [...ids].filter(Boolean);
-}
-
-function characterImageUrl(item, extension = "jpg") {
-  const direct = directImageUrl(item);
-  if (direct) return direct;
-  const variants = characterImageVariants(item);
-  if (!variants.length) return "";
-  const base = variants[0];
-  const plain = String(base || "").trim();
-  if (!plain) return "";
-  const folderCandidates = ["f", "", "m"];
-  for (const folder of folderCandidates) {
-    const path = folder ? `${GBF_ASSET_CDN}/npc/${folder}/${plain}.${extension}` : `${GBF_ASSET_CDN}/npc/${plain}.${extension}`;
-    if (folder === "f") return path;
-  }
-  return `${GBF_ASSET_CDN}/npc/${plain}.${extension}`;
-}
-
-function characterImageCandidates(item) {
-  const direct = directImageUrl(item);
-  if (direct) return [direct];
-  const variants = characterImageVariants(item);
-  if (!variants.length) return [];
-  const urls = [];
-  for (const id of variants) {
-    const plain = String(id || "").trim();
-    if (!plain) continue;
-    const folders = ["f", "", "m"];
-    for (const folder of folders) {
-      const base = folder ? `${GBF_ASSET_CDN}/npc/${folder}/${plain}` : `${GBF_ASSET_CDN}/npc/${plain}`;
-      urls.push(`${base}.jpg`);
-      urls.push(`${base}.png`);
-    }
-  }
-  return [...new Set(urls.filter(Boolean))];
-}
-
-function imageFallback(img) {
-  if (!img) return;
-  const current = img.src || "";
-  const dedup = [];
-  try {
-    const raw = img.dataset.candidates || "";
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) dedup.push(...parsed);
-    }
-  } catch (e) {}
-  const jpg = img.dataset.jpgSrc || "";
-  const png = img.dataset.pngSrc || "";
-  if (jpg) dedup.push(jpg);
-  if (png) dedup.push(png);
-  const candidates = [...new Set(dedup.filter(Boolean))];
-  if (!candidates.length) {
-    img.style.display = "none";
-    img.onerror = null;
-    return;
-  }
-  const tried = Number(img.dataset.fallbackIndex || "0");
-  if (tried >= candidates.length) {
-    img.style.display = "none";
-    img.onerror = null;
-    return;
-  }
-  const next = candidates[tried];
-  if (!next || next === current) {
-    img.dataset.fallbackIndex = String(Math.min(tried + 1, candidates.length));
-    img.style.display = "none";
-    img.onerror = null;
-    return;
-  }
-  img.dataset.fallbackIndex = String(tried + 1);
-  img.src = next;
-}
-
-function buildCharacterImage(item, className, alt = "") {
-  const candidates = characterImageCandidates(item);
-  const img = document.createElement("img");
-  img.className = className;
-  img.alt = alt;
-  img.loading = "eager";
-  img.decoding = "async";
-  img.style.display = "block";
-  img.style.objectFit = "cover";
-  img.dataset.fallbackIndex = "0";
-  if (candidates.length) {
-    img.dataset.candidates = JSON.stringify(candidates);
-    const jpg = candidates.find((u) => u.endsWith(".jpg")) || "";
-    const png = candidates.find((u) => u.endsWith(".png")) || "";
-    if (jpg) img.dataset.jpgSrc = jpg;
-    if (png) img.dataset.pngSrc = png;
-    img.src = candidates[0];
-    img.title = candidates[0];
-    img.onerror = () => imageFallback(img);
-  }
-  return img;
-}
-
 // 队伍总览：成员缩略条
 function normalizeDeck(deckData) {
-  if (!deckData || typeof deckData !== "object") return null;
-  let data = deckData;
-  for (let i = 0; i < 3; i++) {
-    if (data.result && typeof data.result === "object") {
-      data = data.result;
-    } else if (data.data && typeof data.data === "object" && !data.npc && !data.deck) {
-      data = data.data;
-    } else {
-      break;
-    }
+  // 兼容多种真实结构：deck.npc、deck.deck_list[]、平铺 deck
+  if (!deckData) return null;
+  // 顶层直接是 deck_list
+  if (Array.isArray(deckData.deck_list)) {
+    return deckData.deck_list[0] || deckData.deck_list;
   }
-  if (Array.isArray(data.deck_list)) {
-    return data.deck_list.find((item) => deckNPCs(item).length) || data.deck_list[0] || null;
-  }
-  return data;
+  return deckData;
 }
 function deckNPCs(d) {
   if (!d) return [];
@@ -410,32 +255,16 @@ function renderDeckVisual(cache){
   slotEl.textContent = (d && (d.group_name || (cache.deck.url||"").split("?")[0])) || "";
   const npcs = deckNPCs(d);
   if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员（原始结构见🔬原始数据）</i>'; return; }
-  memEl.innerHTML = "";
-  npcs.forEach((it)=>{
+  memEl.innerHTML = npcs.map((it,i)=>{
     const m = it.master||{}, p = it.param||{};
-    const attr = String(m.element ?? m.attribute ?? p.element ?? p.attribute ?? "");
-    const cell = document.createElement("div");
-    cell.className = "m-cell";
-    const img = buildCharacterImage(it, "m-avatar");
-    cell.appendChild(img);
-    const attrEl = document.createElement("div");
-    attrEl.className = "attr";
-    attrEl.style.background = charColor(attr);
-    cell.appendChild(attrEl);
-    const mn = document.createElement("div");
-    mn.className = "mn";
-    mn.textContent = m.name || (m.unit_name || "?");
-    cell.appendChild(mn);
-    const mnum = document.createElement("div");
-    mnum.className = "mnum";
-    mnum.textContent = p.level ? "Lv" + p.level : "";
-    cell.appendChild(mnum);
-    const ms = document.createElement("div");
-    ms.className = "ms";
-    ms.textContent = `${ATTR_NAME[attr] || ""} ${m.rare_name || ""}`;
-    cell.appendChild(ms);
-    memEl.appendChild(cell);
-  });
+    const attr = String(m.element !== undefined ? m.element : p.element);
+    return `<div class="m-cell">
+      <div class="attr" style="background:${charColor(attr)}"></div>
+      <div class="mn">${m.name || (m.unit_name || "?")}</div>
+      <div class="mnum">${p.level ? "Lv"+p.level : ""}</div>
+      <div class="ms">${ATTR_NAME[attr]||""} ${m.rare_name||""}</div>
+    </div>`;
+  }).join("");
 }
 
 // 角色头卡
@@ -449,52 +278,26 @@ function renderDeckCharacters(cache){
   }
   if(!list.length){ el.innerHTML='<i class="muted">暂无角色数据</i>'; return; }
   // 优先从 deck 取 master.name 作真实名称
-  el.innerHTML = "";
-  list.forEach((it)=>{
+  el.innerHTML = list.map((it)=>{
     const m = it.master||{}, p = it.param||{};
-    const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
+    const attr = m.element !== undefined ? m.element : p.element;
     const name = (m && m.name) || "";
-    const card = document.createElement("div");
-    card.className = "ch-card";
-    const head = document.createElement("div");
-    head.className = "ch-head";
-    const rarity = document.createElement("span");
-    rarity.className = "ch-rarity";
-    rarity.textContent = "SSR";
-    head.appendChild(rarity);
-    const avatarWrap = document.createElement("div");
-    avatarWrap.className = "ch-avatar";
-    const img = buildCharacterImage(it, "ch-image", name);
-    avatarWrap.appendChild(img);
-    head.appendChild(avatarWrap);
-    const attrEl = document.createElement("div");
-    attrEl.className = "ch-attr";
-    attrEl.style.background = charColor(attr);
-    head.appendChild(attrEl);
-    card.appendChild(head);
-    const body = document.createElement("div");
-    body.className = "ch-body";
-    const nameEl = document.createElement("div");
-    nameEl.className = "ch-name";
-    nameEl.textContent = name || it.id;
-    body.appendChild(nameEl);
-    const stats = document.createElement("div");
-    stats.className = "ch-stats";
-    const atk = document.createElement("span");
-    atk.innerHTML = `攻<b>${p.attack || m.attack || "-"}</b>`;
-    const hp = document.createElement("span");
-    hp.innerHTML = `血<b>${p.hp || m.hp || "-"}</b>`;
-    stats.appendChild(atk);
-    stats.appendChild(hp);
-    body.appendChild(stats);
-    const typeEl = document.createElement("div");
-    typeEl.className = "ch-type";
-    const specialty = m.specialty ? (Array.isArray(m.specialty) ? m.specialty.map((s) => "得意" + s).join(" ") : "得意" + m.specialty) : "";
-    typeEl.textContent = `${ATTR_NAME[attr] || ""}属性 · ${specialty}`;
-    body.appendChild(typeEl);
-    card.appendChild(body);
-    el.appendChild(card);
-  });
+    return `<div class="ch-card">
+      <div class="ch-head">
+        <span class="ch-rarity">SSR</span>
+        <div class="ch-avatar"></div>
+        <div class="ch-attr" style="background:${charColor(attr)}"></div>
+      </div>
+      <div class="ch-body">
+        <div class="ch-name">${name||it.id}</div>
+        <div class="ch-stats">
+          <span>攻<b>${p.attack||m.attack||"-"}</b></span>
+          <span>血<b>${p.hp||m.hp||"-"}</b></span>
+        </div>
+        <div class="ch-type">${ATTR_NAME[attr]||""}属性 · ${m.specialty ? (Array.isArray(m.specialty)?m.specialty.map(s=>"得意"+s).join(" "):"得意"+m.specialty) : ""}</div>
+      </div>
+    </div>`;
+  }).join("");
 }
 
 // 武器盘网格（主手 + 副手）
@@ -511,7 +314,7 @@ function renderWeaponGrid(cache){
   el.innerHTML = weps.map((it,idx)=>{
     const m = it.master||{}, p = it.param||{};
     const name = (m && m.name) || "";
-    const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
+    const attr = m.element !== undefined ? m.element : p.element;
     const atk = p.attack !== undefined ? p.attack : m.attack;
     let skillName = "";
     for(let i=1;i<=4;i++){ if(it["skill"+i] && it["skill"+i].name){ skillName = it["skill"+i].name; break; } }
@@ -539,7 +342,7 @@ function renderSummonGrid(cache){
   el.innerHTML = sums.map((it,idx)=>{
     const m = it.master||{}, p = it.param||{};
     const name = (m && m.name) || "";
-    const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
+    const attr = m.element !== undefined ? m.element : p.element;
     const atk = p.attack||m.attack||"-";
     return `<div class="sm-cell${idx===0?' main':''}">
       <div class="sm-icon" style="border:2px solid ${charColor(attr)}">${charTag(attr)||"✨"}</div>
