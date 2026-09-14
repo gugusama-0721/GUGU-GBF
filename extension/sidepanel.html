@@ -40,10 +40,10 @@
   .m-cell .mnum{font-size:calc(9px*var(--ui-scale));color:var(--gold)}
 
   /* 角色卡 */
-  .ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(170px*var(--ui-scale)),calc(170px*var(--ui-scale))));gap:8px;justify-content:start}
-  .ch-card{width:calc(170px*var(--ui-scale));background:var(--card2);border:1px solid var(--line);border-radius:9px;overflow:hidden}
-  .ch-head{height:calc(400px*var(--ui-scale));position:relative;background:linear-gradient(135deg,#1d2436,#12172a)}
-  .ch-avatar{width:170px;height:calc350px;border-radius:4px;position:absolute;left:1px;bottom:1px;border:2px solid var(--gold);background:#000;overflow:hidden}
+  .ch-grid{display:grid;grid-auto-flow:column;grid-auto-columns:calc(120px*var(--ui-scale));gap:8px;justify-content:start}
+  .ch-card{width:calc(120px*var(--ui-scale));background:var(--card2);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .ch-head{height:calc(300px*var(--ui-scale));position:relative;background:linear-gradient(135deg,#1d2436,#12172a)}
+  .ch-avatar{width:calc(116px*var(--ui-scale));height:calc(270px*var(--ui-scale));border-radius:4px;position:absolute;left:1px;bottom:1px;border:2px solid var(--gold);background:#000;overflow:hidden}
   .ch-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:#000}
   .ch-attr{position:absolute;top:7px;right:7px;width:calc(16px*var(--ui-scale));height:calc(16px*var(--ui-scale));border-radius:50%;border:1px solid rgba(255,255,255,.5)}
   .ch-rarity{position:absolute;top:6px;left:8px;font-size:calc(10px*var(--ui-scale));font-weight:800;color:var(--gold)}
