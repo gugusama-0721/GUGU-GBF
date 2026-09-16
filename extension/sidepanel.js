@@ -651,8 +651,8 @@ if (versionNode) versionNode.textContent = 'v' + manifestVersion;
 
 function applyGlobalScale() {
   const width = Math.max(window.innerWidth || 0, 240);
-  const scaleByWidth = width / 720;
-  const scale = Math.min(1.18, Math.max(0.84, scaleByWidth));
+  const scaleByWidth = width / 500;
+  const scale = Math.min(2, Math.max(0.36, scaleByWidth));
   document.documentElement.style.setProperty('--ui-scale', scale.toFixed(3));
 }
 window.addEventListener('resize', applyGlobalScale);

@@ -13,8 +13,8 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html, body { width:100%; height:100%; }
-  body{background:var(--bg);color:var(--text);font-family:"Segoe UI","Microsoft YaHei",sans-serif;padding:12px;display:flex;gap:10px;align-items:flex-start;overflow:hidden;transform-origin:top left;transform:scale(var(--ui-scale,1));width:calc(100% / var(--ui-scale,1));height:calc(100% / var(--ui-scale,1));font-size:13px;}
-  .main{flex:1;min-width:0;order:1;overflow-y:auto;overflow-x:hidden;max-height:100vh;padding:4px 6px 10px 4px;direction:ltr;scrollbar-width:thin;scrollbar-color:transparent transparent}
+  body{background:var(--bg);color:var(--text);font-family:"Segoe UI","Microsoft YaHei",sans-serif;padding:12px;display:flex;gap:10px;align-items:stretch;overflow:hidden;transform-origin:top left;transform:scale(var(--ui-scale,1));width:calc(100% / var(--ui-scale,1));height:calc(100% / var(--ui-scale,1));font-size:13px;}
+  .main{flex:1;min-width:0;min-height:0;height:100%;order:1;overflow-y:auto;overflow-x:hidden;padding:4px 6px 28px 4px;direction:ltr;scrollbar-width:thin;scrollbar-color:transparent transparent}
   .sidebar{width:40px;flex:0 0 40px;display:flex;flex-direction:column;gap:8px;padding-top:4px;order:2;align-items:stretch;overflow-y:auto;overflow-x:hidden;max-height:100vh;direction:rtl;scrollbar-width:thin;scrollbar-color:transparent transparent}
   .main::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:8px;height:8px;background:transparent}
   .main::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track{background:transparent}
@@ -56,8 +56,8 @@
   .ch-type{font-size:9px;color:var(--muted);margin-top:3px}
 
   /* 武器盘 */
-  .wp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-  .wp-cell{background:transparent;border:0;border-radius:0;padding:7px;text-align:center;position:relative;min-width:0}
+  .wp-grid{display:grid;grid-template-columns:repeat(4,120px);gap:7px;justify-content:start}
+  .wp-cell{width:120px;background:transparent;border:0;border-radius:0;padding:7px;text-align:center;position:relative;min-width:0}
   .wp-cell.main{border-color:transparent}
   .wp-tag{position:absolute;top:3px;right:5px;font-size:8px;color:var(--gold)}
   .wp-icon{width:32px;height:32px;border-radius:0;background:transparent;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:15px}
@@ -66,8 +66,8 @@
   .wp-skill{font-size:8px;color:var(--accent);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   /* 召唤栏 */
-  .sm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-  .sm-cell{background:transparent;border:0;border-radius:0;padding:7px;text-align:center;position:relative}
+  .sm-grid{display:grid;grid-template-columns:repeat(3,120px);gap:7px;justify-content:start}
+  .sm-cell{width:120px;background:transparent;border:0;border-radius:0;padding:7px;text-align:center;position:relative}
   .sm-cell.main{border-color:transparent}
   .sm-icon{width:32px;height:32px;border-radius:50%;background:transparent;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:15px;border:0}
   .sm-name{font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
