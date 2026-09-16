@@ -404,20 +404,32 @@ function deckPC(d) {
   if (!d) return {};
   if (d.pc) return d.pc;
   if (d.party && d.party.pc) return d.party.pc;
+  if (d.deck && d.deck.pc) return d.deck.pc;
   return {};
 }
 function renderDeckVisual(cache){
   const nameEl = document.getElementById("deck-name");
   const slotEl = document.getElementById("deck-slot");
+  const jobEl = document.getElementById("job-info");
   const memEl = document.getElementById("deck-members");
   const deckData = cache.deck && cache.deck.data;
   if(!deckData){
     nameEl.textContent = "未读取"; slotEl.textContent = "";
+    if (jobEl) jobEl.textContent = "主角职业：未读取";
     memEl.innerHTML = '<i class="muted">打开编成页后自动采集</i>'; return;
   }
   const d = normalizeDeck(cache.deck.data);
+  const pc = deckPC(d);
+  const job = pc.job || {};
+  const jobMaster = job.master || {};
+  const jobParam = job.param || {};
   nameEl.textContent = (d && (d.name || d.deck_name)) || "Deck";
   slotEl.textContent = (d && (d.group_name || (cache.deck.url||"").split("?")[0])) || "";
+  if (jobEl) {
+    const jobName = jobMaster.name || job.name || jobParam.name || "未读取";
+    const jobLevel = jobParam.level || job.level || "";
+    jobEl.innerHTML = `主角职业：<b>${jobName}</b>${jobLevel ? ` · Lv${jobLevel}` : ""}`;
+  }
   const npcs = deckNPCs(d);
   if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员（原始结构见🔬原始数据）</i>'; return; }
   memEl.innerHTML = "";
@@ -532,7 +544,9 @@ function renderSummonGrid(cache){
   const el = document.getElementById("sm-grid");
   const deckData = cache.deck && cache.deck.data;
   const pc = deckPC(normalizeDeck(deckData));
-  let sums = (pc && pc.summons) ? Object.values(pc.summons) : [];
+  let sums = [];
+  if (pc && pc.summons) sums.push(...Object.values(pc.summons));
+  if (pc && pc.sub_summons) sums.push(...Object.values(pc.sub_summons));
   if(!sums.length){
     const raw = cache.summon && cache.summon.data;
     if(raw && raw.list) sums = raw.list.slice(0,6);
