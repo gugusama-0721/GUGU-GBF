@@ -44,11 +44,10 @@
   .m-cell .mnum{font-size:9px;color:var(--gold)}
 
   /* 角色卡 */
-  .ch-grid{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:8px;justify-content:start}
-  .ch-card{width:120px;background:transparent;border:0;border-radius:0;overflow:hidden}
-  .ch-head{height:300px;position:relative;background:linear-gradient(135deg,#1d2436,#12172a)}
-  .ch-avatar{width:116px;height:270px;border-radius:0;position:absolute;left:1px;bottom:1px;border:0;background:transparent;overflow:hidden}
-  .ch-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:transparent}
+  .ch-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;align-items:start}
+  .ch-card{width:100%;min-width:0;background:transparent;border:0;border-radius:0;overflow:visible}
+  .ch-head{width:100%;aspect-ratio:116 / 270;position:relative;background:transparent;overflow:visible}
+  .ch-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:transparent;border:2px solid var(--gold);border-radius:0}
   .ch-body{padding:7px 8px}
   .ch-name{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ch-stats{display:flex;gap:8px;font-size:10.5px}

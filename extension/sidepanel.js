@@ -360,7 +360,7 @@ function buildCharacterImage(item, className, alt = "") {
   img.loading = "eager";
   img.decoding = "async";
   img.style.display = "block";
-  img.style.objectFit = "cover";
+  img.style.objectFit = className === "ch-image" ? "contain" : "cover";
   img.dataset.fallbackIndex = "0";
   if (candidates.length) {
     img.dataset.candidates = JSON.stringify(candidates);
@@ -474,17 +474,13 @@ function renderDeckCharacters(cache){
   el.innerHTML = "";
   list.forEach((it)=>{
     const m = it.master||{}, p = it.param||{};
-    const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
     const name = (m && m.name) || "";
     const card = document.createElement("div");
     card.className = "ch-card";
     const head = document.createElement("div");
     head.className = "ch-head";
-    const avatarWrap = document.createElement("div");
-    avatarWrap.className = "ch-avatar";
     const img = buildCharacterImage(it, "ch-image", name);
-    avatarWrap.appendChild(img);
-    head.appendChild(avatarWrap);
+    head.appendChild(img);
     card.appendChild(head);
     const body = document.createElement("div");
     body.className = "ch-body";
