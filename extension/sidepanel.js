@@ -65,7 +65,8 @@ function extractAndRender(cache) {
   } else {
     charList = deckNPCs(normalizeDeck(cache.deck && cache.deck.data));
   }
-  document.getElementById("c-char").textContent = charList.length;
+  const charCount = document.getElementById("c-char");
+  if (charCount) charCount.textContent = charList.length;
 
   let wepList = [];
   const lw = cache.weapon && cache.weapon.data;
@@ -75,7 +76,8 @@ function extractAndRender(cache) {
     const pc = deckPC(normalizeDeck(cache.deck && cache.deck.data));
     if (pc.weapons) wepList = Object.values(pc.weapons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
   }
-  document.getElementById("c-weapon").textContent = wepList.length;
+  const weaponCount = document.getElementById("c-weapon");
+  if (weaponCount) weaponCount.textContent = wepList.length;
 
   let sumList = [];
   const ls = cache.summon && cache.summon.data;
@@ -85,25 +87,33 @@ function extractAndRender(cache) {
     const pc = deckPC(normalizeDeck(cache.deck && cache.deck.data));
     if (pc.summons) sumList = Object.values(pc.summons).map((it) => ({ ...(it.master || {}), ...(it.param || {}), ...it }));
   }
-  document.getElementById("c-summon").textContent = sumList.length;
+  const summonCount = document.getElementById("c-summon");
+  if (summonCount) summonCount.textContent = sumList.length;
 
   // 队伍数量由可视化函数 renderDeckVisual 处理，这里仅汇总计数
-  document.getElementById("c-deck").textContent = deckNPCs(normalizeDeck(cache.deck && cache.deck.data)).length;
+  const deckCount = document.getElementById("c-deck");
+  if (deckCount) deckCount.textContent = deckNPCs(normalizeDeck(cache.deck && cache.deck.data)).length;
 
   updateStatus(cache);
 }
 
 function updateStatus(cache) {
+  const lastUpdate = document.getElementById("last-update");
+  const diagBox = document.getElementById("diag-box");
+  if (!lastUpdate && !diagBox) return;
   const last = [];
   for (const k of ["character", "weapon", "summon", "deck"]) {
     if (cache[k] && cache[k].time) last.push(`${k}:${new Date(cache[k].time).toLocaleTimeString()}`);
   }
-  document.getElementById("last-update").textContent =
-    last.length ? "最近截获: " + last.join(" · ") : "尚未读取 · 打开游戏页后自动采集";
+  if (lastUpdate) {
+    lastUpdate.textContent =
+      last.length ? "最近截获: " + last.join(" · ") : "尚未读取 · 打开游戏页后自动采集";
+  }
 
   try {
     chrome.storage.local.get("gugu_gbf_diag", (obj) => {
       const box = document.getElementById("diag-box");
+      if (!box) return;
       const d = obj && obj.gugu_gbf_diag;
       if (!d) {
         box.textContent = "暂无诊断数据。\ncontent script 未写入诊断。可能：尚未刷新游戏页，或注入失败。\n请刷新 GBF 页面后点「立即读取」。";
@@ -458,19 +468,11 @@ function renderDeckCharacters(cache){
     card.className = "ch-card";
     const head = document.createElement("div");
     head.className = "ch-head";
-    const rarity = document.createElement("span");
-    rarity.className = "ch-rarity";
-    rarity.textContent = "SSR";
-    head.appendChild(rarity);
     const avatarWrap = document.createElement("div");
     avatarWrap.className = "ch-avatar";
     const img = buildCharacterImage(it, "ch-image", name);
     avatarWrap.appendChild(img);
     head.appendChild(avatarWrap);
-    const attrEl = document.createElement("div");
-    attrEl.className = "ch-attr";
-    attrEl.style.background = charColor(attr);
-    head.appendChild(attrEl);
     card.appendChild(head);
     const body = document.createElement("div");
     body.className = "ch-body";
@@ -490,7 +492,7 @@ function renderDeckCharacters(cache){
     const typeEl = document.createElement("div");
     typeEl.className = "ch-type";
     const specialty = m.specialty ? (Array.isArray(m.specialty) ? m.specialty.map((s) => "得意" + s).join(" ") : "得意" + m.specialty) : "";
-    typeEl.textContent = `${ATTR_NAME[attr] || ""}属性 · ${specialty}`;
+    typeEl.textContent = specialty;
     body.appendChild(typeEl);
     card.appendChild(body);
     el.appendChild(card);
@@ -598,6 +600,25 @@ function bindTabs() {
 }
 const selectTab = bindTabs();
 
+function bindScrollbars() {
+  const scrollAreas = [document.querySelector(".main"), document.querySelector(".sidebar")].filter(Boolean);
+  scrollAreas.forEach((area) => {
+    let hideTimer = null;
+    const showScrollbar = () => {
+      area.classList.add("is-scrolling");
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => area.classList.remove("is-scrolling"), 700);
+    };
+    area.addEventListener("scroll", showScrollbar, { passive: true });
+    area.addEventListener("mouseenter", () => area.classList.add("is-scrolling"));
+    area.addEventListener("mouseleave", () => {
+      clearTimeout(hideTimer);
+      area.classList.remove("is-scrolling");
+    });
+  });
+}
+bindScrollbars();
+
 // ===== 实时监听：数据到位自动重渲染，无需手动点击 =====
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== "local") return;
@@ -610,3 +631,15 @@ liveRefresh(true);
 function liveRefresh(first) {
   if (first) refresh();
 }
+const manifestVersion = "0.1.0";
+const versionNode = document.getElementById('plugin-version');
+if (versionNode) versionNode.textContent = 'v' + manifestVersion;
+
+function applyGlobalScale() {
+  const width = Math.max(window.innerWidth || 0, 240);
+  const scaleByWidth = width / 720;
+  const scale = Math.min(1.18, Math.max(0.84, scaleByWidth));
+  document.documentElement.style.setProperty('--ui-scale', scale.toFixed(3));
+}
+window.addEventListener('resize', applyGlobalScale);
+applyGlobalScale();
