@@ -1,0 +1,12 @@
+{
+  "name": "gugu-gbf",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Granblue Fantasy party data sidepanel",
+  "scripts": {
+    "prepare:extension": "node scripts/prepare-extension.js"
+  },
+  "dependencies": {
+    "vue": "^3.5.13"
+  }
+}

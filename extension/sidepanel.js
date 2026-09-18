@@ -179,26 +179,38 @@ function refreshDeck(cache) {
   renderStatEstimate(cache);
 }
 
-let refreshTimer = null;
-const pendingRefreshKinds = new Set();
-function scheduleRefresh(kind) {
-  pendingRefreshKinds.add(kind);
-  clearTimeout(refreshTimer);
-  refreshTimer = setTimeout(async () => {
-    const kinds = new Set(pendingRefreshKinds);
-    pendingRefreshKinds.clear();
-    const cache = await fetchCollected();
-    if (kinds.has("deck")) refreshDeck(cache);
-    if (kinds.has("battle")) await renderBattle();
-  }, 80);
-}
+// Vue 响应式状态层：storage 变化只更新对应状态，再由 watchEffect 局部渲染。
+const { createApp, ref, watchEffect } = Vue;
+const deck = ref(null);
+const battle = ref([]);
+
+createApp({
+  setup() {
+    watchEffect(() => {
+      if (deck.value) refreshDeck(deck.value);
+      renderBattleList(battle.value);
+    });
+
+    chrome.storage.local.get(["gugu_gbf_data", "gugu_gbf_battle"]).then((stored) => {
+      deck.value = stored.gugu_gbf_data || {};
+      battle.value = stored.gugu_gbf_battle || [];
+    });
+
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== "local") return;
+      if (changes.gugu_gbf_data) deck.value = changes.gugu_gbf_data.newValue || {};
+      if (changes.gugu_gbf_battle) battle.value = changes.gugu_gbf_battle.newValue || [];
+    });
+
+    return { deck, battle };
+  },
+}).mount("#vue-state");
 
 // 战斗实时事件（WebSocket，复刻 Tarou）
-async function renderBattle() {
+function renderBattleList(list) {
   const box = document.getElementById("battle-box");
   if (!box) return;
-  let list = null;
-  try { list = (await chrome.storage.local.get("gugu_gbf_battle")).gugu_gbf_battle || []; } catch (e) { list = []; }
+  list = Array.isArray(list) ? list : [];
   if (!list.length) { box.innerHTML = '<i class="muted">进入副本战斗后，WebSocket 服务器实时推送事件会显示于此</i>'; return; }
   box.innerHTML = list.map((b) => {
     const t = new Date(b.t || Date.now());
@@ -210,6 +222,15 @@ async function renderBattle() {
       <span style="color:var(--muted)"> ${b.summary||''}</span>
     </div>`;
   }).join("");
+}
+
+async function renderBattle() {
+  try {
+    const result = await chrome.storage.local.get("gugu_gbf_battle");
+    renderBattleList(result.gugu_gbf_battle || []);
+  } catch (e) {
+    renderBattleList([]);
+  }
 }
 
 function renderRawBox(cache) {
@@ -695,16 +716,6 @@ function bindScrollbars() {
 }
 bindScrollbars();
 
-// ===== 实时监听：数据到位自动重渲染，无需手动点击 =====
-chrome.storage.onChanged.addListener((changes, area) => {
-  if (area !== "local") return;
-  if (changes["gugu_gbf_data"]) scheduleRefresh("deck");
-  if (changes["gugu_gbf_battle"]) scheduleRefresh("battle");
-});
-liveRefresh(true);
-function liveRefresh(first) {
-  if (first) refresh();
-}
 const manifestVersion = "0.1.0";
 const versionNode = document.getElementById('plugin-version');
 if (versionNode) versionNode.textContent = 'v' + manifestVersion;
