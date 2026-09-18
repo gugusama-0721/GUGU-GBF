@@ -58,12 +58,15 @@
   .ch-skills{font-size:8px;color:var(--muted);line-height:1.35;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
   /* 武器盘 */
-  .wp-grid{display:grid;grid-template-columns:repeat(4,120px);gap:7px;justify-content:start}
-  .wp-cell{width:120px;background:transparent;border:0;border-radius:0;padding:7px;text-align:center;position:relative;min-width:0}
+  .wp-grid{display:grid;grid-template-columns:120px repeat(3,120px);grid-template-rows:repeat(4,minmax(112px,auto));gap:7px;justify-content:start;align-items:start}
+  .wp-cell{width:120px;min-height:112px;background:transparent;border:0;border-radius:0;padding:7px;text-align:center;position:relative;min-width:0}
+  .wp-cell.main{grid-column:1;grid-row:1 / span 4;align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+  .wp-cell.empty{opacity:.22}
   .wp-cell.main{border-color:transparent}
   .wp-tag{position:absolute;top:3px;right:5px;font-size:8px;color:var(--gold)}
   .wp-icon{width:64px;height:64px;border-radius:0;background:transparent;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:15px;object-fit:contain}
   .wp-image{display:block;width:100%;height:100%;object-fit:contain}
+  .wp-cell:not(.main):not(.empty) .wp-image{transform:rotate(-90deg)}
   .wp-name{font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .wp-atk{font-size:9px;color:var(--muted)}
   .wp-skill{font-size:8px;color:var(--accent);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

@@ -563,7 +563,10 @@ function renderWeaponGrid(cache){
     if(raw && raw.list) weps = raw.list.slice(0,13);
   }
   if(!weps.length){ el.innerHTML='<i class="muted">暂无武器数据</i>'; return; }
-  el.innerHTML = weps.map((it,idx)=>{
+  const slots = [weps[0] || null, ...weps.slice(1, 10)];
+  while (slots.length < 10) slots.push(null);
+  el.innerHTML = slots.map((it,idx)=>{
+    if (!it) return '<div class="wp-cell empty" aria-hidden="true"></div>';
     const m = it.master||{}, p = it.param||{};
     const name = (m && m.name) || "";
     const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
@@ -579,7 +582,9 @@ function renderWeaponGrid(cache){
     </div>`;
     }).join("");
   el.querySelectorAll(".wp-icon").forEach((icon, index) => {
-    const image = buildAssetImage("weapon", weps[index], "wp-image", weps[index].master?.name || "");
+    const weapon = slots[index];
+    if (!weapon) return;
+    const image = buildAssetImage("weapon", weapon, "wp-image", weapon.master?.name || "");
     icon.appendChild(image);
   });
 }
