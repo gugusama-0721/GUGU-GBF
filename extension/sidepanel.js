@@ -567,18 +567,8 @@ function renderWeaponGrid(cache){
   while (slots.length < 10) slots.push(null);
   el.innerHTML = slots.map((it,idx)=>{
     if (!it) return '<div class="wp-cell empty" aria-hidden="true"></div>';
-    const m = it.master||{}, p = it.param||{};
-    const name = (m && m.name) || "";
-    const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
-    const atk = p.attack !== undefined ? p.attack : m.attack;
-    let skillName = "";
-    for(let i=1;i<=4;i++){ if(it["skill"+i] && it["skill"+i].name){ skillName = it["skill"+i].name; break; } }
     return `<div class="wp-cell${idx===0?' main':''}">
-      <span class="wp-tag">${idx===0?'主手':(charTag(attr))}</span>
-      <div class="wp-icon" style="border:2px solid ${charColor(attr)}"></div>
-      <div class="wp-name">${name||it.id}</div>
-      <div class="wp-atk">攻 ${atk||"-"}</div>
-      ${skillName?`<div class="wp-skill">${skillName}</div>`:""}
+      <div class="wp-icon"></div>
     </div>`;
     }).join("");
   el.querySelectorAll(".wp-icon").forEach((icon, index) => {
