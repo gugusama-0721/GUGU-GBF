@@ -382,7 +382,11 @@ function assetImageCandidates(kind, item) {
   if (direct) return [direct];
   const id = assetImageId(item);
   if (!id) return [];
-  const folders = kind === "weapon" ? ["weapon", "weapon/f"] : ["summon", "summon/f"];
+  const master = item.master || {};
+  const weaponKind = String(master.kind || "").trim();
+  const folders = kind === "weapon"
+    ? [`weapon/${weaponKind === "10" ? "ls" : weaponKind}`, "weapon/ls", "weapon/m", "weapon", "weapon/f"]
+    : ["summon", "summon/f"];
   const urls = [];
   folders.forEach((folder) => {
     urls.push(`${GBF_ASSET_CDN}/${folder}/${id}.jpg`);
