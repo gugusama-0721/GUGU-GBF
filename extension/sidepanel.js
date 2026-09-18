@@ -336,19 +336,14 @@ function imageFallback(img) {
     return;
   }
   const tried = Number(img.dataset.fallbackIndex || "0");
-  if (tried >= candidates.length) {
+  const nextIndex = candidates.findIndex((candidate, index) => index >= tried && candidate !== current);
+  if (nextIndex < 0) {
     img.style.display = "none";
     img.onerror = null;
     return;
   }
-  const next = candidates[tried];
-  if (!next || next === current) {
-    img.dataset.fallbackIndex = String(Math.min(tried + 1, candidates.length));
-    img.style.display = "none";
-    img.onerror = null;
-    return;
-  }
-  img.dataset.fallbackIndex = String(tried + 1);
+  const next = candidates[nextIndex];
+  img.dataset.fallbackIndex = String(nextIndex + 1);
   img.src = next;
 }
 
@@ -368,6 +363,46 @@ function buildCharacterImage(item, className, alt = "") {
     const png = candidates.find((u) => u.endsWith(".png")) || "";
     if (jpg) img.dataset.jpgSrc = jpg;
     if (png) img.dataset.pngSrc = png;
+    img.src = candidates[0];
+    img.title = candidates[0];
+    img.onerror = () => imageFallback(img);
+  }
+  return img;
+}
+
+function assetImageId(item) {
+  if (!item || typeof item !== "object") return "";
+  const master = item.master || {};
+  const param = item.param || {};
+  return String(param.image_id || param.image_id_3 || master.image_id || master.id || "").trim();
+}
+
+function assetImageCandidates(kind, item) {
+  const direct = directImageUrl(item);
+  if (direct) return [direct];
+  const id = assetImageId(item);
+  if (!id) return [];
+  const folders = kind === "weapon" ? ["weapon", "weapon/f"] : ["summon", "summon/f"];
+  const urls = [];
+  folders.forEach((folder) => {
+    urls.push(`${GBF_ASSET_CDN}/${folder}/${id}.jpg`);
+    urls.push(`${GBF_ASSET_CDN}/${folder}/${id}.png`);
+  });
+  return [...new Set(urls)];
+}
+
+function buildAssetImage(kind, item, className, alt = "") {
+  const candidates = assetImageCandidates(kind, item);
+  const img = document.createElement("img");
+  img.className = className;
+  img.alt = alt;
+  img.loading = "eager";
+  img.decoding = "async";
+  img.style.display = "block";
+  img.style.objectFit = "contain";
+  img.dataset.fallbackIndex = "0";
+  if (candidates.length) {
+    img.dataset.candidates = JSON.stringify(candidates);
     img.src = candidates[0];
     img.title = candidates[0];
     img.onerror = () => imageFallback(img);
@@ -428,7 +463,8 @@ function renderDeckVisual(cache){
   if (jobEl) {
     const jobName = jobMaster.name || job.name || jobParam.name || "未读取";
     const jobLevel = jobParam.level || job.level || "";
-    jobEl.innerHTML = `主角职业：<b>${jobName}</b>${jobLevel ? ` · Lv${jobLevel}` : ""}`;
+    const actions = Array.isArray(pc.set_action) ? pc.set_action.map((action) => action.name).filter(Boolean).slice(0, 3) : [];
+    jobEl.innerHTML = `主角职业：<b>${jobName}</b>${jobLevel ? ` · Lv${jobLevel}` : ""}${actions.length ? `<div class="job-skills">职业技能：<b>${actions.join(" · ")}</b></div>` : ""}`;
   }
   const npcs = deckNPCs(d);
   if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员（原始结构见🔬原始数据）</i>'; return; }
@@ -502,6 +538,11 @@ function renderDeckCharacters(cache){
     const specialty = m.specialty ? (Array.isArray(m.specialty) ? m.specialty.map((s) => "得意" + s).join(" ") : "得意" + m.specialty) : "";
     typeEl.textContent = specialty;
     body.appendChild(typeEl);
+    const skillEl = document.createElement("div");
+    skillEl.className = "ch-skills";
+    const skills = Array.isArray(it.skill && it.skill.description) ? it.skill.description : [];
+    skillEl.textContent = skills.map((skill) => skill.comment).filter(Boolean).slice(0, 2).join(" · ");
+    body.appendChild(skillEl);
     card.appendChild(body);
     el.appendChild(card);
   });
@@ -527,12 +568,16 @@ function renderWeaponGrid(cache){
     for(let i=1;i<=4;i++){ if(it["skill"+i] && it["skill"+i].name){ skillName = it["skill"+i].name; break; } }
     return `<div class="wp-cell${idx===0?' main':''}">
       <span class="wp-tag">${idx===0?'主手':(charTag(attr))}</span>
-      <div class="wp-icon" style="border:2px solid ${charColor(attr)}">🗡️</div>
+      <div class="wp-icon" style="border:2px solid ${charColor(attr)}"></div>
       <div class="wp-name">${name||it.id}</div>
       <div class="wp-atk">攻 ${atk||"-"}</div>
       ${skillName?`<div class="wp-skill">${skillName}</div>`:""}
     </div>`;
-  }).join("");
+    }).join("");
+  el.querySelectorAll(".wp-icon").forEach((icon, index) => {
+    const image = buildAssetImage("weapon", weps[index], "wp-image", weps[index].master?.name || "");
+    icon.appendChild(image);
+  });
 }
 
 // 召唤栏（主召唤 + 副召唤）
@@ -554,11 +599,15 @@ function renderSummonGrid(cache){
     const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
     const atk = p.attack||m.attack||"-";
     return `<div class="sm-cell${idx===0?' main':''}">
-      <div class="sm-icon" style="border:2px solid ${charColor(attr)}">${charTag(attr)||"✨"}</div>
+      <div class="sm-icon" style="border:2px solid ${charColor(attr)}"></div>
       <div class="sm-name">${name||it.id}</div>
       <div class="sm-meta">${ATTR_NAME[attr]||""} · 攻 ${atk}</div>
     </div>`;
   }).join("");
+  el.querySelectorAll(".sm-icon").forEach((icon, index) => {
+    const image = buildAssetImage("summon", sums[index], "sm-image", sums[index].master?.name || "");
+    icon.appendChild(image);
+  });
 }
 
 // 数值统计：先展示可用基础统计（完整攻刃引擎后续）
