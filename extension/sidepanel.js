@@ -165,14 +165,32 @@ function updateStatus(cache) {
 
 async function refresh() {
   const cache = await fetchCollected();
+  refreshDeck(cache);
+  await renderBattle();
+}
+
+function refreshDeck(cache) {
   renderRawBox(cache);
-  renderBattle(cache);
   extractAndRender(cache);
   renderDeckVisual(cache);
   renderDeckCharacters(cache);
   renderWeaponGrid(cache);
   renderSummonGrid(cache);
   renderStatEstimate(cache);
+}
+
+let refreshTimer = null;
+const pendingRefreshKinds = new Set();
+function scheduleRefresh(kind) {
+  pendingRefreshKinds.add(kind);
+  clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(async () => {
+    const kinds = new Set(pendingRefreshKinds);
+    pendingRefreshKinds.clear();
+    const cache = await fetchCollected();
+    if (kinds.has("deck")) refreshDeck(cache);
+    if (kinds.has("battle")) await renderBattle();
+  }, 80);
 }
 
 // 战斗实时事件（WebSocket，复刻 Tarou）
@@ -680,10 +698,8 @@ bindScrollbars();
 // ===== 实时监听：数据到位自动重渲染，无需手动点击 =====
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== "local") return;
-  // 数据缓存、诊断、最近请求 或 战斗事件 任一变化都触发刷新展示
-  if (changes["gugu_gbf_data"] || changes["gugu_gbf_dbg"] || changes["gugu_gbf_recent"] || changes["gugu_gbf_battle"]) {
-    refresh();
-  }
+  if (changes["gugu_gbf_data"]) scheduleRefresh("deck");
+  if (changes["gugu_gbf_battle"]) scheduleRefresh("battle");
 });
 liveRefresh(true);
 function liveRefresh(first) {
