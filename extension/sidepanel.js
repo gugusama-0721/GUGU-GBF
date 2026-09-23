@@ -603,8 +603,8 @@ function renderWeaponGrid(cache){
     if(raw && raw.list) weps = raw.list.slice(0,13);
   }
   if(!weps.length){ el.innerHTML='<i class="muted">暂无武器数据</i>'; return; }
-  const slots = [weps[0] || null, ...weps.slice(1, 10)];
-  while (slots.length < 10) slots.push(null);
+  const slots = [weps[0] || null, ...weps.slice(1, 13)];
+  while (slots.length < 13) slots.push(null);
   el.innerHTML = slots.map((it,idx)=>{
     if (!it) return '<div class="wp-cell empty" aria-hidden="true"></div>';
     return `<div class="wp-cell${idx===0?' main':''}">
