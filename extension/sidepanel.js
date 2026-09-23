@@ -619,7 +619,7 @@ function renderWeaponGrid(cache){
 }
 
 // 召唤栏：左主召 / 中副召(2列×3行) / 右友召。
-// 图片目录：主召/友召用 summon/party_main，副召用 summon/party_sub；文件名取 image_id 的值。
+// 图片目录：主召/友召用 summon/party_main，副召用 summon/m；文件名取 image_id 的值。
 function extractSummonItems(data, out = [], seen = new Set()) {
   if (data == null) return out;
   if (Array.isArray(data)) {
@@ -642,7 +642,7 @@ function buildSummonImage(imageId, dir, className, alt) {
   img.loading = "eager";
   img.decoding = "async";
   img.style.display = "block";
-  img.style.objectFit = "contain";
+  img.style.objectFit = "cover";
   img.dataset.fallbackIndex = "0";
   const idStr = String(imageId || "").trim();
   const base = `${GBF_ASSET_CDN}/summon/${dir}/${idStr}`;
@@ -660,47 +660,35 @@ function renderSummonGrid(cache){
   const el = document.getElementById("sm-grid");
   const deckData = cache.deck && cache.deck.data;
   const pc = deckPC(normalizeDeck(deckData));
-  const mains = (pc && pc.summons) ? Object.values(pc.summons) : [];
-  const subs = (pc && pc.sub_summons) ? Object.values(pc.sub_summons) : [];
+  const mains = (pc && pc.summons) ? Object.values(pc.summons) : [];               // slot1=主召, slot2-5=副召前两行
+  const subSummons = (pc && pc.sub_summons) ? Object.values(pc.sub_summons) : []; // 副召末行
   let friends = [];
   const fd = cache.friend_summon && cache.friend_summon.data;
   if (fd) friends = extractSummonItems(fd);
   const main = mains[0] || null;
   const friend = friends[0] || null;
-  if (!main && !subs.length && !friend) { el.innerHTML = '<i class="muted">暂无召唤数据</i>'; return; }
+  // 副召区 6 格：summons slot2-5(前两行) + sub_summon(末行)；数据不满补空槽保容器高
+  const midSlots = [...mains.slice(1, 5), ...subSummons.slice(0, 2)];
+  while (midSlots.length < 6) midSlots.push(null);
+  if (!main && !friend && midSlots.every(v => !v)) { el.innerHTML = '<i class="muted">暂无召唤数据</i>'; return; }
 
-  const card = (it, mainFlag) => {
-    if (!it) return '<div class="sm-card empty" aria-hidden="true"></div>';
-    const m = it.master || {}, p = it.param || {};
-    const name = it.name || m.name || "";
-    const attr = it.attribute ?? it.element ?? m.attribute ?? m.element ?? p.attribute ?? p.element;
-    const atk = it.attack || p.attack || m.attack;
-    return `<div class="sm-card${mainFlag ? ' main' : ''}"><div class="sm-imgbox"></div><div class="sm-lbl"><b>${name || it.id || ''}</b><span>${ATTR_NAME[attr] || ''}${atk ? ' · 攻 ' + atk : ''}</span></div></div>`;
-  };
-
-  // 副召固定补满 6 格（2列×3行），不足补空槽占位，保持容器高度，类似武器盘空副手
-  const subSlots = subs.slice(0, 6);
-  while (subSlots.length < 6) subSlots.push(null);
+  const cell = (it, i) => it == null
+    ? `<div class="sm-card empty" data-i="${i}" aria-hidden="true"></div>`
+    : `<div class="sm-card" data-i="${i}"><div class="sm-imgbox"></div></div>`;
 
   el.innerHTML =
-    `<div class="sm-main">${main ? card(main, true) : ''}</div>` +
-    `<div class="sm-subs">${subSlots.map((s) => card(s, false)).join('')}</div>` +
-    `<div class="sm-friend">${friend ? card(friend, true) : ''}</div>`;
+    `<div class="sm-main">${main ? cell(main, -1) : ''}</div>` +
+    `<div class="sm-subs">${midSlots.map((s, i) => cell(s, i)).join('')}</div>` +
+    `<div class="sm-friend">${friend ? cell(friend, -1) : ''}</div>`;
 
-  if (main) {
-    const box = el.querySelector('.sm-main .sm-imgbox');
-    if (box) { const m = main.master || {}, p = main.param || {}; box.appendChild(buildSummonImage(p.image_id || m.id, "party_main", "sm-image", m.name || "")); }
-  }
-  el.querySelectorAll('.sm-subs .sm-imgbox').forEach((box, idx) => {
-    const s = subSlots[idx];
+  const idOf = (it) => { const m = it.master || {}, p = it.param || {}; return p.image_id || m.id || it.image_id || m.image_id || it.id || ""; };
+  if (main) { const b = el.querySelector('.sm-main .sm-imgbox'); if (b) b.appendChild(buildSummonImage(idOf(main), 'party_main', 'sm-image', '主召')); }
+  midSlots.forEach((s, i) => {
     if (!s) return;
-    const m = s.master || {}, p = s.param || {};
-    box.appendChild(buildSummonImage(p.image_id || m.id, "party_sub", "sm-image", m.name || ""));
+    const b = el.querySelector(`.sm-subs .sm-card[data-i="${i}"] .sm-imgbox`);
+    if (b) b.appendChild(buildSummonImage(idOf(s), 'm', 'sm-image', ''));
   });
-  if (friend) {
-    const box = el.querySelector('.sm-friend .sm-imgbox');
-    if (box) { box.appendChild(buildSummonImage(friend.image_id || ((friend.master || {}).id), "party_main", "sm-image", "支援召唤")); }
-  }
+  if (friend) { const b = el.querySelector('.sm-friend .sm-imgbox'); if (b) b.appendChild(buildSummonImage(idOf(friend), 'party_main', 'sm-image', '友召')); }
 }
 
 // 数值统计：先展示可用基础统计（完整攻刃引擎后续）
