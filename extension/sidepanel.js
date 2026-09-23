@@ -621,7 +621,11 @@ function renderWeaponGrid(cache){
   const subsEl = el.querySelector(".wp-subs");
   const applyWp = () => {
     if (!subsEl) return;
-    const h = subsEl.getBoundingClientRect().height;
+    // body 有 transform:scale(var(--ui-scale))，
+    // getBoundingClientRect 返回缩放后的可视高度；--wp-main-w 是未缩放布局长度，
+    // 故需除以当前缩放系数还原为布局高度，否则主手随缩放系数失调。
+    const sc = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--ui-scale")) || 1;
+    const h = subsEl.getBoundingClientRect().height / sc;
     if (h > 0) el.style.setProperty("--wp-main-w", (h * 200 / 420).toFixed(1) + "px");
   };
   if (subsEl) {
