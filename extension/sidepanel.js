@@ -603,19 +603,31 @@ function renderWeaponGrid(cache){
     if(raw && raw.list) weps = raw.list.slice(0,13);
   }
   if(!weps.length){ el.innerHTML='<i class="muted">暂无武器数据</i>'; return; }
-  const slots = [weps[0] || null, ...weps.slice(1, 13)];
-  while (slots.length < 13) slots.push(null);
-  el.innerHTML = slots.map((it,idx)=>{
-    if (!it) return '<div class="wp-cell empty" aria-hidden="true"></div>';
-    return `<div class="wp-cell${idx===0?' main':''}">
-      <div class="wp-icon"></div>
-    </div>`;
-    }).join("");
-  el.querySelectorAll(".wp-icon").forEach((icon, index) => {
-    const weapon = slots[index];
-    if (!weapon) return;
-    const image = buildAssetImage("weapon", weapon, "wp-image", weapon.master?.name || "", index === 0);
-    icon.appendChild(image);
+  // 隔离双列：主手单列 + 副手 3×4 网格各自独立，互不拉伸
+  const main = weps[0] || null;
+  const subs = weps.slice(1, 13);
+  const subCells = [];
+  for (let i = 0; i < 12; i++) subCells.push(subs[i] || null);
+  const mainHtml = main
+    ? '<div class="wp-main-card"><div class="wp-icon"></div></div>'
+    : '<div class="wp-main-card empty"></div>';
+  el.innerHTML =
+    '<div class="wp-main">' + mainHtml + '</div>' +
+    '<div class="wp-subs">' + subCells.map((it) =>
+      it ? '<div class="wp-cell"><div class="wp-icon"></div></div>' : '<div class="wp-cell empty"></div>'
+    ).join('') + '</div>';
+  if (main) el.querySelector(".wp-main .wp-icon").appendChild(buildAssetImage("weapon", main, "wp-image", main.master?.name || "", true));
+  subCells.forEach((it, i) => {
+    if (!it) return;
+    const icon = el.querySelectorAll(".wp-subs .wp-cell")[i].querySelector(".wp-icon");
+    icon.appendChild(buildAssetImage("weapon", it, "wp-image", it.master?.name || "", false));
+  });
+  // 自动等高：测量副手网格高度，反推主手列宽，使主手保持 200:420 且与副手上下平齐
+  requestAnimationFrame(() => {
+    const subsEl = el.querySelector(".wp-subs");
+    if (!subsEl) return;
+    const h = subsEl.getBoundingClientRect().height;
+    if (h > 0) el.style.setProperty("--wp-main-w", Math.round(h * 200 / 420) + "px");
   });
 }
 
