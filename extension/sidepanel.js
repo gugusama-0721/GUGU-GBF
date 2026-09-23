@@ -616,25 +616,30 @@ function renderWeaponGrid(cache){
     '<div class="wp-subs">' + subCells.map((it) =>
       it ? '<div class="wp-cell"><div class="wp-icon"></div></div>' : '<div class="wp-cell empty"></div>'
     ).join('') + '</div>';
-  if (main) el.querySelector(".wp-main .wp-icon").appendChild(buildAssetImage("weapon", main, "wp-image", main.master?.name || "", true));
-  subCells.forEach((it, i) => {
-    if (!it) return;
-    const icon = el.querySelectorAll(".wp-subs .wp-cell")[i].querySelector(".wp-icon");
-    icon.appendChild(buildAssetImage("weapon", it, "wp-image", it.master?.name || "", false));
-  });
-  // 自动等高：ResizeObserver 持续监听副手网格高度，回写主手列宽
-  // 使主手保持 200:420 且与副手上下平齐；对重渲染/容器宽度变化均收敛
+  // 自动等高：先装观测（在挂图之前），避免任何图片构建异常短路对齐逻辑
   if (el._wpRo) el._wpRo.disconnect();
   const subsEl = el.querySelector(".wp-subs");
+  const applyWp = () => {
+    if (!subsEl) return;
+    const h = subsEl.getBoundingClientRect().height;
+    if (h > 0) el.style.setProperty("--wp-main-w", (h * 200 / 420).toFixed(1) + "px");
+  };
   if (subsEl) {
-    const apply = () => {
-      const h = subsEl.getBoundingClientRect().height;
-      if (h > 0) el.style.setProperty("--wp-main-w", (h * 200 / 420).toFixed(1) + "px");
-    };
-    el._wpRo = new ResizeObserver(apply);
+    el._wpRo = new ResizeObserver(applyWp);
     el._wpRo.observe(subsEl);
-    apply();
+    applyWp();
   }
+  // 再挂图（个别项失败不影响对齐）
+  try {
+    if (main) el.querySelector(".wp-main .wp-icon").appendChild(buildAssetImage("weapon", main, "wp-image", main.master?.name || "", true));
+  } catch (e) {}
+  subCells.forEach((it, i) => {
+    if (!it) return;
+    try {
+      const icon = el.querySelectorAll(".wp-subs .wp-cell")[i].querySelector(".wp-icon");
+      icon.appendChild(buildAssetImage("weapon", it, "wp-image", it.master?.name || "", false));
+    } catch (e) {}
+  });
 }
 
 // 召唤栏：左主召 / 中副召(2列×3行) / 右友召。
