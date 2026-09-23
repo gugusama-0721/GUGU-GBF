@@ -12,6 +12,7 @@ let cache = {
   weapon: null,
   summon: null,
   deck: null,
+  friend_summon: null,
 };
 
 // 恢复缓存
@@ -115,6 +116,7 @@ function kindForUrl(u) {
   if (/\/npc\/list\//.test(u)) return "character";
   if (/\/listall\/content\//.test(u)) return "weapon";
   if (/\/summon\/list\//.test(u)) return "summon";
+  if (/\/party\/calculate_setting\//.test(u)) return "friend_summon";
   return null;
 }
 

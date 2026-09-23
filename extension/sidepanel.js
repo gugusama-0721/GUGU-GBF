@@ -618,36 +618,84 @@ function renderWeaponGrid(cache){
   });
 }
 
-// 召唤栏（主召唤 + 副召唤，显示格式参考武器盘）
+// 召唤栏：左主召 / 中副召(2列×3行) / 右友召。
+// 图片目录：主召/友召用 summon/party_main，副召用 summon/party_sub；文件名取 image_id 的值。
+function extractSummonItems(data, out = [], seen = new Set()) {
+  if (data == null) return out;
+  if (Array.isArray(data)) {
+    for (const v of data) extractSummonItems(v, out, seen);
+  } else if (typeof data === "object") {
+    const img = data.image_id;
+    if (typeof img === "string" && img && (data.summon_id != null || data.attribute != null || data.element != null || data.master)) {
+      const key = JSON.stringify([data.summon_id ?? data.image_id, data.attribute ?? data.element]);
+      if (!seen.has(key)) { seen.add(key); out.push(data); }
+    }
+    for (const v of Object.values(data)) extractSummonItems(v, out, seen);
+  }
+  return out;
+}
+
+function buildSummonImage(imageId, dir, className, alt) {
+  const img = document.createElement("img");
+  img.className = className;
+  img.alt = alt || "";
+  img.loading = "eager";
+  img.decoding = "async";
+  img.style.display = "block";
+  img.style.objectFit = "contain";
+  img.dataset.fallbackIndex = "0";
+  const idStr = String(imageId || "").trim();
+  const base = `${GBF_ASSET_CDN}/summon/${dir}/${idStr}`;
+  const candidates = idStr ? [base + ".jpg", base + ".png"] : [];
+  if (candidates.length) {
+    img.dataset.candidates = JSON.stringify(candidates);
+    img.src = candidates[0];
+    img.title = candidates[0];
+    img.onerror = () => imageFallback(img);
+  }
+  return img;
+}
+
 function renderSummonGrid(cache){
   const el = document.getElementById("sm-grid");
   const deckData = cache.deck && cache.deck.data;
   const pc = deckPC(normalizeDeck(deckData));
-  let sums = [];
-  if (pc && pc.summons) sums.push(...Object.values(pc.summons));
-  if (pc && pc.sub_summons) sums.push(...Object.values(pc.sub_summons));
-  if(!sums.length){
-    const raw = cache.summon && cache.summon.data;
-    if(raw && raw.list) sums = raw.list.slice(0,6);
-  }
-  if(!sums.length){ el.innerHTML='<i class="muted">暂无召唤数据</i>'; return; }
-  const slots = [sums[0] || null, ...sums.slice(1, 5)];
-  el.innerHTML = slots.map((it, idx)=>{
+  const mains = (pc && pc.summons) ? Object.values(pc.summons) : [];
+  const subs = (pc && pc.sub_summons) ? Object.values(pc.sub_summons) : [];
+  let friends = [];
+  const fd = cache.friend_summon && cache.friend_summon.data;
+  if (fd) friends = extractSummonItems(fd).slice(0, 5);
+  const main = mains[0] || null;
+  const hasMain = !!main, hasSubs = !!subs.length, hasFriend = !!friends.length;
+  if (!hasMain && !hasSubs && !hasFriend) { el.innerHTML = '<i class="muted">暂无召唤数据</i>'; return; }
+
+  const card = (it, mainFlag) => {
     if (!it) return '<div class="sm-card empty" aria-hidden="true"></div>';
     const m = it.master || {}, p = it.param || {};
-    const name = m.name || "";
-    const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
-    const atk = p.attack || m.attack;
-    return `<div class="sm-card${idx === 0 ? ' main' : ''}">
-      <div class="sm-imgbox"></div>
-      <div class="sm-lbl"><b>${name || it.id}</b><span>${ATTR_NAME[attr] || ''}${atk ? ' · 攻 ' + atk : ''}</span></div>
-    </div>`;
-  }).join("");
-  el.querySelectorAll(".sm-imgbox").forEach((box, index) => {
-    const s = slots[index];
-    if (!s) return;
-    const image = buildAssetImage("summon", s, "sm-image", (s.master && s.master.name) || "");
-    box.appendChild(image);
+    const name = it.name || m.name || "";
+    const attr = it.attribute ?? it.element ?? m.attribute ?? m.element ?? p.attribute ?? p.element;
+    const atk = it.attack || p.attack || m.attack;
+    return `<div class="sm-card${mainFlag ? ' main' : ''}"><div class="sm-imgbox"></div><div class="sm-lbl"><b>${name || it.id || ''}</b><span>${ATTR_NAME[attr] || ''}${atk ? ' · 攻 ' + atk : ''}</span></div></div>`;
+  };
+
+  el.innerHTML =
+    (hasMain ? `<div class="sm-main">${card(main, true)}</div>` : '') +
+    (hasSubs ? `<div class="sm-subs">${subs.slice(0, 6).map((s) => card(s, false)).join('')}</div>` : '') +
+    (hasFriend ? `<div class="sm-friend">${friends.map((f) => card(f, false)).join('')}</div>` : '');
+
+  if (hasMain) {
+    const box = el.querySelector('.sm-main .sm-imgbox');
+    if (box) { const m = main.master || {}, p = main.param || {}; box.appendChild(buildSummonImage(p.image_id || m.id, "party_main", "sm-image", m.name || "")); }
+  }
+  el.querySelectorAll('.sm-subs .sm-imgbox').forEach((box, idx) => {
+    if (idx >= subs.length) return;
+    const s = subs[idx]; const m = s.master || {}, p = s.param || {};
+    box.appendChild(buildSummonImage(p.image_id || m.id, "party_sub", "sm-image", m.name || ""));
+  });
+  el.querySelectorAll('.sm-friend .sm-imgbox').forEach((box, idx) => {
+    if (idx >= friends.length) return;
+    const f = friends[idx];
+    box.appendChild(buildSummonImage(f.image_id || ((f.master || {}).id), "party_main", "sm-image", (f.name || (f.master || {}).name) || ""));
   });
 }
 
