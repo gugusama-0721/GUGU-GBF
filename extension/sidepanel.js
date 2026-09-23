@@ -664,10 +664,10 @@ function renderSummonGrid(cache){
   const subs = (pc && pc.sub_summons) ? Object.values(pc.sub_summons) : [];
   let friends = [];
   const fd = cache.friend_summon && cache.friend_summon.data;
-  if (fd) friends = extractSummonItems(fd).slice(0, 5);
+  if (fd) friends = extractSummonItems(fd);
   const main = mains[0] || null;
-  const hasMain = !!main, hasSubs = !!subs.length, hasFriend = !!friends.length;
-  if (!hasMain && !hasSubs && !hasFriend) { el.innerHTML = '<i class="muted">暂无召唤数据</i>'; return; }
+  const friend = friends[0] || null;
+  if (!main && !subs.length && !friend) { el.innerHTML = '<i class="muted">暂无召唤数据</i>'; return; }
 
   const card = (it, mainFlag) => {
     if (!it) return '<div class="sm-card empty" aria-hidden="true"></div>';
@@ -678,25 +678,29 @@ function renderSummonGrid(cache){
     return `<div class="sm-card${mainFlag ? ' main' : ''}"><div class="sm-imgbox"></div><div class="sm-lbl"><b>${name || it.id || ''}</b><span>${ATTR_NAME[attr] || ''}${atk ? ' · 攻 ' + atk : ''}</span></div></div>`;
   };
 
-  el.innerHTML =
-    (hasMain ? `<div class="sm-main">${card(main, true)}</div>` : '') +
-    (hasSubs ? `<div class="sm-subs">${subs.slice(0, 6).map((s) => card(s, false)).join('')}</div>` : '') +
-    (hasFriend ? `<div class="sm-friend">${friends.map((f) => card(f, false)).join('')}</div>` : '');
+  // 副召固定补满 6 格（2列×3行），不足补空槽占位，保持容器高度，类似武器盘空副手
+  const subSlots = subs.slice(0, 6);
+  while (subSlots.length < 6) subSlots.push(null);
 
-  if (hasMain) {
+  el.innerHTML =
+    `<div class="sm-main">${main ? card(main, true) : ''}</div>` +
+    `<div class="sm-subs">${subSlots.map((s) => card(s, false)).join('')}</div>` +
+    `<div class="sm-friend">${friend ? card(friend, true) : ''}</div>`;
+
+  if (main) {
     const box = el.querySelector('.sm-main .sm-imgbox');
     if (box) { const m = main.master || {}, p = main.param || {}; box.appendChild(buildSummonImage(p.image_id || m.id, "party_main", "sm-image", m.name || "")); }
   }
   el.querySelectorAll('.sm-subs .sm-imgbox').forEach((box, idx) => {
-    if (idx >= subs.length) return;
-    const s = subs[idx]; const m = s.master || {}, p = s.param || {};
+    const s = subSlots[idx];
+    if (!s) return;
+    const m = s.master || {}, p = s.param || {};
     box.appendChild(buildSummonImage(p.image_id || m.id, "party_sub", "sm-image", m.name || ""));
   });
-  el.querySelectorAll('.sm-friend .sm-imgbox').forEach((box, idx) => {
-    if (idx >= friends.length) return;
-    const f = friends[idx];
-    box.appendChild(buildSummonImage(f.image_id || ((f.master || {}).id), "party_main", "sm-image", (f.name || (f.master || {}).name) || ""));
-  });
+  if (friend) {
+    const box = el.querySelector('.sm-friend .sm-imgbox');
+    if (box) { box.appendChild(buildSummonImage(friend.image_id || ((friend.master || {}).id), "party_main", "sm-image", "支援召唤")); }
+  }
 }
 
 // 数值统计：先展示可用基础统计（完整攻刃引擎后续）
