@@ -71,10 +71,10 @@
   .wp-skill{font-size:8px;color:var(--accent);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   /* 召唤栏：左主召 / 中副召(2列×3行) / 右友召，格式参考武器盘 */
-  #sm-grid{display:grid;grid-template-columns:auto 1fr auto;gap:var(--sm-gap);width:100%;align-items:stretch;--sm-gap:7px}
-  #sm-grid .sm-main{width:96px;min-width:96px;display:flex}
-  #sm-grid .sm-subs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:var(--sm-gap);width:100%}
-  #sm-grid .sm-friend{width:96px;min-width:96px;display:flex;flex-direction:column;gap:var(--sm-gap)}
+  #sm-grid{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"main subs friend";gap:var(--sm-gap);width:100%;align-items:stretch;--sm-gap:7px}
+  #sm-grid .sm-main{grid-area:main;width:96px;min-width:96px;display:flex}
+  #sm-grid .sm-subs{grid-area:subs;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:var(--sm-gap);width:100%}
+  #sm-grid .sm-friend{grid-area:friend;width:96px;min-width:96px;display:flex;flex-direction:column;gap:var(--sm-gap)}
   .sm-card{width:100%;min-width:0;aspect-ratio:9/12;background:transparent;border:1px solid rgba(232,185,74,.4);border-radius:0;padding:0;text-align:center;position:relative;display:flex;flex-direction:column;align-items:stretch;gap:3px;overflow:hidden}
   .sm-card.main{aspect-ratio:auto;align-self:stretch;border-color:var(--gold)}
   .sm-card.empty{opacity:.22}
