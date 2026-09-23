@@ -443,6 +443,7 @@ function buildAssetImage(kind, item, className, alt = "", isMain = false) {
   img.decoding = "async";
   img.style.display = "block";
   img.style.objectFit = "contain";
+  img.referrerPolicy = "no-referrer";
   img.dataset.fallbackIndex = "0";
   if (candidates.length) {
     img.dataset.candidates = JSON.stringify(candidates);
@@ -643,6 +644,7 @@ function buildSummonImage(imageId, dir, className, alt) {
   img.decoding = "async";
   img.style.display = "block";
   img.style.objectFit = "cover";
+  img.referrerPolicy = "no-referrer";
   img.dataset.fallbackIndex = "0";
   const idStr = String(imageId || "").trim();
   const base = `${GBF_ASSET_CDN}/summon/${dir}/${idStr}`;
