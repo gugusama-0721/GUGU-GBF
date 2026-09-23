@@ -416,15 +416,13 @@ function assetImageId(item) {
   return String(param.image_id || param.image_id_3 || master.image_id || master.id || "").trim();
 }
 
-function assetImageCandidates(kind, item) {
+function assetImageCandidates(kind, item, isMain) {
   const direct = directImageUrl(item);
   if (direct) return [direct];
   const id = assetImageId(item);
   if (!id) return [];
-  const master = item.master || {};
-  const weaponKind = String(master.kind || "").trim();
   const folders = kind === "weapon"
-    ? [`weapon/${weaponKind === "10" ? "ls" : weaponKind}`, "weapon/ls", "weapon/m", "weapon", "weapon/f"]
+    ? [isMain ? "weapon/ls" : "weapon/m", "weapon"]
     : ["summon", "summon/f"];
   const urls = [];
   folders.forEach((folder) => {
@@ -434,8 +432,8 @@ function assetImageCandidates(kind, item) {
   return [...new Set(urls)];
 }
 
-function buildAssetImage(kind, item, className, alt = "") {
-  const candidates = assetImageCandidates(kind, item);
+function buildAssetImage(kind, item, className, alt = "", isMain = false) {
+  const candidates = assetImageCandidates(kind, item, isMain);
   const img = document.createElement("img");
   img.className = className;
   img.alt = alt;
@@ -613,7 +611,7 @@ function renderWeaponGrid(cache){
   el.querySelectorAll(".wp-icon").forEach((icon, index) => {
     const weapon = slots[index];
     if (!weapon) return;
-    const image = buildAssetImage("weapon", weapon, "wp-image", weapon.master?.name || "");
+    const image = buildAssetImage("weapon", weapon, "wp-image", weapon.master?.name || "", index === 0);
     icon.appendChild(image);
   });
 }
@@ -723,7 +721,8 @@ if (versionNode) versionNode.textContent = 'v' + manifestVersion;
 function applyGlobalScale() {
   const width = Math.max(window.innerWidth || 0, 240);
   const scaleByWidth = width / 500;
-  const scale = Math.min(2, Math.max(0.36, scaleByWidth));
+  //const scale = Math.min(2, Math.max(0.36, scaleByWidth));
+  const scale = Math.max(0.36, scaleByWidth);
   document.documentElement.style.setProperty('--ui-scale', scale.toFixed(3));
 }
 window.addEventListener('resize', applyGlobalScale);
