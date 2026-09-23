@@ -419,7 +419,9 @@ function assetImageId(item) {
 function assetImageCandidates(kind, item, isMain) {
   const direct = directImageUrl(item);
   if (direct) return [direct];
-  const id = assetImageId(item);
+  const id = kind === "summon"
+    ? String((item && item.master && item.master.id) || assetImageId(item)).trim()
+    : assetImageId(item);
   if (!id) return [];
   const folders = kind === "weapon"
     ? [isMain ? "weapon/ls" : "weapon/m", "weapon"]
@@ -616,7 +618,7 @@ function renderWeaponGrid(cache){
   });
 }
 
-// 召唤栏（主召唤 + 副召唤）
+// 召唤栏（主召唤 + 副召唤，显示格式参考武器盘）
 function renderSummonGrid(cache){
   const el = document.getElementById("sm-grid");
   const deckData = cache.deck && cache.deck.data;
@@ -629,20 +631,23 @@ function renderSummonGrid(cache){
     if(raw && raw.list) sums = raw.list.slice(0,6);
   }
   if(!sums.length){ el.innerHTML='<i class="muted">暂无召唤数据</i>'; return; }
-  el.innerHTML = sums.map((it,idx)=>{
-    const m = it.master||{}, p = it.param||{};
-    const name = (m && m.name) || "";
+  const slots = [sums[0] || null, ...sums.slice(1, 5)];
+  el.innerHTML = slots.map((it, idx)=>{
+    if (!it) return '<div class="sm-card empty" aria-hidden="true"></div>';
+    const m = it.master || {}, p = it.param || {};
+    const name = m.name || "";
     const attr = m.element ?? m.attribute ?? p.element ?? p.attribute;
-    const atk = p.attack||m.attack||"-";
-    return `<div class="sm-cell${idx===0?' main':''}">
-      <div class="sm-icon" style="border:2px solid ${charColor(attr)}"></div>
-      <div class="sm-name">${name||it.id}</div>
-      <div class="sm-meta">${ATTR_NAME[attr]||""} · 攻 ${atk}</div>
+    const atk = p.attack || m.attack;
+    return `<div class="sm-card${idx === 0 ? ' main' : ''}">
+      <div class="sm-imgbox"></div>
+      <div class="sm-lbl"><b>${name || it.id}</b><span>${ATTR_NAME[attr] || ''}${atk ? ' · 攻 ' + atk : ''}</span></div>
     </div>`;
   }).join("");
-  el.querySelectorAll(".sm-icon").forEach((icon, index) => {
-    const image = buildAssetImage("summon", sums[index], "sm-image", sums[index].master?.name || "");
-    icon.appendChild(image);
+  el.querySelectorAll(".sm-imgbox").forEach((box, index) => {
+    const s = slots[index];
+    if (!s) return;
+    const image = buildAssetImage("summon", s, "sm-image", (s.master && s.master.name) || "");
+    box.appendChild(image);
   });
 }
 
