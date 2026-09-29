@@ -515,24 +515,26 @@ function renderDeckVisual(cache){
     // 职业图标：ui/icon/job/{job.master.id}.png（叠加在头像左上）
     const jobIconBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/";
     const jobIcon = jobMaster.id ? `<img class="job-icon" referrerpolicy="no-referrer" src="${jobIconBase}${jobMaster.id}.png" alt="职业图标">` : "";
-    // 职业技能：来自 job_equipped 响应 job.ability（四格，名右图标右）
+    // 职业技能：来自 job_equipped 响应 job.ability（四格，名左图标右；每行按各自 flag 变色）
     const je = cache.job_equipped && cache.job_equipped.data;
     const abilities = (je && (je.ability || (je.job && je.job.ability))) || {};
     const abiBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/";
-    // user_full_auto_setting_flag: 1=自动释放(整体橘黄), 0/缺失=手动(整体灰)
-    const autoFlag = Number((je && (je.user_full_auto_setting_flag ?? (je.job && je.job.user_full_auto_setting_flag) ?? 0)) === 1) ? " auto" : "";
     const skillRows = Object.values(abilities)
       .filter((a) => a && (a.name || a.class_name))
       .slice(0, 4)
-      .map((a) =>
-        `<div class="skill-row">
+      .map((a) => {
+        // 每个技能独立判断：flag 在 ability 条目内，1=自动释放(橘黄)，0/缺失=手动(灰)
+        const raw = a.user_full_auto_setting_flag ?? 0;
+        const auto = Number(raw) === 1 ? " auto" : "";
+        return `<div class="skill-row${auto}">
            <span class="skill-name">${a.name || ""}</span>
            ${a.class_name ? `<img class="skill-icon" referrerpolicy="no-referrer" src="${abiBase}${a.class_name}.png" alt="">` : ""}
-         </div>`)
+         </div>`;
+      })
       .join("");
     jobEl.innerHTML =
       '<div class="job-leader">' + leadImg + jobIcon +
-        (skillRows ? `<div class="skill-list${autoFlag}">${skillRows}</div>` : "") +
+        (skillRows ? `<div class="skill-list">${skillRows}</div>` : "") +
       "</div>" +
       `<div class="job-box">
          <span class="job-name">${jobName}${jobLevel ? ` <b>· Lv${jobLevel}</b>` : ""}</span>
