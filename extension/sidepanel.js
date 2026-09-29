@@ -508,7 +508,21 @@ function renderDeckVisual(cache){
     const jobName = jobMaster.name || job.name || jobParam.name || "未读取";
     const jobLevel = jobParam.level || job.level || "";
     const actions = Array.isArray(pc.set_action) ? pc.set_action.map((action) => action.name).filter(Boolean).slice(0, 3) : [];
-    jobEl.innerHTML = `主角职业：<b>${jobName}</b>${jobLevel ? ` · Lv${jobLevel}` : ""}${actions.length ? `<div class="job-skills">职业技能：<b>${actions.join(" · ")}</b></div>` : ""}`;
+    // 主角职业头像：leader/p/{param.image}.jpg，referrer 防盗链规避
+    const pcm = pc.param || {};
+    let leadImg = "";
+    if (pcm.image) {
+      let u = `${GBF_ASSET_CDN}/leader/p/${pcm.image}.jpg`;
+      leadImg = `<img class="leader-img" referrerpolicy="no-referrer" src="${u}" alt="职业">`;
+    }
+    const attrN = ATTR_NAME ? (ATTR_NAME[String(pcm.attribute)] || "") : "";
+    jobEl.innerHTML =
+      leadImg +
+      '<div class="job-box">' +
+      `<span class="job-name">${jobName}${jobLevel ? ` <span style="color:var(--gold)">· Lv${jobLevel}</span>` : ""}</span>` +
+      `<span class="job-attr">${attrN ? attrN + "属性 · " : ""}主角职业</span>` +
+      `${actions.length ? `<span class="job-skills">职业技能：${actions.join(" · ")}</span>` : ""}` +
+      "</div>";
   }
   const npcs = deckNPCs(d);
   if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员（原始结构见🔬原始数据）</i>'; return; }
@@ -723,25 +737,27 @@ function renderSummonGrid(cache){
 // 数值统计：先展示可用基础统计（完整攻刃引擎后续）
 function renderStatEstimate(cache){
   const el = document.getElementById("stats");
-  const deckData = cache.deck && cache.deck.data;
-  const weps = (deckData && deckData.deck && deckData.deck.pc && deckData.deck.pc.weapons)
-    ? Object.values(deckData.deck.pc.weapons) : [];
-  if(!weps.length){ el.innerHTML='<i class="muted">数值引擎待接入（参考 Tarou 攻刃/EX/浑身计算）</i>'; return; }
-  // 简化的攻刃估算：按武器数量 + 技能类型粗分（占位，真实公式后续实现）
-  const totalAtk = weps.reduce((s,w)=> s + Number((w.param&&w.param.attack)||(w.master&&w.master.attack)||0), 0);
-  const attrs = weps.reduce((s,w)=>{ const a=String((w.master&&w.master.element)||(w.param&&w.param.element)); s[a]=(s[a]||0)+1; return s;},{});
-  const rows = [
-    ["武器数", weps.length + " 把", Math.min(100, weps.length*8)],
-    ["总攻击", totalAtk.toLocaleString(), Math.min(100, totalAtk/2000)],
-    ["主属性", (Object.entries(attrs).sort((a,b)=>b[1]-a[1])[0]||["?",""])[0]+"属 x"+(Object.values(attrs)[0]||0), 60],
-  ];
-  el.innerHTML = rows.map(([label,val,bar])=>`
-    <div class="stat-row">
-      <span class="label">${label}</span>
-      <span class="val">${val}</span>
-    </div>
-    <div class="bar"><i style="width:${bar}%"></i></div>`).join("")
-    + '<div class="muted" style="margin-top:8px">⚠️ 当前为基础统计，完整「攻刃/EX/浑身」精细计算引擎为下一步 TODO</div>';
+  const pc = deckPC(normalizeDeck(cache.deck && cache.deck.data));
+  const di = (pc && pc.damage_info) || null;
+  if (!el) return;
+  if (!di || !Array.isArray(di.effect_value_info)) {
+    el.innerHTML = '<i class="muted">暂无盘面数值（未捕获 /party/deck 或 calculate_setting）</i>';
+    return;
+  }
+  const iconBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/weapon_skill_label/";
+  const fmt = (n) => Number(n || 0).toLocaleString();
+  const rows = di.effect_value_info.map((it) => `
+    <div class="dv-row${it.is_max ? " max" : ""}">
+      <img class="dv-icon" referrerpolicy="no-referrer" loading="lazy" src="${iconBase}${encodeURIComponent(it.icon_img || "")}" alt="">
+      <span class="dv-val">${it.value ?? ""}</span>
+    </div>`).join("");
+  el.innerHTML =
+    '<div class="dv-top">' +
+      `<span>预计(克属)<b>${fmt(di.assumed_advantage_damage)}</b></span>` +
+      `<span>预计(平属)<b>${fmt(di.assumed_normal_damage)}</b></span>` +
+      `<span>HP<b>${fmt(di.hp)}</b></span>` +
+    "</div>" +
+    `<div class="dv-list">${rows || '<span class="muted">无效果数值</span>'}</div>`;
 }
 
 // 保留原渲染调用

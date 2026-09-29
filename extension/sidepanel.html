@@ -30,8 +30,12 @@
   .deck-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .deck-head .name{font-size:14px;font-weight:700;color:#fff}
   .deck-head .slot{font-size:11px;color:var(--muted)}
-  .job-info{font-size:11px;color:var(--muted);margin-bottom:8px}
+  .job-info{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-bottom:8px}
   .job-info b{color:var(--gold);font-weight:700}
+  .leader-img{width:44px;height:44px;object-fit:cover;flex:0 0 auto;border:1px solid var(--gold);border-radius:3px;background:transparent}
+  .job-box{display:flex;flex-direction:column;min-width:0}
+  .job-name{font-size:13px;font-weight:700;color:#fff}
+  .job-attr{font-size:10px;color:var(--muted)}
   .job-skills{margin-top:3px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .job-skills b{color:var(--accent)}
 
@@ -88,6 +92,14 @@
   .stat-row:last-child{border-bottom:none}
   .stat-row .label{color:var(--muted)}
   .stat-row .val{font-weight:800;color:var(--gold)}
+  /* 盘面详细数值（召唤下方） */
+  .dv-top{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:8px}
+  .dv-top b{color:var(--accent);font-weight:700;margin-left:3px}
+  .dv-list{display:flex;flex-wrap:wrap;gap:4px 12px}
+  .dv-row{display:flex;align-items:center;gap:3px;font-size:11px;line-height:1}
+  .dv-row .dv-icon{height:16px;width:auto;object-fit:contain}
+  .dv-row .dv-val{color:#fff;font-variant-numeric:tabular-nums}
+  .dv-row.max .dv-val{color:var(--gold);font-weight:700}
   .stat-row .bar{height:6px;border-radius:4px;background:var(--card2);margin-top:4px;overflow:hidden}
   .stat-row .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--fire));border-radius:4px}
 
@@ -134,12 +146,6 @@
     <div id="ch-grid" class="ch-grid"><i class="muted">暂无角色数据</i></div>
   </div>
 
-  <!-- 数值统计 -->
-  <div class="card">
-    <h3><span class="icon">📊</span> 盘面数值统计</h3>
-    <div class="stats" id="stats"><i class="muted">数值引擎待接入（参考 Tarou 攻刃/EX/浑身计算）</i></div>
-  </div>
-
   <!-- 武器盘 -->
   <div class="card">
     <h3><span class="icon">🗡️</span> 武器盘 · 主手+副手</h3>
@@ -150,6 +156,12 @@
   <div class="card">
     <h3><span class="icon">✨</span> 召唤 · 主+副</h3>
     <div id="sm-grid" class="sm-grid"><i class="muted">暂无召唤数据</i></div>
+  </div>
+
+  <!-- 盘面详细数值（召唤下方） -->
+  <div class="card">
+    <h3><span class="icon">📊</span> 盘面数值统计</h3>
+    <div class="stats" id="stats"><i class="muted">暂无盘面数值</i></div>
   </div>
   </div><!-- /panel-deck -->
 
