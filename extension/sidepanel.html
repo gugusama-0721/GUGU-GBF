@@ -39,9 +39,12 @@
   .job-name{font-size:13px;font-weight:700;color:#fff}
   .job-attr{font-size:10px;color:var(--muted)}
   .skill-list{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;gap:3px;padding:4px;z-index:1}
-  .skill-row{display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(16,19,28,.72);border:1px solid rgba(232,185,74,.25);border-radius:4px;padding:2px 6px;min-width:0}
-  .skill-name{font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;text-shadow:0 1px 2px #000}
-  .skill-icon{width:24px;height:24px;object-fit:contain;flex:0 0 auto}
+  .skill-row{display:flex;align-items:center;justify-content:flex-end;gap:8px;background:rgba(154,164,178,.08);border:1px solid rgba(154,164,178,.3);border-radius:4px;padding:2px 6px;min-width:0}
+  .skill-name{font-size:11px;text-align:right;color:#cfd6e0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .skill-icon{width:24px;height:24px;object-fit:contain;flex:0 0 auto;filter:grayscale(.9)}
+  .skill-list.auto .skill-row{background:rgba(255,154,42,.13);border-color:rgba(255,154,42,.55)}
+  .skill-list.auto .skill-name{color:#ff9a2a;font-weight:600}
+  .skill-list.auto .skill-icon{filter:none}
   .job-skills{margin-top:3px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .job-skills b{color:var(--accent)}
 
