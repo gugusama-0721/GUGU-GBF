@@ -507,21 +507,35 @@ function renderDeckVisual(cache){
   if (jobEl) {
     const jobName = jobMaster.name || job.name || jobParam.name || "未读取";
     const jobLevel = jobParam.level || job.level || "";
-    const actions = Array.isArray(pc.set_action) ? pc.set_action.map((action) => action.name).filter(Boolean).slice(0, 3) : [];
-    // 主角职业头像：leader/p/{param.image}.png，填满窗口宽度，referrer 防盗链规避
     const pcm = pc.param || {};
-    let leadImg = "";
-    if (pcm.image) {
-      let u = `${GBF_ASSET_CDN}/leader/p/${pcm.image}.png`;
-      leadImg = `<img class="leader-img" referrerpolicy="no-referrer" src="${u}" alt="职业">`;
-    }
     const attrN = ATTR_NAME ? (ATTR_NAME[String(pcm.attribute)] || "") : "";
+    // 职业头像：leader/p/{param.image}.png（填满左侧），referrer 防盗链规避
+    let leadImg = "";
+    if (pcm.image) leadImg = `<img class="leader-img" referrerpolicy="no-referrer" src="${GBF_ASSET_CDN}/leader/p/${pcm.image}.png" alt="职业">`;
+    // 职业图标：ui/icon/job/{job.master.id}.jpg（叠加在头像左上）
+    const jobIconBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/";
+    const jobIcon = jobMaster.id ? `<img class="job-icon" referrerpolicy="no-referrer" src="${jobIconBase}${jobMaster.id}.jpg" alt="职业图标">` : "";
+    // 职业技能：来自 job_equipped 响应 job.ability（四格，名左图标右）
+    const je = cache.job_equipped && cache.job_equipped.data;
+    const abilities = (je && (je.ability || (je.job && je.job.ability))) || {};
+    const abiBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/";
+    const skillRows = Object.values(abilities)
+      .filter((a) => a && (a.name || a.class_name))
+      .slice(0, 4)
+      .map((a) =>
+        `<div class="skill-row">
+           <span class="skill-name">${a.name || ""}</span>
+           ${a.class_name ? `<img class="skill-icon" referrerpolicy="no-referrer" src="${abiBase}${a.class_name}.jpg" alt="">` : ""}
+         </div>`)
+      .join("");
     jobEl.innerHTML =
-      leadImg +
-      '<div class="job-box">' +
-      `<span class="job-name">${jobName}${jobLevel ? ` <span style="color:var(--gold)">· Lv${jobLevel}</span>` : ""}</span>` +
-      `<span class="job-attr">${attrN ? attrN + "属性 · " : ""}主角职业</span>` +
-      `${actions.length ? `<span class="job-skills">职业技能：${actions.join(" · ")}</span>` : ""}` +
+      '<div class="job-leader">' + leadImg + jobIcon + "</div>" +
+      '<div class="job-side">' +
+        `<div class="job-box">
+           <span class="job-name">${jobName}${jobLevel ? ` <b>· Lv${jobLevel}</b>` : ""}</span>
+           <span class="job-attr">${attrN ? attrN + "属性 · " : ""}主角职业</span>
+         </div>` +
+        (skillRows ? `<div class="skill-list">${skillRows}</div>` : "") +
       "</div>";
   }
   const npcs = deckNPCs(d);

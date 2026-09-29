@@ -117,6 +117,7 @@ function kindForUrl(u) {
   if (/\/listall\/content\//.test(u)) return "weapon";
   if (/\/summon\/list\//.test(u)) return "summon";
   if (/\/party\/calculate_setting\//.test(u)) return "friend_summon";
+  if (/\/party\/job_equipped\//.test(u)) return "job_equipped";
   return null;
 }
 

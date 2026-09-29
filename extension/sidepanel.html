@@ -30,12 +30,19 @@
   .deck-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .deck-head .name{font-size:14px;font-weight:700;color:#fff}
   .deck-head .slot{font-size:11px;color:var(--muted)}
-  .job-info{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted);margin-bottom:8px}
+  .job-info{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--muted);margin-bottom:8px}
   .job-info b{color:var(--gold);font-weight:700}
+  .job-leader{position:relative;flex:0 0 44%;min-width:0}
   .leader-img{width:100%;height:auto;display:block;object-fit:contain;background:transparent}
+  .job-icon{position:absolute;top:2px;left:2px;width:30px;height:30px;object-fit:contain;border:1px solid var(--gold);border-radius:3px;background:var(--card2)}
+  .job-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
   .job-box{display:flex;flex-direction:column;min-width:0}
   .job-name{font-size:13px;font-weight:700;color:#fff}
   .job-attr{font-size:10px;color:var(--muted)}
+  .skill-list{display:flex;flex-direction:column;gap:4px}
+  .skill-row{display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:3px;padding:2px 6px;min-width:0}
+  .skill-name{font-size:10.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+  .skill-icon{width:26px;height:26px;object-fit:contain;flex:0 0 auto}
   .job-skills{margin-top:3px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .job-skills b{color:var(--accent)}
 
@@ -92,13 +99,13 @@
   .stat-row:last-child{border-bottom:none}
   .stat-row .label{color:var(--muted)}
   .stat-row .val{font-weight:800;color:var(--gold)}
-  /* 盘面详细数值（召唤下方） */
-  .dv-top{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:8px}
-  .dv-top b{color:var(--accent);font-weight:700;margin-left:3px}
-  .dv-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px}
-  .dv-row{display:flex;align-items:center;gap:3px;font-size:11px;line-height:1}
-  .dv-row .dv-icon{height:16px;width:auto;object-fit:contain}
-  .dv-row .dv-val{color:#fff;font-variant-numeric:tabular-nums}
+  /* 盘面详细数值（召唤下方）：双倍尺寸，每行左图右值 */
+  .dv-top{display:flex;gap:18px;flex-wrap:wrap;font-size:22px;color:var(--muted);margin-bottom:12px}
+  .dv-top b{color:var(--accent);font-weight:700;margin-left:4px}
+  .dv-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px}
+  .dv-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:22px;line-height:1}
+  .dv-row .dv-icon{height:32px;width:auto;object-fit:contain;flex:0 0 auto}
+  .dv-row .dv-val{color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
   .dv-row.max .dv-val{color:var(--gold);font-weight:700}
   .stat-row .bar{height:6px;border-radius:4px;background:var(--card2);margin-top:4px;overflow:hidden}
   .stat-row .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--fire));border-radius:4px}
