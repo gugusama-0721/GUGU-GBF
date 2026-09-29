@@ -529,14 +529,13 @@ function renderDeckVisual(cache){
          </div>`)
       .join("");
     jobEl.innerHTML =
-      '<div class="job-leader">' + leadImg + jobIcon + "</div>" +
-      '<div class="job-side">' +
-        `<div class="job-box">
-           <span class="job-name">${jobName}${jobLevel ? ` <b>· Lv${jobLevel}</b>` : ""}</span>
-           <span class="job-attr">${attrN ? attrN + "属性 · " : ""}主角职业</span>
-         </div>` +
+      '<div class="job-leader">' + leadImg + jobIcon +
         (skillRows ? `<div class="skill-list">${skillRows}</div>` : "") +
-      "</div>";
+      "</div>" +
+      `<div class="job-box">
+         <span class="job-name">${jobName}${jobLevel ? ` <b>· Lv${jobLevel}</b>` : ""}</span>
+         <span class="job-attr">${attrN ? attrN + "属性 · " : ""}主角职业</span>
+       </div>`;
   }
   const npcs = deckNPCs(d);
   if(!npcs.length){ memEl.innerHTML='<i class="muted">无成员（原始结构见🔬原始数据）</i>'; return; }
