@@ -95,7 +95,7 @@
   /* 盘面详细数值（召唤下方） */
   .dv-top{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:8px}
   .dv-top b{color:var(--accent);font-weight:700;margin-left:3px}
-  .dv-list{display:flex;flex-wrap:wrap;gap:4px 12px}
+  .dv-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px}
   .dv-row{display:flex;align-items:center;gap:3px;font-size:11px;line-height:1}
   .dv-row .dv-icon{height:16px;width:auto;object-fit:contain}
   .dv-row .dv-val{color:#fff;font-variant-numeric:tabular-nums}

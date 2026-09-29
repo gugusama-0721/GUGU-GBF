@@ -508,11 +508,11 @@ function renderDeckVisual(cache){
     const jobName = jobMaster.name || job.name || jobParam.name || "未读取";
     const jobLevel = jobParam.level || job.level || "";
     const actions = Array.isArray(pc.set_action) ? pc.set_action.map((action) => action.name).filter(Boolean).slice(0, 3) : [];
-    // 主角职业头像：leader/p/{param.image}.jpg，referrer 防盗链规避
+    // 主角职业头像：leader/p/{param.image}.png，填满窗口宽度，referrer 防盗链规避
     const pcm = pc.param || {};
     let leadImg = "";
     if (pcm.image) {
-      let u = `${GBF_ASSET_CDN}/leader/p/${pcm.image}.jpg`;
+      let u = `${GBF_ASSET_CDN}/leader/p/${pcm.image}.png`;
       leadImg = `<img class="leader-img" referrerpolicy="no-referrer" src="${u}" alt="职业">`;
     }
     const attrN = ATTR_NAME ? (ATTR_NAME[String(pcm.attribute)] || "") : "";
