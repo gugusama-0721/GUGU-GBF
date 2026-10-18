@@ -509,9 +509,10 @@ function renderDeckVisual(cache){
     const jobLevel = jobParam.level || job.level || "";
     const pcm = pc.param || {};
     const attrN = ATTR_NAME ? (ATTR_NAME[String(pcm.attribute)] || "") : "";
-    // 职业头像：leader/p/{param.image}.png（填满左侧），referrer 防盗链规避
+    // 主角立绘：assets/leader/result_ml/{param.image}.jpg（填满左侧），referrer 防盗链规避
+    const leaderBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/leader/result_ml";
     let leadImg = "";
-    if (pcm.image) leadImg = `<img class="leader-img" referrerpolicy="no-referrer" src="${GBF_ASSET_CDN}/leader/p/${pcm.image}.png" alt="职业">`;
+    if (pcm.image) leadImg = `<img class="leader-img" referrerpolicy="no-referrer" src="${leaderBase}/${pcm.image}.jpg" alt="主角">`;
     // 职业图标：ui/icon/job/{job.master.id}.png（叠加在头像左上）
     const jobIconBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/";
     const jobIcon = jobMaster.id ? `<img class="job-icon" referrerpolicy="no-referrer" src="${jobIconBase}${jobMaster.id}.png" alt="职业图标">` : "";
