@@ -516,30 +516,20 @@ function renderDeckVisual(cache){
     // 职业图标：ui/icon/job/{job.master.id}.png（叠加在头像左上）
     const jobIconBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/";
     const jobIcon = jobMaster.id ? `<img class="job-icon" referrerpolicy="no-referrer" src="${jobIconBase}${jobMaster.id}.png" alt="职业图标">` : "";
-    // 主角技能：名称与顺序取自 deck.pc.set_action（与配队同一次响应下发，切队即刷新，不再滞留上一个配队）
-    // 图标(class_name)与自动标记只在 job_equipped 里，按技能名做最佳匹配补齐；匹配不到就只显示名字（无图标=手动灰）
+    // 职业技能：来自 job_equipped 响应 job.ability（四格，名左图标右；每行按各自 flag 变色）
     const je = cache.job_equipped && cache.job_equipped.data;
-    const jeAbilities = Object.values((je && (je.ability || (je.job && je.job.ability))) || {});
-    const jeByName = {};
-    for (const a of jeAbilities) if (a && a.name) jeByName[a.name] = a;
-
-    let skillNames = (pc.set_action || [])
-      .filter((a) => a && String(a.character_id) === "0" && a.name)
-      .sort((x, y) => Number(x.action_set_pos) - Number(y.action_set_pos))
-      .slice(0, 4)
-      .map((a) => a.name);
-    // 兜底：响应里没有 set_action 时（旧结构/其它入口）退回 job_equipped 的技能表
-    if (!skillNames.length) skillNames = jeAbilities.filter((a) => a && a.name).slice(0, 4).map((a) => a.name);
-
+    const abilities = (je && (je.ability || (je.job && je.job.ability))) || {};
     const abiBase = "https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/";
-    const skillRows = skillNames
-      .map((name) => {
-        const meta = jeByName[name] || {};
-        // 每个技能独立判断：1=自动释放(橘黄)，0/缺失=手动(灰)
-        const auto = Number(meta.user_full_auto_setting_flag ?? 0) === 1 ? " auto" : "";
+    const skillRows = Object.values(abilities)
+      .filter((a) => a && (a.name || a.class_name))
+      .slice(0, 4)
+      .map((a) => {
+        // 每个技能独立判断：flag 在 ability 条目内，1=自动释放(橘黄)，0/缺失=手动(灰)
+        const raw = a.user_full_auto_setting_flag ?? 0;
+        const auto = Number(raw) === 1 ? " auto" : "";
         return `<div class="skill-row${auto}">
-           <span class="skill-name">${name}</span>
-           ${meta.class_name ? `<img class="skill-icon" referrerpolicy="no-referrer" src="${abiBase}${meta.class_name}.png" alt="">` : ""}
+           <span class="skill-name">${a.name || ""}</span>
+           ${a.class_name ? `<img class="skill-icon" referrerpolicy="no-referrer" src="${abiBase}${a.class_name}.png" alt="">` : ""}
          </div>`;
       })
       .join("");
